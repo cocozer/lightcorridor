@@ -30,7 +30,7 @@ void onWindowResized(GLFWwindow* window, int width, int height)
 	glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60.0,aspectRatio,Z_NEAR,Z_FAR);
+	gluPerspective(60.0,aspectRatio,Z_NEAR,Z_FAR); // Fonctionnement de la caméra (ouverture, ratiojsp, distance mini d'affichage, distance max d'affichage)
 	glMatrixMode(GL_MODELVIEW);
 }
 

@@ -40,19 +40,17 @@ void onKey(GLFWwindow* window, int key, int scancode, int action, int mods)
 		switch(key) {
 			case GLFW_KEY_A :
 			case GLFW_KEY_ESCAPE :
-				glfwSetWindowShouldClose(window, GLFW_TRUE);
+				// glfwSetWindowShouldClose(window, GLFW_TRUE); // Ferme la fenêtre 
 				break;
 			case GLFW_KEY_L :
-				glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+				// glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
 				break;
 			case GLFW_KEY_P :
-				glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+				// glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 				break;
 			case GLFW_KEY_R :
-				flag_animate_rot_arm = 1-flag_animate_rot_arm;
 				break;
 			case GLFW_KEY_T :
-				flag_animate_rot_scale = 1-flag_animate_rot_scale;
 				break;
 			case GLFW_KEY_KP_9 :
 				if(dist_zoom<100.0f) dist_zoom*=1.1;
@@ -130,28 +128,7 @@ int main() {
 		setCamera();
 
 		/* Initial scenery setup */
-		glPushMatrix();
-		glTranslatef(0.0,0.0,-0.01);
-		glScalef(10.0,10.0,1.0);
-		glColor3f(0.0,0.0,0.1);
-		drawSquare();
-		glPopMatrix();
-		
-		// rotating spheres exemple
-		glPushMatrix();
-		glScalef(2.0,2.0,2.0);
-		glRotatef(startTime*90.0,0.0,0.0,1.0);
-		glColor3f(1.0,0.0,0.0);
-		glTranslatef(0.0,4.0,0.0);
-		drawSphere();
-
-		glPushMatrix();
-		glRotatef(startTime*50.0,0.0,0.0,1.0);
-		glTranslatef(0.0,2.0,0.0);
-		glScalef(0.3, 0.3, 0.3);
-		drawSphere();
-		
-		glPopMatrix();
+		drawDecor();
 
 		/* Scene rendering */
 

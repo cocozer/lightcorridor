@@ -2,3 +2,5 @@ bin/
 build/
 .vscode/*
 !.vscode/settings.json
+theLightCorridor.pdf
+Guide_de_survie_du_projet_informatique.pdf

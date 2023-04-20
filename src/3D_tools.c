@@ -7,7 +7,7 @@ float dist_zoom = 1.0f; // Distance between origin and viewpoint
 
 void setCamera() {
 	gluLookAt(0, 0, 0, // Caméra placée en 0 0 0
-			  0.0,1.0,0.0, // Regarde vers l'axe X positif
+			  0.0,1.0,0.0, // Regarde vers l'axe Y positif
 			  0.0,0.0,1.0); // Le haut de la caméra est l'axe Z positif
 }
 

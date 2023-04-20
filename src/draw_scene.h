@@ -7,4 +7,6 @@
 #include <math.h>
 
 
+void drawDecorX();
+void drawDecorZ();
 void drawDecor();

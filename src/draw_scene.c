@@ -3,44 +3,177 @@
 float red = 0;
 float green = 0;
 float blue = 0;
-void drawDecor() {
-    // Couleur
-    red = 169.0/255; // Rouge
-    green = 234.0/255; // Vert
-    blue = 254.0/255; // Bleu
-    glColor3f(red, green, blue);
+void drawDecorX() {
+    // Rectangle gauche
+    glBegin(GL_QUADS);
+		glVertex3f(-0.5,0,-0.3);
+		glVertex3f(-0.5,0.2,-0.3);
+		glVertex3f(-0.5,0.2,0.3);
+		glVertex3f(-0.5,0,0.3);
+	glEnd();
+
+    // Rectangle droit
+    glBegin(GL_QUADS);
+		glVertex3f(0.5,0,-0.3);
+		glVertex3f(0.5,0.2,-0.3);
+		glVertex3f(0.5,0.2,0.3);
+		glVertex3f(0.5,0,0.3);
+    glEnd();
+    
+}
+void drawDecorZ() {
+
 
     // Rectangle bas
     glBegin(GL_QUADS);
-		glVertex3f(-0.5,0,-0.5);
-		glVertex3f(-0.5,0.5,-0.5);
-		glVertex3f(0.5,0.5,-0.5);
-		glVertex3f(0.5,0,-0.5);
+		glVertex3f(-0.5,0,-0.3);
+		glVertex3f(-0.5,0.2,-0.3);
+		glVertex3f(0.5,0.2,-0.3);
+		glVertex3f(0.5,0,-0.3);
 	glEnd();
     
     // Rectangle haut
     glBegin(GL_QUADS);
-		glVertex3f(-0.5,0,0.5);
-		glVertex3f(-0.5,0.5,0.5);
-		glVertex3f(0.5,0.5,0.5);
-		glVertex3f(0.5,0,0.5);
+		glVertex3f(-0.5,0,0.3);
+		glVertex3f(-0.5,0.2,0.3);
+		glVertex3f(0.5,0.2,0.3);
+		glVertex3f(0.5,0,0.3);
 	glEnd();
+}
 
+void drawDecor() {
+    // CADRE 1
     // Couleur
-    red = 116.0/255; // Rouge
-    green = 208.0/255; // Vert
-    blue = 241.0/255; // Bleu
+    red = 218.0/255; // Rouge
+    green = 243.0/255; // Vert
+    blue = 252.0/255; // Bleu
     glColor3f(red, green, blue);
-    glBegin(GL_QUADS);
-		glVertex3f(-0.5,0,-0.5);
-		glVertex3f(-0.5,0.5,-0.5);
-		glVertex3f(-0.5,0.5,0.5);
-		glVertex3f(-0.5,0,0.5);
-	glEnd();
-    glBegin(GL_QUADS);
-		glVertex3f(0.5,0,-0.5);
-		glVertex3f(0.5,0.5,-0.5);
-		glVertex3f(0.5,0.5,0.5);
-		glVertex3f(0.5,0,0.5);
-    glEnd();
+    drawDecorX();
+    // Couleur
+    red = 198.0/255; // Rouge
+    green = 236.0/255; // Vert
+    blue = 250.0/255; // Bleu
+    glColor3f(red, green, blue);
+    drawDecorZ();
+
+    // CADRE 2
+    glPushMatrix(); // Sauvegarde de la matrice
+        glTranslatef(0, 0.2f, 0); // Déplacement du plan
+        // Couleur
+        red = 161.0/255; // Rouge
+        green = 224.0/255; // Vert
+        blue = 247.0/255; // Bleu
+        glColor3f(red, green, blue);
+        drawDecorX();
+
+        // Couleur
+        red = 142.0/255; // Rouge
+        green = 218.0/255; // Vert
+        blue = 245.0/255; // Bleu
+        glColor3f(red, green, blue);
+        drawDecorZ();
+        // CADRE 3
+        glPushMatrix(); // Sauvegarde de la matrice
+            glTranslatef(0, 0.2f, 0); // Déplacement du plan
+            // Couleur
+            red = 105.0/255; // Rouge
+            green = 205.0/255; // Vert
+            blue = 242.0/255; // Bleu
+            glColor3f(red, green, blue);
+            drawDecorX();
+
+            // Couleur
+            red = 86.0/255; // Rouge
+            green = 199.0/255; // Vert
+            blue = 240.0/255; // Bleu
+            glColor3f(red, green, blue);
+            drawDecorZ();
+
+            // CADRE 4
+            glPushMatrix(); // Sauvegarde de la matrice
+                glTranslatef(0, 0.2f, 0); // Déplacement du plan
+                // Couleur
+                red = 49.0/255; // Rouge
+                green = 187.0/255; // Vert
+                blue = 237.0/255; // Bleu
+                glColor3f(red, green, blue);
+                drawDecorX();
+
+                // Couleur
+                red = 30.0/255; // Rouge
+                green = 181.0/255; // Vert
+                blue = 235.0/255; // Bleu
+                glColor3f(red, green, blue);
+                drawDecorZ();
+                // CADRE 5
+                glPushMatrix(); // Sauvegarde de la matrice
+                    glTranslatef(0, 0.2f, 0); // Déplacement du plan
+                    // Couleur
+                    red = 20.0/255; // Rouge
+                    green = 170.0/255; // Vert
+                    blue = 225.0/255; // Bleu
+                    glColor3f(red, green, blue);
+                    drawDecorX();
+
+                    // Couleur
+                    red = 18.0/255; // Rouge
+                    green = 156.0/255; // Vert
+                    blue = 206.0/255; // Bleu
+                    glColor3f(red, green, blue);
+                    drawDecorZ();
+                    // CADRE 5
+                    glPushMatrix(); // Sauvegarde de la matrice
+                        glTranslatef(0, 0.2f, 0); // Déplacement du plan
+                        // Couleur
+                        red = 15.0/255; // Rouge
+                        green = 128.0/255; // Vert
+                        blue = 169.0/255; // Bleu
+                        glColor3f(red, green, blue);
+                        drawDecorX();
+
+                        // Couleur
+                        red = 13.0/255; // Rouge
+                        green = 114.0/255; // Vert
+                        blue = 150.0/255; // Bleu
+                        glColor3f(red, green, blue);
+                        drawDecorZ();
+                        // CADRE 6
+                        glPushMatrix(); // Sauvegarde de la matrice
+                            glTranslatef(0, 0.2f, 0); // Déplacement du plan
+                            // Couleur
+                            red = 10.0/255; // Rouge
+                            green = 85.0/255; // Vert
+                            blue = 113.0/255; // Bleu
+                            glColor3f(red, green, blue);
+                            drawDecorX();
+
+                            // Couleur
+                            red = 8.0/255; // Rouge
+                            green = 71.0/255; // Vert
+                            blue = 94.0/255; // Bleu
+                            glColor3f(red, green, blue);
+                            drawDecorZ();
+                            // CADRE 7
+                            glPushMatrix(); // Sauvegarde de la matrice
+                                glTranslatef(0, 0.2f, 0); // Déplacement du plan
+                                // Couleur
+                                red = 5.0/255; // Rouge
+                                green = 43.0/255; // Vert
+                                blue = 56.0/255; // Bleu
+                                glColor3f(red, green, blue);
+                                drawDecorX();
+
+                                // Couleur
+                                red = 3.0/255; // Rouge
+                                green = 29.0/255; // Vert
+                                blue = 38.0/255; // Bleu
+                                glColor3f(red, green, blue);
+                                drawDecorZ();
+                            glPopMatrix(); // Reload de la matrice sauvegardée
+                        glPopMatrix(); // Reload de la matrice sauvegardée
+                    glPopMatrix(); // Reload de la matrice sauvegardée
+                glPopMatrix(); // Reload de la matrice sauvegardée
+            glPopMatrix(); // Reload de la matrice sauvegardée
+        glPopMatrix(); // Reload de la matrice sauvegardée
+    glPopMatrix(); // Reload de la matrice sauvegardée
 }

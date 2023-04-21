@@ -2,14 +2,17 @@
 #include "GLFW/glfw3.h"
 #include <iostream>
 
+
 #include "3D_tools.h"
 #include "draw_scene.h"
+#include "struct.h"
 
 /* Window properties */
 static const unsigned int WINDOW_WIDTH = 1000;
 static const unsigned int WINDOW_HEIGHT = 1000;
 static const char WINDOW_TITLE[] = "TD04 Ex01";
 static float aspectRatio = 1.0;
+static bool play = 1; // Est-ce que la partie est lancée ou pas ?
 
 /* Minimal time wanted between two images */
 static const double FRAMERATE_IN_SECONDS = 1. / 30.;
@@ -112,6 +115,13 @@ int main() {
 
     onWindowResized(window,WINDOW_WIDTH,WINDOW_HEIGHT);
 
+	/* Création de la raquette */
+	Raquette *raquette = new Raquette;
+	raquette->x = 0;
+	raquette->y = 1;
+	raquette->z = 0;
+	raquette->coefftaille = 1;
+
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
@@ -129,6 +139,9 @@ int main() {
 
 		/* Initial scenery setup */
 		drawDecor();
+		
+		/* Draw Raquette */
+		raquette->drawRaquette();
 
 		/* Scene rendering */
 

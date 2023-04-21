@@ -1,7 +1,0 @@
-{
-    "files.associations": {
-        "visu.h": "c",
-        "gldrawing.h": "c",
-        "glfw3.h": "c"
-    }
-}

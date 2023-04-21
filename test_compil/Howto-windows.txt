@@ -1,0 +1,33 @@
+Le programme utilise les bibliothèque GL (et GLU) ainsi que GLFW. 
+Vous trouverez tout le nécessaire pour GLFW ici :
+https://www.glfw.org/docs/latest/
+
+Sinon pour exploiter le makefile fourni, je vous propose d'utiliser MSYS 2
+C'est une sorte d'émulateur de linux (un peu comme Cygwin) qui permet d'avoir un terminal et d'utiliser de nombreuses bibliothèques propre à l'environnement Linux
+
+Vous trouverez MSYS 2 ici : https://www.msys2.org/
+
+Suivez le tutorial d'installation : https://www.msys2.org/#installation
+> Cela crée un répertoire (par exemple dans C:) C:\msys64
+> Ce répertoire contient notamment des executables (msys2.exe et surtout mingw64.exe qui permet de compiler avec les Makefile)
+> Une fois installé, l'utilitaire pacman (à utiliser dans le terminal de msys2.exe) permet d'installer des bibliothèques. Voici quelques exemples
+	> pacman -Ss <nom> permet de rechercher une bibliothèque
+	> pacman -Suy permet de mettre à jour toutes les bibliothèques
+> Dans le répertoire C:\msys64 il existe un /home/<user>/ dans lequel vous pouvez télécharger le projet
+> Une fois les installations indiquées dans https://www.msys2.org/#installation 
+	> pensez à relancer le terminal (msys2.exe)
+	> installer GLFW avec :
+		> pacman -Ss glfw
+		> pacman -S mingw64/mingw-w64-x86_64-glfw (ou celui qui s'en approche le plus) 
+	> installer GL avec :
+		> pacman -Ss mesa
+		> pacman -S mingw64/mingw-w64-x86_64-mesa (ou celui qui s'en approche le plus)
+> Il faut utiliser le Makefile-windows à la place du Makefile
+> Vous n'avez plus qu'à, dans le terminal de mingw64.exe, rejoindre le dossier comportant le projet et taper 'make' 
+	(en s'assurant d'utiliser le bon Makefile)
+
+
+
+
+
+

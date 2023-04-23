@@ -160,7 +160,7 @@ int main() {
 	ball->y = 1;
 	ball->z = 0;
 	ball->vx = 0.01;
-	ball->vy = 0.017;
+	ball->vy = 0.003;
 	ball->vz = 0.013;
 	ball->coefftaille = 0.1;
 

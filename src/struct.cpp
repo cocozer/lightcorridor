@@ -6,6 +6,7 @@ void Raquette::drawRaquette() {
     glColor3f(255, 255, 255); // Blanc
     glPushMatrix(); // Sauvegarde de la matrice
         glTranslatef(this->x, this->y, this->z); // Déplacement du plan pour correspondre au x et au y de la raquette
+        
         glPushMatrix(); // Sauvegarde de la matrice
             glScalef(this->coefftaille, 1, this->coefftaille); // Resize du plan pour correspondre au coeff de la raquette
             drawSquare(); // Dessin de la raquette7

@@ -141,6 +141,16 @@ int main() {
 	raquette->z = 0;
 	raquette->coefftaille = 1;
 
+	/* Création de la balle */
+	Ball *ball = new Ball;
+	ball->x = 0;
+	ball->y = 1;
+	ball->z = 0;
+	ball->vx = 0.001;
+	ball->vy = 0;
+	ball->vz = 0;
+	ball->coefftaille = 0.1;
+
     // Make the window's context current
     glfwMakeContextCurrent(window);
 
@@ -157,6 +167,8 @@ int main() {
 		/* Get time (in second) at loop beginning */
 		double startTime = glfwGetTime();
 
+		/* Updates de position des objets*/
+		ball->updatePosition();
 		deplacerRaquette(window, raquette);
 		/* Cleaning buffers and setting Matrix Mode */
 		glClearColor(0.2,0.0,0.0,0.0);
@@ -172,6 +184,9 @@ int main() {
 		
 		/* Draw Raquette */
 		raquette->drawRaquette();
+
+		/* Draw Ball*/
+		ball->drawBall();
 
 		/* Scene rendering */
 

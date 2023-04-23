@@ -15,6 +15,7 @@ static float aspectRatio = 1.0;
 
 /* Etats du jeu */
 bool play = true; // Est-ce que la partie est lancée ou pas ?
+bool lose = false; // Est-ce que le joueur a perdu ?
 bool CorridorMoving = false; // Est-ce que le couloir est en mouvement ou pas ?
 
 /* Minimal time wanted between two images */
@@ -60,9 +61,8 @@ void MoveRaquette(GLFWwindow* window, Raquette* raquette) {
 		ypos = 0.43;
 	}
 
-	// std::cout << "Cursor Position at (" << xpos << " : " << ypos << std::endl;
-    raquette->x = xpos;
-    raquette->z = ypos;
+    raquette->x = xpos*1.2*(raquette->y+1); // Position X multipliée par la sensibilité (change en fonction de la profondeur de la raquette)
+    raquette->z = ypos*1.2*(raquette->y+1); // Position Y multipliée par la sensibilité (change en fonction de la profondeur de la raquette)
 
 	
 }
@@ -114,6 +114,15 @@ void onKey(GLFWwindow* window, int key, int scancode, int action, int mods)
 	}
 }
 
+void mouse_button_callback(GLFWwindow* window ,int button, int action, int mods) {
+
+    if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) 
+    {
+		
+    }
+
+}
+
 int main() {
     // Initialize the library
     if (!glfwInit()) {
@@ -141,7 +150,7 @@ int main() {
 	/* Création de la raquette */
 	Raquette *raquette = new Raquette;
 	raquette->x = 0;
-	raquette->y = 0;
+	raquette->y = 1;
 	raquette->z = 0;
 	raquette->coefftaille = 1;
 
@@ -150,9 +159,9 @@ int main() {
 	ball->x = 0;
 	ball->y = 1;
 	ball->z = 0;
-	ball->vx = 0.001;
+	ball->vx = 0.01;
 	ball->vy = 0;
-	ball->vz = 0;
+	ball->vz = 0.013;
 	ball->coefftaille = 0.1;
 
 	/* Création du couloir */
@@ -164,6 +173,7 @@ int main() {
 
     glfwSetWindowSizeCallback(window,onWindowResized);
 	glfwSetKeyCallback(window, onKey);
+	glfwSetMouseButtonCallback(window, mouse_button_callback);
 
     onWindowResized(window,WINDOW_WIDTH,WINDOW_HEIGHT);
 
@@ -175,8 +185,11 @@ int main() {
 		/* Get time (in second) at loop beginning */
 		double startTime = glfwGetTime();
 
-		/* Updates de position des objets*/
-		ball->updatePosition(); // Balle
+		/* On vérifie si le joueur a perdu */
+		lose = ball->checkLoose(raquette);
+		/* Updates des positions des objets*/
+		ball->checkDirection(); // Balle (vérif de la direction de la balle pour collisions etc)
+		ball->updatePosition(); // update de la position de la balle
 		MoveRaquette(window, raquette); // Raquette
 
 		MoveCorridor(corridor);
@@ -193,14 +206,14 @@ int main() {
 		/* Initial scenery setup */
 		drawDecor();
 		
-		/* Draw Raquette */
-		raquette->drawRaquette();
+		/* Draw Corridor*/
+		corridor->drawCorridor();
 
 		/* Draw Ball*/
 		ball->drawBall();
-		
-		/* Draw Corridor*/
-		corridor->drawCorridor();
+
+		/* Draw Raquette */
+		raquette->drawRaquette();
 
 		/* Scene rendering */
 

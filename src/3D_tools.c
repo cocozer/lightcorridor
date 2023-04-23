@@ -19,10 +19,10 @@ float toRad(float deg) {
 
 void drawSquare() {
 	glBegin(GL_TRIANGLE_FAN);
-		glVertex3f(-0.15,1,-0.15);
-		glVertex3f(-0.15,1,0.15);
-		glVertex3f(0.15,1,0.15);
-		glVertex3f(0.15,1,-0.15);
+		glVertex3f(-0.25,1,-0.25);
+		glVertex3f(-0.25,1,0.25);
+		glVertex3f(0.25,1,0.25);
+		glVertex3f(0.25,1,-0.25);
 	glEnd();
 }
 
@@ -52,10 +52,10 @@ void drawSphere() {
 
 void drawBorderCorridor() {
 	glBegin(GL_LINE_LOOP);
-		glVertex3f(-1,0,0.5);
-		glVertex3f(1,0,0.5);
-		glVertex3f(1,0,-0.5);
-		glVertex3f(-1,0,-0.5);
+		glVertex3f(-0.5,0,0.25);
+		glVertex3f(0.5,0,0.25);
+		glVertex3f(0.5,0,-0.25);
+		glVertex3f(-0.5,0,-0.25);
 	glEnd();
 	
 }

@@ -31,6 +31,28 @@ void Ball::updatePosition() {
     this->z += this->vz;
 }
 
+void Ball::checkDirection() {
+    if(this->x < -0.5) {
+        this->vx = -(this->vx);
+    } else if(this->x > 0.5) {
+        this->vx = -(this->vx);
+    }
+
+    if(this->z < -0.25) {
+        this->vz = -(this->vz);
+    } else if(this->z > 0.25) {
+        this->vz = -(this->vz);
+    }
+}
+
+bool Ball::checkLoose(Raquette* raquette) {
+    if(this->y < raquette->y) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 void Corridor::drawCorridor() {
     glColor3f(255, 255, 255); // Blanc
     for(int i=0; i<17; i++) {

@@ -26,3 +26,11 @@ struct Ball {
     // Update la position de la balle en fonction de sa vélocité en x, y et z
     void updatePosition();
 };
+
+struct Corridor {
+    // Avancée du corridor vers le joueur 
+    float y;
+
+    // Dessin du corridor
+    void drawCorridor();
+};

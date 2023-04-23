@@ -151,6 +151,10 @@ int main() {
 	ball->vz = 0;
 	ball->coefftaille = 0.1;
 
+	/* Création du couloir */
+	Corridor *corridor = new Corridor;
+	corridor->y = 1;
+
     // Make the window's context current
     glfwMakeContextCurrent(window);
 
@@ -187,6 +191,9 @@ int main() {
 
 		/* Draw Ball*/
 		ball->drawBall();
+		
+		/* Draw Corridor*/
+		corridor->drawCorridor();
 
 		/* Scene rendering */
 

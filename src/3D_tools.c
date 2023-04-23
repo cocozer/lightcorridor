@@ -49,3 +49,13 @@ void drawCone() {
 void drawSphere() {
 	gluSphere(gluNewQuadric(),1.0,NB_SEG_CIRCLE,NB_SEG_CIRCLE);
 }
+
+void drawBorderCorridor() {
+	glBegin(GL_LINE_LOOP);
+		glVertex3f(-0.15,1,-0.15);
+		glVertex3f(-0.15,1,0.15);
+		glVertex3f(0.15,1,0.15);
+		glVertex3f(0.15,1,-0.15);
+	glEnd();
+	
+}

@@ -39,5 +39,7 @@ void drawCone();
 
 void drawSphere();
 
+void drawBorderCorridor();
+
 /* Small tools */
 float toRad(float deg);

@@ -33,13 +33,14 @@ void Ball::updatePosition() {
 
 void Corridor::drawCorridor() {
     glColor3f(255, 255, 255); // Blanc
-    glPushMatrix(); // Sauvegarde de la matrice
-        glTranslatef(0, this->y, 0); // Déplacement du plan pour correspondre au y du couloir
-        for(int i=0; i<12; i++) {
-            glPushMatrix(); // Sauvegarde de la matrice
-                glTranslatef(0, 0.2*i, 0);
-                drawBorderCorridor();
-            glPopMatrix(); // Reload de la matrice sauvegardée
+    for(int i=0; i<17; i++) {
+        glPushMatrix(); // Sauvegarde de la matrice
+        float translateY = (0.2*i)-this->y;
+        while(translateY < 0) {
+            translateY +=3.4;
         }
-    glPopMatrix(); // Reload de la matrice sauvegardée
+            glTranslatef(0, translateY, 0);
+            drawBorderCorridor();
+        glPopMatrix(); // Reload de la matrice sauvegardée
+    }
 }

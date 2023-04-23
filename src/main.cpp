@@ -12,7 +12,10 @@ static const unsigned int WINDOW_WIDTH = 1000;
 static const unsigned int WINDOW_HEIGHT = 1000;
 static const char WINDOW_TITLE[] = "TD04 Ex01";
 static float aspectRatio = 1.0;
-static bool play = 1; // Est-ce que la partie est lancée ou pas ?
+
+/* Etats du jeu */
+bool play = true; // Est-ce que la partie est lancée ou pas ?
+bool CorridorMoving = false; // Est-ce que le couloir est en mouvement ou pas ?
 
 /* Minimal time wanted between two images */
 static const double FRAMERATE_IN_SECONDS = 1. / 30.;
@@ -37,7 +40,7 @@ void onWindowResized(GLFWwindow* window, int width, int height)
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void deplacerRaquette(GLFWwindow* window, Raquette* raquette) {
+void MoveRaquette(GLFWwindow* window, Raquette* raquette) {
     double xpos, ypos;
     glfwGetCursorPos(window, &xpos, &ypos);
 
@@ -64,6 +67,12 @@ void deplacerRaquette(GLFWwindow* window, Raquette* raquette) {
 	
 }
 
+void MoveCorridor(Corridor* corridor) {
+	if(CorridorMoving) {
+		corridor->y+=0.025;
+	}
+} 
+
 void onKey(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	if (action == GLFW_PRESS) {
@@ -83,26 +92,21 @@ void onKey(GLFWwindow* window, int key, int scancode, int action, int mods)
 			case GLFW_KEY_T :
 				break;
 			case GLFW_KEY_KP_9 :
-				if(dist_zoom<100.0f) dist_zoom*=1.1;
-				std::cout << "Zoom is " << dist_zoom << std::endl;
 				break;
 			case GLFW_KEY_KP_3 :
-				if(dist_zoom>1.0f) dist_zoom*=0.9;
-				std::cout << "Zoom is " << dist_zoom << std::endl;
 				break;
 			case GLFW_KEY_UP :
-				if (phy>2) phy -= 2;
-				std::cout << "Phy is " << phy << std::endl;
+				if (CorridorMoving) {
+					CorridorMoving = false;
+				} else {
+					CorridorMoving = true;
+				}
 				break;
 			case GLFW_KEY_DOWN :
-				if (phy<=88.) phy += 2;
-				std::cout << "Phy is " << phy << std::endl;
 				break;
 			case GLFW_KEY_LEFT :
-				theta -= 5;
 				break;
 			case GLFW_KEY_RIGHT :
-				theta += 5;
 				break;
 			default:
 				std::cout << "Touche non gérée (" << key << ")" << std::endl;
@@ -153,7 +157,7 @@ int main() {
 
 	/* Création du couloir */
 	Corridor *corridor = new Corridor;
-	corridor->y = 1;
+	corridor->y = 7.6;
 
     // Make the window's context current
     glfwMakeContextCurrent(window);
@@ -172,8 +176,11 @@ int main() {
 		double startTime = glfwGetTime();
 
 		/* Updates de position des objets*/
-		ball->updatePosition();
-		deplacerRaquette(window, raquette);
+		ball->updatePosition(); // Balle
+		MoveRaquette(window, raquette); // Raquette
+
+		MoveCorridor(corridor);
+
 		/* Cleaning buffers and setting Matrix Mode */
 		glClearColor(0.2,0.0,0.0,0.0);
 

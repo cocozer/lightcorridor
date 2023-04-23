@@ -15,11 +15,20 @@ void Raquette::drawRaquette() {
 }
 
 void Ball::drawBall() {
-    glColor3f(0, 255, 0); // Vert
     glPushMatrix(); // Sauvegarde de la matrice
         glTranslatef(this->x, this->y, this->z); // Déplacement du plan pour correspondre au x, au y et au z de la balle
+        // Dessin de l'ombre de la balle
+        glPushMatrix();
+        glTranslatef(0, 0, -this->z-0.37);
+            glPushMatrix(); // Sauvegarde de la matrice
+                glScalef(this->coefftaille, this->coefftaille, 0.1); // Resize du plan pour correspondre au coeff de la balle
+                glColor3f(0, 0, 0); // Noir
+                drawCircle();
+            glPopMatrix(); // Reload de la matrice sauvegardée
+        glPopMatrix(); // Reload de la matrice sauvegardée
         glPushMatrix(); // Sauvegarde de la matrice
             glScalef(this->coefftaille, this->coefftaille, this->coefftaille); // Resize du plan pour correspondre au coeff de la balle
+            glColor3f(0, 255, 0); // Couleur de la balle
             drawSphere();
         glPopMatrix(); // Reload de la matrice sauvegardée
     glPopMatrix(); // Reload de la matrice sauvegardée

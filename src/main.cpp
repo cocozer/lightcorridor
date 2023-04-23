@@ -118,7 +118,7 @@ void mouse_button_callback(GLFWwindow* window ,int button, int action, int mods)
 
     if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) 
     {
-		
+
     }
 
 }
@@ -160,7 +160,7 @@ int main() {
 	ball->y = 1;
 	ball->z = 0;
 	ball->vx = 0.01;
-	ball->vy = 0;
+	ball->vy = 0.017;
 	ball->vz = 0.013;
 	ball->coefftaille = 0.1;
 

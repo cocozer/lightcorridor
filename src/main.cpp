@@ -43,9 +43,25 @@ void deplacerRaquette(GLFWwindow* window, Raquette* raquette) {
 
 	xpos = ((xpos / (WINDOW_WIDTH/2))/2-0.5);
     ypos = -((ypos / (WINDOW_HEIGHT/2))/2-0.5);
-	std::cout << "Cursor Position at (" << xpos << " : " << ypos << std::endl;
+	// On empêche de dépasser les bords de l'écran
+	if (xpos < -0.43) { 
+		xpos = -0.43;
+	}
+	if (xpos > 0.43) { 
+		xpos = 0.43;
+	}
+	if (ypos < -0.43) { 
+		ypos = -0.43;
+	}
+	if (ypos > 0.43) { 
+		ypos = 0.43;
+	}
+
+	// std::cout << "Cursor Position at (" << xpos << " : " << ypos << std::endl;
     raquette->x = xpos;
     raquette->z = ypos;
+
+	
 }
 
 void onKey(GLFWwindow* window, int key, int scancode, int action, int mods)

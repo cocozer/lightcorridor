@@ -158,11 +158,11 @@ int main() {
 	/* Création de la balle */
 	Ball *ball = new Ball;
 	ball->x = 0;
-	ball->y = 1;
+	ball->y = 2;
 	ball->z = 0;
 	ball->vx = 0.01;
-	ball->vy = 0.003;
-	ball->vz = 0.013;
+	ball->vy = -0.003;
+	ball->vz = 0.01;
 	ball->coefftaille = 0.1;
 
 	/* Création du couloir */
@@ -190,6 +190,7 @@ int main() {
 		lose = ball->checkLoose(raquette);
 		/* Updates des positions des objets*/
 		ball->checkDirection(); // Balle (vérif de la direction de la balle pour collisions etc)
+		ball->checkRaquetteHit(raquette); // rebond si la balle touche la raquette
 		ball->updatePosition(); // update de la position de la balle
 		MoveRaquette(window, raquette); // Raquette
 

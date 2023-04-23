@@ -25,8 +25,10 @@ struct Ball {
 
     // Update la position de la balle en fonction de sa vélocité en x, y et z
     void updatePosition();
-    // Vérification de la direction de la balle pour savoir si elle heurte un bord du couloir
+    // Vérification de la direction de la balle pour savoir si elle heurte un bord du couloir et la faire rebondir
     void checkDirection();
+    // Vérification de si la raquette touche la balle pour la faire rebondir
+    void checkRaquetteHit(Raquette* raquette);
     // Vérifie si la balle est passée entre la raquette et la caméra
     bool checkLoose(Raquette* Raquette);
 };

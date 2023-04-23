@@ -53,6 +53,18 @@ void Ball::checkDirection() {
         this->vz = -(this->vz);
     }
 }
+void Ball::checkRaquetteHit(Raquette* raquette) {
+    // Si la raquette touche la balle
+    if (this->y < raquette->y) {
+        if(this->x+0.2 > raquette->x - 0.25*raquette->coefftaille && this->z+0.2 > raquette->z - 0.25*raquette->coefftaille) { 
+            if(this->x-0.2 < raquette->x + 0.25*raquette->coefftaille && this->z-0.2 < raquette->z + 0.25*raquette->coefftaille) { 
+                
+                this->vy = -this->vy; // On inverse la vitesse de la balle en y
+            }
+        }
+    }
+    
+}
 
 bool Ball::checkLoose(Raquette* raquette) {
     if(this->y < raquette->y) {

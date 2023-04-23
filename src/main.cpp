@@ -67,9 +67,10 @@ void MoveRaquette(GLFWwindow* window, Raquette* raquette) {
 	
 }
 
-void MoveCorridor(Corridor* corridor) {
+void MoveCorridor(Corridor* corridor, Ball* ball) {
 	if(CorridorMoving) {
 		corridor->y+=0.025;
+		ball->y-=0.025;
 	}
 } 
 
@@ -192,7 +193,7 @@ int main() {
 		ball->updatePosition(); // update de la position de la balle
 		MoveRaquette(window, raquette); // Raquette
 
-		MoveCorridor(corridor);
+		MoveCorridor(corridor, ball);
 
 		/* Cleaning buffers and setting Matrix Mode */
 		glClearColor(0.2,0.0,0.0,0.0);

@@ -64,11 +64,11 @@ bool Ball::checkLoose(Raquette* raquette) {
 
 void Corridor::drawCorridor() {
     glColor3f(255, 255, 255); // Blanc
-    for(int i=0; i<17; i++) {
+    for(int i=0; i<9; i++) {
         glPushMatrix(); // Sauvegarde de la matrice
         float translateY = (0.2*i)-this->y;
         while(translateY < 0) {
-            translateY +=3.4;
+            translateY +=1.8;
         }
             glTranslatef(0, translateY, 0);
             drawBorderCorridor();

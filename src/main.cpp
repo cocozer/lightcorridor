@@ -29,12 +29,23 @@ void onError(int error, const char* description) {
 void onWindowResized(GLFWwindow* window, int width, int height)
 {
 	aspectRatio = width / (float) height;
-
+	
 	glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(60.0,aspectRatio,Z_NEAR,Z_FAR); // Fonctionnement de la caméra (ouverture, ratiojsp, distance mini d'affichage, distance max d'affichage)
 	glMatrixMode(GL_MODELVIEW);
+}
+
+void deplacerRaquette(GLFWwindow* window, Raquette* raquette) {
+    double xpos, ypos;
+    glfwGetCursorPos(window, &xpos, &ypos);
+
+	xpos = ((xpos / (WINDOW_WIDTH/2))/2-0.5);
+    ypos = -((ypos / (WINDOW_HEIGHT/2))/2-0.5);
+	std::cout << "Cursor Position at (" << xpos << " : " << ypos << std::endl;
+    raquette->x = xpos;
+    raquette->z = ypos;
 }
 
 void onKey(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -107,6 +118,13 @@ int main() {
         return -1;
     }
 
+	/* Création de la raquette */
+	Raquette *raquette = new Raquette;
+	raquette->x = 0;
+	raquette->y = 0;
+	raquette->z = 0;
+	raquette->coefftaille = 1;
+
     // Make the window's context current
     glfwMakeContextCurrent(window);
 
@@ -115,12 +133,7 @@ int main() {
 
     onWindowResized(window,WINDOW_WIDTH,WINDOW_HEIGHT);
 
-	/* Création de la raquette */
-	Raquette *raquette = new Raquette;
-	raquette->x = 0;
-	raquette->y = 1;
-	raquette->z = 0;
-	raquette->coefftaille = 1;
+
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
@@ -128,6 +141,7 @@ int main() {
 		/* Get time (in second) at loop beginning */
 		double startTime = glfwGetTime();
 
+		deplacerRaquette(window, raquette);
 		/* Cleaning buffers and setting Matrix Mode */
 		glClearColor(0.2,0.0,0.0,0.0);
 

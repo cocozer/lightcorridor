@@ -35,9 +35,11 @@ void Corridor::drawCorridor() {
     glColor3f(255, 255, 255); // Blanc
     glPushMatrix(); // Sauvegarde de la matrice
         glTranslatef(0, this->y, 0); // Déplacement du plan pour correspondre au y du couloir
-        glPushMatrix(); // Sauvegarde de la matrice
-            glScalef(1, 1, 1); // Resize du plan 
-            drawBorderCorridor();
-        glPopMatrix(); // Reload de la matrice sauvegardée
+        for(int i=0; i<12; i++) {
+            glPushMatrix(); // Sauvegarde de la matrice
+                glTranslatef(0, 0.2*i, 0);
+                drawBorderCorridor();
+            glPopMatrix(); // Reload de la matrice sauvegardée
+        }
     glPopMatrix(); // Reload de la matrice sauvegardée
 }

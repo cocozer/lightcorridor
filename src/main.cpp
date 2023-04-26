@@ -25,6 +25,7 @@ static const double FRAMERATE_IN_SECONDS = 1. / 30.;
 static int flag_animate_rot_scale = 0;
 static int flag_animate_rot_arm = 0;
 
+
 /* Error handling function */
 void onError(int error, const char* description) {
     std::cout << "GLFW Error: " << description << std::endl;
@@ -67,10 +68,15 @@ void MoveRaquette(GLFWwindow* window, Raquette* raquette) {
 	
 }
 
-void MoveCorridor(Corridor* corridor, Ball* ball) {
+void MoveCorridor(Corridor* corridor, Ball* ball, ListOfObstacles* list) {
 	if(CorridorMoving) {
 		corridor->y+=0.025;
 		ball->y-=0.025;
+		Obstacle* current = list->head;
+    	while(current!=nullptr){ //on parcoure la liste chaînée
+      		current->y-=0.025; //fait avancer l'obstacle
+      		current = current->next;
+    	}
 	}
 } 
 
@@ -148,6 +154,8 @@ int main() {
         return -1;
     }
 
+	//glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+
 	/* Création de la raquette */
 	Raquette *raquette = new Raquette;
 	raquette->x = 0;
@@ -169,6 +177,20 @@ int main() {
 	Corridor *corridor = new Corridor;
 	corridor->y = 7.6;
 
+
+	// Obstacle *obstacle1 = new Obstacle;
+	// obstacle1->side=1;
+	// obstacle1->y=2;
+
+	// Obstacle *obstacle2 = new Obstacle;
+	// obstacle1->side=4;
+	// obstacle1->y=3;
+
+
+	//création de la liste chainée des obstacles
+	ListOfObstacles obstacles;
+	initList(&obstacles); //on initialise la liste
+
     // Make the window's context current
     glfwMakeContextCurrent(window);
 
@@ -176,13 +198,14 @@ int main() {
 	glfwSetKeyCallback(window, onKey);
 	glfwSetMouseButtonCallback(window, mouse_button_callback);
 
-    onWindowResized(window,WINDOW_WIDTH,WINDOW_HEIGHT);
+    onWindowResized(window, WINDOW_WIDTH, WINDOW_HEIGHT);
 
 
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
+
 		/* Get time (in second) at loop beginning */
 		double startTime = glfwGetTime();
 
@@ -194,7 +217,7 @@ int main() {
 		ball->updatePosition(); // update de la position de la balle
 		MoveRaquette(window, raquette); // Raquette
 
-		MoveCorridor(corridor, ball);
+		MoveCorridor(corridor, ball, &obstacles);
 
 		/* Cleaning buffers and setting Matrix Mode */
 		glClearColor(0.2,0.0,0.0,0.0);
@@ -207,6 +230,10 @@ int main() {
 
 		/* Initial scenery setup */
 		drawDecor();
+
+		// obstacle1->drawObstacle();
+		// obstacle2->drawObstacle();
+		drawObstacles(&obstacles); //dessine la liste chainée des obstacles
 		
 		/* Draw Corridor*/
 		corridor->drawCorridor();
@@ -232,6 +259,7 @@ int main() {
 		{
 			glfwWaitEventsTimeout(FRAMERATE_IN_SECONDS-elapsedTime);
 		}
+
 	}
 
     glfwTerminate();

@@ -177,3 +177,4 @@ void drawDecor() {
         glPopMatrix(); // Reload de la matrice sauvegardée
     glPopMatrix(); // Reload de la matrice sauvegardée
 }
+

@@ -41,5 +41,11 @@ void drawSphere();
 
 void drawBorderCorridor();
 
+void drawWall();
+
+void drawUpsideWall();
+
+void drawRightWall();
+
 /* Small tools */
 float toRad(float deg);

@@ -9,7 +9,7 @@ void Raquette::drawRaquette() {
         
         glPushMatrix(); // Sauvegarde de la matrice
             glScalef(this->coefftaille, 1, this->coefftaille); // Resize du plan pour correspondre au coeff de la raquette
-            drawSquare(); // Dessin de la raquette7
+            drawSquare(); // Dessin de la raquette
         glPopMatrix(); // Reload de la matrice sauvegardée
     glPopMatrix(); // Reload de la matrice sauvegardée
     
@@ -64,7 +64,6 @@ void Ball::checkRaquetteHit(Raquette* raquette) {
             }
         }
     }
-    
 }
 
 bool Ball::checkLoose(Raquette* raquette) {
@@ -86,5 +85,72 @@ void Corridor::drawCorridor() {
             glTranslatef(0, translateY, 0);
             drawBorderCorridor();
         glPopMatrix(); // Reload de la matrice sauvegardée
+    }
+}
+
+void Obstacle::drawObstacle() {
+    // if (this->y > 0.0025) {
+    // glColor4f(1.0f, 0.0f, 1.0f, 0.01); // Définir la couleur avec une opacité de 0
+    // //ça marche pas ???
+    // } else {
+    // glColor3f(0.0f, 0.0f, 1.0f); // Définir la couleur sans transparence
+    // }
+    glColor3f(0,0,255);
+    if (this->side == 1) { //mur d'en haut
+        glPushMatrix();
+            glTranslatef(0, this->y, 2.5);
+            drawUpsideWall();
+            glPopMatrix();
+    }
+
+    if (this->side == 2) { //mur de droite
+        glPushMatrix();
+            glTranslatef(0, this->y, 0);
+            drawRightWall();
+            glPopMatrix();
+    }
+
+    if (this->side == 3) { //mur du bas
+        glPushMatrix();
+            glTranslatef(0, this->y, 0);//le meme mur que celui du haut mais décalé vers le bas
+            drawUpsideWall();
+            glPopMatrix();
+    }
+
+     if (this->side == 4) { //mur de gauche
+        glPushMatrix();
+            glTranslatef(-5, this->y, 0);//le meme mur que celui du haut mais décalé vers la gauche
+            drawRightWall();
+            glPopMatrix();
+    }
+}
+
+void initList(ListOfObstacles* list){
+    Obstacle *obstacle1 = new Obstacle;
+    obstacle1->y=5;
+    obstacle1->side=1;
+
+    Obstacle *obstacle2 = new Obstacle;
+    obstacle2->y=7;
+    obstacle2->side=2;
+
+    Obstacle *obstacle3 = new Obstacle;
+    obstacle3->y=9;
+    obstacle3->side=3;
+
+    obstacle1->next=obstacle2;
+    obstacle2->next=obstacle3;
+    obstacle3->next = nullptr;
+
+    //obstacle1->next = list->head; //le pointeur vers l'obstacle suivant devient le pointeur vers la tete de la liste
+    list->head = obstacle1; // notre obstacle est placé à la tete de la liste
+    //std::cout << "la liste est init" << std::endl;
+}
+
+void drawObstacles(ListOfObstacles* list){
+    Obstacle* current = list->head;
+    while(current!=nullptr){ //on parcoure la liste chaînée
+      current->drawObstacle(); //on dessine chaque obstacle
+      current = current->next;
     }
 }

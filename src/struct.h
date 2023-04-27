@@ -1,3 +1,4 @@
+#include <vector>
 using namespace std;
 struct Raquette {
     float x;
@@ -43,27 +44,31 @@ struct Corridor {
 
 
 struct Obstacle {
-     // Avancée de l'Obstacle vers le joueur 
-    float y;
-    int side; //entier pour chaque obstacle -> peut etre égal à 1, 2, 3 ou 4 (correspond au côté du mur : haut, droite, bas, gauche)
-    float size; // taille qui peut varier en cas de bonus ?
-    Obstacle* next = nullptr; //prochain obstacle de la liste chaînée
+    // j'ai mis des _ avant les attributs pour ne pas avoir besoin de mettre this-> dans les fonctions 
+    float _y; // Avancée de l'Obstacle vers le joueur 
+    int _side; //entier pour chaque obstacle -> peut etre égal à 1, 2, 3 ou 4 (correspond au côté du mur : haut, droite, bas, gauche)
+    float _size; // taille qui peut varier en cas de bonus ?
+    // Obstacle* next = nullptr; //prochain obstacle de la liste chaînée
 
     //dessin de l'obstacle
     void drawObstacle();
+
+    Obstacle(float y, int side); //constructeur
 };
 
-struct ListOfObstacles{
-    Obstacle* head = nullptr;
-    //faire une liste chainée qui contient les obstacles ?
-    //les obstacles s'ajoutent au fur et à mesure que le joueur avance
-    //leur side prend la valeur d'un random entre 1 et 4
-    //un obstacle se supprime de la liste chainée lorsque son y dépasse la camera
+// struct ListOfObstacles{
+//     Obstacle* head = nullptr;
+//     //faire une liste chainée qui contient les obstacles ?
+//     //les obstacles s'ajoutent au fur et à mesure que le joueur avance
+//     //leur side prend la valeur d'un random entre 1 et 4
+//     //un obstacle se supprime de la liste chainée lorsque son y dépasse la camera
 
-    //void addObstacle();
-    //void deleteObstacle();
+//     //void addObstacle();
+//     //void deleteObstacle();
 
-};
+// };
 
-void initList(ListOfObstacles* list);
-void drawObstacles(ListOfObstacles *list); //pour dessiner tous les obstacles
+
+
+// void initList(ListOfObstacles* list);
+ void drawObstacles(std::vector<Obstacle> obstacles); //pour dessiner tous les obstacles du vecteur

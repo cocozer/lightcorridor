@@ -1,6 +1,7 @@
 #define GLFW_INCLUDE_NONE
 #include "GLFW/glfw3.h"
 #include <iostream>
+#include <vector>
 
 
 #include "3D_tools.h"
@@ -68,15 +69,13 @@ void MoveRaquette(GLFWwindow* window, Raquette* raquette) {
 	
 }
 
-void MoveCorridor(Corridor* corridor, Ball* ball, ListOfObstacles* list) {
+void MoveCorridor(Corridor* corridor, Ball* ball, std::vector<Obstacle>& obstacles) {
 	if(CorridorMoving) {
 		corridor->y+=0.025;
 		ball->y-=0.025;
-		Obstacle* current = list->head;
-    	while(current!=nullptr){ //on parcoure la liste chaînée
-      		current->y-=0.025; //fait avancer l'obstacle
-      		current = current->next;
-    	}
+		for(auto & obstacle : obstacles){
+			obstacle._y-=0.025; //fait avancer l'obstacle
+		}
 	}
 } 
 
@@ -127,7 +126,6 @@ void mouse_button_callback(GLFWwindow* window ,int button, int action, int mods)
     {
 
     }
-
 }
 
 int main() {
@@ -177,19 +175,10 @@ int main() {
 	Corridor *corridor = new Corridor;
 	corridor->y = 7.6;
 
+	/*Création du vecteur des obstacles*/
 
-	// Obstacle *obstacle1 = new Obstacle;
-	// obstacle1->side=1;
-	// obstacle1->y=2;
-
-	// Obstacle *obstacle2 = new Obstacle;
-	// obstacle1->side=4;
-	// obstacle1->y=3;
-
-
-	//création de la liste chainée des obstacles
-	ListOfObstacles obstacles;
-	initList(&obstacles); //on initialise la liste
+	std::vector<Obstacle> obstacles ={Obstacle (5,1), Obstacle (7,2), Obstacle (9,3)};
+	
 
     // Make the window's context current
     glfwMakeContextCurrent(window);
@@ -217,7 +206,7 @@ int main() {
 		ball->updatePosition(); // update de la position de la balle
 		MoveRaquette(window, raquette); // Raquette
 
-		MoveCorridor(corridor, ball, &obstacles);
+		MoveCorridor(corridor, ball, obstacles);
 
 		/* Cleaning buffers and setting Matrix Mode */
 		glClearColor(0.2,0.0,0.0,0.0);
@@ -233,7 +222,7 @@ int main() {
 
 		// obstacle1->drawObstacle();
 		// obstacle2->drawObstacle();
-		drawObstacles(&obstacles); //dessine la liste chainée des obstacles
+		drawObstacles(obstacles); //dessine la liste chainée des obstacles
 		
 		/* Draw Corridor*/
 		corridor->drawCorridor();

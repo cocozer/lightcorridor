@@ -1,6 +1,7 @@
 #include "struct.h"
 #include "3D_tools.h"
 
+
 // Struct Raquette fonctions
 void Raquette::drawRaquette() {
     glColor3f(255, 255, 255); // Blanc
@@ -89,68 +90,50 @@ void Corridor::drawCorridor() {
 }
 
 void Obstacle::drawObstacle() {
-    // if (this->y > 0.0025) {
-    // glColor4f(1.0f, 0.0f, 1.0f, 0.01); // Définir la couleur avec une opacité de 0
-    // //ça marche pas ???
-    // } else {
-    // glColor3f(0.0f, 0.0f, 1.0f); // Définir la couleur sans transparence
-    // }
-    glColor3f(0,0,255);
-    if (this->side == 1) { //mur d'en haut
+    if (_y > 2){
+    glColor4f(1.0f, 0.0f, 1.0f, 0.0f); // Définir la couleur avec une opacité de 0
+    //ça marche pas ???
+    } else {
+    glColor4f(0.0f, 0.0f, 1.0f, 1.0f); // Définir la couleur sans transparence
+    }
+    //glColor3f(0,0,255);
+    if (_side == 1) { //mur d'en haut
         glPushMatrix();
-            glTranslatef(0, this->y, 2.5);
+            glTranslatef(0, _y, 2.5);
             drawUpsideWall();
-            glPopMatrix();
+        glPopMatrix();
     }
 
-    if (this->side == 2) { //mur de droite
+    if (_side == 2) { //mur de droite
         glPushMatrix();
-            glTranslatef(0, this->y, 0);
+            glTranslatef(0, _y, 0);
             drawRightWall();
-            glPopMatrix();
+        glPopMatrix();
     }
 
-    if (this->side == 3) { //mur du bas
+    if (_side == 3) { //mur du bas
         glPushMatrix();
-            glTranslatef(0, this->y, 0);//le meme mur que celui du haut mais décalé vers le bas
+            glTranslatef(0, _y, 0);//le meme mur que celui du haut mais décalé vers le bas
             drawUpsideWall();
             glPopMatrix();
     }
 
-     if (this->side == 4) { //mur de gauche
+     if (_side == 4) { //mur de gauche
         glPushMatrix();
-            glTranslatef(-5, this->y, 0);//le meme mur que celui du haut mais décalé vers la gauche
+            glTranslatef(-5, _y, 0);//le meme mur que celui du haut mais décalé vers la gauche
             drawRightWall();
             glPopMatrix();
     }
 }
 
-void initList(ListOfObstacles* list){
-    Obstacle *obstacle1 = new Obstacle;
-    obstacle1->y=5;
-    obstacle1->side=1;
-
-    Obstacle *obstacle2 = new Obstacle;
-    obstacle2->y=7;
-    obstacle2->side=2;
-
-    Obstacle *obstacle3 = new Obstacle;
-    obstacle3->y=9;
-    obstacle3->side=3;
-
-    obstacle1->next=obstacle2;
-    obstacle2->next=obstacle3;
-    obstacle3->next = nullptr;
-
-    //obstacle1->next = list->head; //le pointeur vers l'obstacle suivant devient le pointeur vers la tete de la liste
-    list->head = obstacle1; // notre obstacle est placé à la tete de la liste
-    //std::cout << "la liste est init" << std::endl;
+Obstacle::Obstacle(float y, int side){
+    _y=y;
+    _side=side;
 }
 
-void drawObstacles(ListOfObstacles* list){
-    Obstacle* current = list->head;
-    while(current!=nullptr){ //on parcoure la liste chaînée
-      current->drawObstacle(); //on dessine chaque obstacle
-      current = current->next;
-    }
+
+void drawObstacles(std::vector<Obstacle> obstacles){
+  for (auto obstacle: obstacles) {//pour tous les éléments de obstacles
+    obstacle.drawObstacle();
+  }
 }

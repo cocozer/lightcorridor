@@ -157,19 +157,19 @@ int main() {
 	/* Création de la raquette */
 	Raquette *raquette = new Raquette;
 	raquette->x = 0;
-	raquette->y = 1;
+	raquette->y = 0.7;
 	raquette->z = 0;
 	raquette->coefftaille = 1;
 
 	/* Création de la balle */
 	Ball *ball = new Ball;
 	ball->x = 0;
-	ball->y = 2;
+	ball->y = 0.7;
 	ball->z = 0;
 	ball->vx = 0.01;
-	ball->vy = -0.003;
+	ball->vy = 0;
 	ball->vz = 0.01;
-	ball->coefftaille = 0.1;
+	ball->coefftaille = 0.05;
 
 	/* Création du couloir */
 	Corridor *corridor = new Corridor;
@@ -229,7 +229,7 @@ int main() {
 
 		/* Draw Ball*/
 		ball->drawBall();
-
+		
 		/* Draw Raquette */
 		raquette->drawRaquette();
 

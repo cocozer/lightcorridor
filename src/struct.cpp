@@ -7,9 +7,18 @@ void Raquette::drawRaquette() {
     glColor3f(255, 255, 255); // Blanc
     glPushMatrix(); // Sauvegarde de la matrice
         glTranslatef(this->x, this->y, this->z); // Déplacement du plan pour correspondre au x et au y de la raquette
-        
+        // // Dessin de l'ombre de la raquette
+        // glPushMatrix();
+        // glTranslatef(0, 0, -this->z-0.25);
+        //     glPushMatrix(); // Sauvegarde de la matrice
+        //         glScalef(this->coefftaille, this->coefftaille, 0.05); // Resize du plan pour correspondre au coeff de la raquette
+        //         glColor3f(0, 0, 0); // Noir
+        //         drawSquare();
+        //     glPopMatrix(); // Reload de la matrice sauvegardée
+        // glPopMatrix(); // Reload de la matrice sauvegardée
         glPushMatrix(); // Sauvegarde de la matrice
             glScalef(this->coefftaille, 1, this->coefftaille); // Resize du plan pour correspondre au coeff de la raquette
+            glColor3f(255, 255, 255); // Blanc
             drawSquare(); // Dessin de la raquette
         glPopMatrix(); // Reload de la matrice sauvegardée
     glPopMatrix(); // Reload de la matrice sauvegardée
@@ -21,7 +30,7 @@ void Ball::drawBall() {
         glTranslatef(this->x, this->y, this->z); // Déplacement du plan pour correspondre au x, au y et au z de la balle
         // Dessin de l'ombre de la balle
         glPushMatrix();
-        glTranslatef(0, 0, -this->z-0.37);
+        glTranslatef(0, 0, -this->z-0.25);
             glPushMatrix(); // Sauvegarde de la matrice
                 glScalef(this->coefftaille, this->coefftaille, 0.1); // Resize du plan pour correspondre au coeff de la balle
                 glColor3f(0, 0, 0); // Noir
@@ -43,15 +52,15 @@ void Ball::updatePosition() {
 }
 
 void Ball::checkDirection() {
-    if(this->x < -0.5) {
+    if(this->x-this->coefftaille*2 < -0.5) {
         this->vx = -(this->vx);
-    } else if(this->x > 0.5) {
+    } else if(this->x+this->coefftaille*2 > 0.5) {
         this->vx = -(this->vx);
     }
 
-    if(this->z < -0.25) {
+    if(this->z-this->coefftaille*2 < -0.25) {
         this->vz = -(this->vz);
-    } else if(this->z > 0.25) {
+    } else if(this->z+this->coefftaille*2 > 0.25) {
         this->vz = -(this->vz);
     }
 }

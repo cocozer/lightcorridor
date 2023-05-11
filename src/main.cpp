@@ -49,7 +49,8 @@ void MoveRaquette(GLFWwindow* window, Raquette* raquette) {
 
 	xpos = ((xpos / (WINDOW_WIDTH/2))/2-0.5);
     ypos = -((ypos / (WINDOW_HEIGHT/2))/2-0.5);
-	// On empêche de dépasser les bords de l'écran
+	
+	
 	if (xpos < -0.43) { 
 		xpos = -0.43;
 	}
@@ -66,6 +67,18 @@ void MoveRaquette(GLFWwindow* window, Raquette* raquette) {
     raquette->x = xpos*1.2*(raquette->y+1); // Position X multipliée par la sensibilité (change en fonction de la profondeur de la raquette)
     raquette->z = ypos*1.2*(raquette->y+1); // Position Y multipliée par la sensibilité (change en fonction de la profondeur de la raquette)
 
+	// if (raquette->x+raquette->coefftaille*0.25 < -0.5) {
+	// 	raquette->x = -0.5-raquette->coefftaille*0.25;
+	// }
+	// if (raquette->x-raquette->coefftaille*0.25 > 0.5) {
+	// 	raquette->x = 0.5+raquette->coefftaille*0.25;
+	// }
+	// if (raquette->z+raquette->coefftaille*0.25 < -0.25) {
+	// 	raquette->z = -0.25-raquette->coefftaille*0.25;
+	// }
+	// if (raquette->z-raquette->coefftaille*0.25 > 0.25) {
+	// 	raquette->z = 0.25+raquette->coefftaille*0.25;
+	// }
 	
 }
 
@@ -157,23 +170,23 @@ int main() {
 	/* Création de la raquette */
 	Raquette *raquette = new Raquette;
 	raquette->x = 0;
-	raquette->y = 0.7;
+	raquette->y = 0.6;
 	raquette->z = 0;
 	raquette->coefftaille = 1;
 
 	/* Création de la balle */
 	Ball *ball = new Ball;
 	ball->x = 0;
-	ball->y = 0.7;
+	ball->y = 1.8;
 	ball->z = 0;
-	ball->vx = 0.01;
-	ball->vy = 0;
-	ball->vz = 0.01;
-	ball->coefftaille = 0.05;
+	ball->vx = 0.001;
+	ball->vy = -0.0005;
+	ball->vz = 0.001;
+	ball->coefftaille = 0.5;
 
 	/* Création du couloir */
 	Corridor *corridor = new Corridor;
-	corridor->y = 7.6;
+	corridor->y = 0;
 
 	/*Création du vecteur des obstacles*/
 
@@ -189,14 +202,19 @@ int main() {
 
     onWindowResized(window, WINDOW_WIDTH, WINDOW_HEIGHT);
 
+	glEnable(GL_DEPTH_TEST); //Activation du z-buffer pour gérer la profondeur 
 
-
+	/* Get time (in second) at loop beginning */
+	double startTime = glfwGetTime();
+	double deltaTime = 0.0;
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
-
-		/* Get time (in second) at loop beginning */
-		double startTime = glfwGetTime();
+		double currentTime = glfwGetTime();
+        deltaTime = currentTime - startTime;
+        startTime = currentTime;
+		
+		
 
 		/* On vérifie si le joueur a perdu */
 		lose = ball->checkLoose(raquette);
@@ -241,13 +259,16 @@ int main() {
 		/* Poll for and process events */
 		glfwPollEvents();
 
+		/* Clear du z buffer */
+		// glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_DEPTH_BUFFER_BIT);
 		/* Elapsed time computation from loop begining */
-		double elapsedTime = glfwGetTime() - startTime;
-		/* If to few time is spend vs our wanted FPS, we wait */
-		if(elapsedTime < FRAMERATE_IN_SECONDS) 
-		{
-			glfwWaitEventsTimeout(FRAMERATE_IN_SECONDS-elapsedTime);
-		}
+		// double elapsedTime = glfwGetTime() - startTime;
+		// /* If to few time is spend vs our wanted FPS, we wait */
+		// if(elapsedTime < FRAMERATE_IN_SECONDS) 
+		// {
+		// 	glfwWaitEventsTimeout(FRAMERATE_IN_SECONDS-elapsedTime);
+		// }
 
 	}
 

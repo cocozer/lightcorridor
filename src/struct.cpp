@@ -38,7 +38,7 @@ void Ball::drawBall() {
             glPopMatrix(); // Reload de la matrice sauvegardée
         glPopMatrix(); // Reload de la matrice sauvegardée
         glPushMatrix(); // Sauvegarde de la matrice
-            glScalef(this->coefftaille, this->coefftaille, this->coefftaille); // Resize du plan pour correspondre au coeff de la balle
+            glScalef(0.1*this->coefftaille, 0.1*this->coefftaille, 0.1*this->coefftaille); // Resize du plan pour correspondre au coeff de la balle
             glColor3f(0, 255, 0); // Couleur de la balle
             drawSphere();
         glPopMatrix(); // Reload de la matrice sauvegardée
@@ -52,15 +52,15 @@ void Ball::updatePosition() {
 }
 
 void Ball::checkDirection() {
-    if(this->x-this->coefftaille*2 < -0.5) {
+    if(this->x-this->coefftaille*0.1 < -0.49) {
         this->vx = -(this->vx);
-    } else if(this->x+this->coefftaille*2 > 0.5) {
+    } else if(this->x+this->coefftaille*0.1 > 0.49) {
         this->vx = -(this->vx);
     }
 
-    if(this->z-this->coefftaille*2 < -0.25) {
+    if(this->z-this->coefftaille*0.1 < -0.24) {
         this->vz = -(this->vz);
-    } else if(this->z+this->coefftaille*2 > 0.25) {
+    } else if(this->z+this->coefftaille*0.1 > 0.24) {
         this->vz = -(this->vz);
     }
 }

@@ -52,10 +52,6 @@ void MoveRaquette(GLFWwindow* window, Raquette* raquette) {
     double xpos, ypos;
     glfwGetCursorPos(window, &xpos, &ypos);
 
-	// xpos = ((xpos / (WINDOW_WIDTH/2))/2-0.5);
-    // ypos = -((ypos / (WINDOW_HEIGHT/2))/2-0.5);
-	
-	
 	// if (xpos < -0.43) { 
 	// 	xpos = -0.43;
 	// }

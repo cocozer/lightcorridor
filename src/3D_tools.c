@@ -50,6 +50,15 @@ void drawSphere() {
 	gluSphere(gluNewQuadric(),1.0,NB_SEG_CIRCLE,NB_SEG_CIRCLE);
 }
 
+void drawRaquette() {
+	glBegin(GL_LINE);
+		glVertex3f(-0.25,1,-0.25);
+		glVertex3f(-0.25,1,0.25);
+		glVertex3f(0.25,1,0.25);
+		glVertex3f(0.25,1,-0.25);
+	glEnd();
+}
+
 void drawBorderCorridor() {
 	glBegin(GL_LINE_LOOP);
 		glVertex3f(-0.5,0,0.25);

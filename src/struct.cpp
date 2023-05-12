@@ -1,6 +1,6 @@
 #include "struct.h"
 #include "3D_tools.h"
-
+#include <iostream>
 
 // Struct Raquette fonctions
 void Raquette::drawRaquette() {
@@ -10,7 +10,8 @@ void Raquette::drawRaquette() {
         
         glPushMatrix(); // Sauvegarde de la matrice
             glScalef(this->coefftaille, 1, this->coefftaille); // Resize du plan pour correspondre au coeff de la raquette
-            drawSquare(); // Dessin de la raquette
+            //drawSquare(); // Dessin de la raquette
+            //drawRaquette();
         glPopMatrix(); // Reload de la matrice sauvegardée
     glPopMatrix(); // Reload de la matrice sauvegardée
     
@@ -67,6 +68,18 @@ void Ball::checkRaquetteHit(Raquette* raquette) {
     }
 }
 
+void Ball::checkObstacleHit(Obstacle obstacle){
+    //si la balle touche un mur
+    float delta = 0.01; // marge d'erreur pour comparer 2 float
+    if ((this->y > (obstacle._y-delta)) && (this->y < (obstacle._y+delta))) {
+        std::cout<<"les y sont pareils"<<endl;
+        //std::cout<<"la balle a pour y"<<this->y <<endl;
+        //if(obstacle._side == 1){
+            this->vy = -this->vy; // On inverse la vitesse de la balle en y
+        //}
+    }
+}
+
 bool Ball::checkLoose(Raquette* raquette) {
     if(this->y < raquette->y) {
         return true;
@@ -89,51 +102,66 @@ void Corridor::drawCorridor() {
     }
 }
 
+
+Obstacle::Obstacle(float y, int side){ // constructeur de la structure Obstacle
+    _y=y;
+    _side=side;
+}
+
+
+
 void Obstacle::drawObstacle() {
     if (_y > 2){
     glColor4f(1.0f, 0.0f, 1.0f, 0.0f); // Définir la couleur avec une opacité de 0
     //ça marche pas ???
     } else {
     glColor4f(0.0f, 0.0f, 1.0f, 1.0f); // Définir la couleur sans transparence
+    //std::cout <<_y << endl;
     }
     //glColor3f(0,0,255);
-    if (_side == 1) { //mur d'en haut
-        glPushMatrix();
-            glTranslatef(0, _y, 2.5);
-            drawUpsideWall();
-        glPopMatrix();
-    }
 
-    if (_side == 2) { //mur de droite
-        glPushMatrix();
-            glTranslatef(0, _y, 0);
-            drawRightWall();
-        glPopMatrix();
-    }
-
-    if (_side == 3) { //mur du bas
-        glPushMatrix();
-            glTranslatef(0, _y, 0);//le meme mur que celui du haut mais décalé vers le bas
-            drawUpsideWall();
+    glPushMatrix();
+        glTranslatef(0, _y, 0); // Déplacement du plan pour correspondre au y du mur
+        if (_side == 1) { //mur d'en haut
+            glPushMatrix();
+                glTranslatef(0, _y, 2.5);
+                drawUpsideWall();
             glPopMatrix();
-    }
+         std::cout << "le mur den haut a pour y" << _y <<endl;
+        }
 
-     if (_side == 4) { //mur de gauche
-        glPushMatrix();
-            glTranslatef(-5, _y, 0);//le meme mur que celui du haut mais décalé vers la gauche
-            drawRightWall();
+        if (_side == 2) { //mur de droite
+            glPushMatrix();
+                glTranslatef(0, _y, 0);
+                drawRightWall();
             glPopMatrix();
-    }
+        }
+
+        if (_side == 3) { //mur du bas
+            glPushMatrix();
+                glTranslatef(0, _y, 0);//le meme mur que celui du haut mais décalé vers le bas
+                drawUpsideWall();
+                glPopMatrix();
+        }
+
+        if (_side == 4) { //mur de gauche
+            glPushMatrix();
+                glTranslatef(-5, _y, 0);//le meme mur que celui du haut mais décalé vers la gauche
+                drawRightWall();
+                glPopMatrix();
+        }
+    glPopMatrix();
 }
 
-Obstacle::Obstacle(float y, int side){
-    _y=y;
-    _side=side;
-}
-
-
-void drawObstacles(std::vector<Obstacle> obstacles){
+void drawObstacles(std::vector<Obstacle> obstacles){ //pour dessiner le vecteur des obstacles
   for (auto obstacle: obstacles) {//pour tous les éléments de obstacles
     obstacle.drawObstacle();
   }
+}
+
+void checkObstaclesHit(Ball ball, std::vector<Obstacle> obstacles){
+    for (auto obstacle: obstacles) {//pour tous les éléments de obstacles
+        ball.checkObstacleHit(obstacle);
+    }
+
 }

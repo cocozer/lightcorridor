@@ -74,18 +74,18 @@ void MoveRaquette(GLFWwindow* window, Raquette* raquette) {
     raquette->x = newx; // Position X 
     raquette->z = -newz; // Position Y 
 
-	// if (raquette->x+raquette->coefftaille*0.1 < -0.5) {
-	// 	raquette->x = -0.5-raquette->coefftaille*0.1;
-	// }
-	// if (raquette->x-raquette->coefftaille*0.1 > 0.5) {
-	// 	raquette->x = 0.5+raquette->coefftaille*0.1;
-	// }
-	// if (raquette->z+raquette->coefftaille*0.1 < -0.25) {
-	// 	raquette->z = -0.25-raquette->coefftaille*0.1;
-	// }
-	// if (raquette->z-raquette->coefftaille*0.1 > 0.25) {
-	// 	raquette->z = 0.25+raquette->coefftaille*0.1;
-	// }
+	if (raquette->x-raquette->coefftaille*0.1 < -0.5) {
+		raquette->x = -0.5+raquette->coefftaille*0.1;
+	}
+	if (raquette->x+raquette->coefftaille*0.1 > 0.5) {
+		raquette->x = 0.5-raquette->coefftaille*0.1;
+	}
+	if (raquette->z-raquette->coefftaille*0.1 < -0.25) {
+		raquette->z = -0.25+raquette->coefftaille*0.1;
+	}
+	if (raquette->z+raquette->coefftaille*0.1 > 0.25) {
+		raquette->z = 0.25-raquette->coefftaille*0.1;
+	}
 	
 
 	//on veut passser du x et du z de la scène à celui de l'écran sans multiplier par 0.5
@@ -180,18 +180,19 @@ int main() {
 	/* Création de la raquette */
 	Raquette *raquette = new Raquette;
 	raquette->x = 0;
-	raquette->y = 0.8;
+	raquette->y = 0.6;
 	raquette->z = 0;
 	raquette->coefftaille = 1;
 
 	/* Création de la balle */
 	Ball *ball = new Ball;
 	ball->x = 0;
-	ball->y = 1.1;
+	ball->y = 1;
 	ball->z = 0;
 	ball->vx = 0.02;
 	ball->vy = -0.0;
 	ball->vz = 0.02;
+
 	ball->coefftaille = 0.5;
 
 	/* Création du couloir */
@@ -200,8 +201,8 @@ int main() {
 
 	/*Création du vecteur des obstacles*/
 
-	//std::vector<Obstacle> obstacles ={Obstacle (2,1), Obstacle (7,2), Obstacle (9,3)};
-	std::vector<Obstacle> obstacles ={Obstacle (2.5,1)};
+	// std::vector<Obstacle> obstacles ={Obstacle (1,1), Obstacle (1.2,2), Obstacle (1.4,3), Obstacle (1.6,4)};
+	std::vector<Obstacle> obstacles ={Obstacle (5,1)};
 	
 
     // Make the window's context current

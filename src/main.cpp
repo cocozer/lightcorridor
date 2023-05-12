@@ -190,7 +190,8 @@ int main() {
 
 	/*Création du vecteur des obstacles*/
 
-	std::vector<Obstacle> obstacles ={Obstacle (5,1), Obstacle (7,2), Obstacle (9,3)};
+	//std::vector<Obstacle> obstacles ={Obstacle (2,1), Obstacle (7,2), Obstacle (9,3)};
+	std::vector<Obstacle> obstacles ={Obstacle (2.5,1)};
 	
 
     // Make the window's context current
@@ -243,14 +244,17 @@ int main() {
 
 		// obstacle1->drawObstacle();
 		// obstacle2->drawObstacle();
-		drawObstacles(obstacles); //dessine la liste chainée des obstacles
+		drawObstacles(obstacles); //dessine le vecteur des obstacles
+		//checkObstaclesHit(*ball, obstacles);
+		ball->checkObstacleHit(obstacles[1]);
 		
 		/* Draw Corridor*/
 		corridor->drawCorridor();
 
 		/* Draw Ball*/
 		ball->drawBall();
-		
+		//std::cout<<"la balle a pour y" <<ball->y<<endl;
+
 		/* Draw Raquette */
 		raquette->drawRaquette();
 

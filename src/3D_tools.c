@@ -27,13 +27,17 @@ void drawSquare() {
 }
 
 void drawCircle() {
-	glBegin(GL_TRIANGLE_FAN);
-		glVertex3f(0.0,0.0,0.0);
-		float step_rad = 2*M_PI/(float)NB_SEG_CIRCLE;
-		for(int i=0;i<=NB_SEG_CIRCLE;i++) {
-			glVertex3f(cos(i*step_rad),sin(i*step_rad),0.0f);
-		}
-	glEnd();
+	glPushMatrix(); // Sauvegarde de la matrice
+        glScalef(0.1, 0.1, 0.1); // Déplacement du plan
+    
+		glBegin(GL_TRIANGLE_FAN);
+			glVertex3f(0.0,0.0,0.0);
+			float step_rad = 2*M_PI/(float)NB_SEG_CIRCLE;
+			for(int i=0;i<=NB_SEG_CIRCLE;i++) {
+				glVertex3f(cos(i*step_rad),sin(i*step_rad),0.0f);
+			}
+		glEnd();
+	glPopMatrix(); // Reload de la matrice sauvegardée
 }
 
 void drawCone() {
@@ -47,15 +51,15 @@ void drawCone() {
 }
 
 void drawSphere() {
-	gluSphere(gluNewQuadric(),1.0,NB_SEG_CIRCLE,NB_SEG_CIRCLE);
+	gluSphere(gluNewQuadric(),1,NB_SEG_CIRCLE,NB_SEG_CIRCLE);
 }
 
 void drawRaquette() {
 	glBegin(GL_LINE);
-		glVertex3f(-0.25,1,-0.25);
-		glVertex3f(-0.25,1,0.25);
-		glVertex3f(0.25,1,0.25);
-		glVertex3f(0.25,1,-0.25);
+		glVertex3f(-0.25,0,-0.25);
+		glVertex3f(-0.25,0,0.25);
+		glVertex3f(0.25,0,0.25);
+		glVertex3f(0.25,0,-0.25);
 	glEnd();
 }
 

@@ -67,18 +67,18 @@ void MoveRaquette(GLFWwindow* window, Raquette* raquette) {
     raquette->x = xpos*1.2*(raquette->y+1); // Position X multipliée par la sensibilité (change en fonction de la profondeur de la raquette)
     raquette->z = ypos*1.2*(raquette->y+1); // Position Y multipliée par la sensibilité (change en fonction de la profondeur de la raquette)
 
-	// if (raquette->x+raquette->coefftaille*0.25 < -0.5) {
-	// 	raquette->x = -0.5-raquette->coefftaille*0.25;
-	// }
-	// if (raquette->x-raquette->coefftaille*0.25 > 0.5) {
-	// 	raquette->x = 0.5+raquette->coefftaille*0.25;
-	// }
-	// if (raquette->z+raquette->coefftaille*0.25 < -0.25) {
-	// 	raquette->z = -0.25-raquette->coefftaille*0.25;
-	// }
-	// if (raquette->z-raquette->coefftaille*0.25 > 0.25) {
-	// 	raquette->z = 0.25+raquette->coefftaille*0.25;
-	// }
+	if (raquette->x+raquette->coefftaille*0.25 < -0.5) {
+		raquette->x = -0.5-raquette->coefftaille*0.25;
+	}
+	if (raquette->x-raquette->coefftaille*0.25 > 0.5) {
+		raquette->x = 0.5+raquette->coefftaille*0.25;
+	}
+	if (raquette->z+raquette->coefftaille*0.25 < -0.25) {
+		raquette->z = -0.25-raquette->coefftaille*0.25;
+	}
+	if (raquette->z-raquette->coefftaille*0.25 > 0.25) {
+		raquette->z = 0.25+raquette->coefftaille*0.25;
+	}
 	
 }
 
@@ -170,18 +170,18 @@ int main() {
 	/* Création de la raquette */
 	Raquette *raquette = new Raquette;
 	raquette->x = 0;
-	raquette->y = 0.6;
+	raquette->y = 0.8;
 	raquette->z = 0;
 	raquette->coefftaille = 1;
 
 	/* Création de la balle */
 	Ball *ball = new Ball;
 	ball->x = 0;
-	ball->y = 1.8;
+	ball->y = 0.9;
 	ball->z = 0;
-	ball->vx = 0.001;
-	ball->vy = -0.0005;
-	ball->vz = 0.001;
+	ball->vx = 0.0005;
+	ball->vy = -0.000;
+	ball->vz = 0.0005;
 	ball->coefftaille = 0.5;
 
 	/* Création du couloir */
@@ -229,7 +229,10 @@ int main() {
 		/* Cleaning buffers and setting Matrix Mode */
 		glClearColor(0.2,0.0,0.0,0.0);
 
+
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		glEnable(GL_DEPTH_TEST);
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
@@ -261,7 +264,7 @@ int main() {
 
 		/* Clear du z buffer */
 		// glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glClear(GL_DEPTH_BUFFER_BIT);
+		// glClear(GL_DEPTH_BUFFER_BIT);
 		/* Elapsed time computation from loop begining */
 		// double elapsedTime = glfwGetTime() - startTime;
 		// /* If to few time is spend vs our wanted FPS, we wait */

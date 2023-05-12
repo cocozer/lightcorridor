@@ -52,15 +52,15 @@ void Ball::updatePosition() {
 }
 
 void Ball::checkDirection() {
-    if(this->x-this->coefftaille*0.1 < -0.49) {
+    if(this->x-this->coefftaille*0.1 < -0.5) {
         this->vx = -(this->vx);
-    } else if(this->x+this->coefftaille*0.1 > 0.49) {
+    } else if(this->x+this->coefftaille*0.1 > 0.5) {
         this->vx = -(this->vx);
     }
 
-    if(this->z-this->coefftaille*0.1 < -0.24) {
+    if(this->z-this->coefftaille*0.1 < -0.25) {
         this->vz = -(this->vz);
-    } else if(this->z+this->coefftaille*0.1 > 0.24) {
+    } else if(this->z+this->coefftaille*0.1 > 0.25) {
         this->vz = -(this->vz);
     }
 }

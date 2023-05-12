@@ -57,6 +57,8 @@ struct Ball {
     // Vérifie si la balle est passée entre la raquette et la caméra
     bool checkLoose(Raquette* Raquette);
 
+    void stickBall(Raquette* raquette);
+
     void checkObstacleHit(Obstacle obstacle);
 };
 

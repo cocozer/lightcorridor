@@ -100,6 +100,11 @@ void Ball::checkRaquetteHit(Raquette* raquette) {
     }
 }
 
+void Ball::stickBall(Raquette* raquette) {
+    this->x = raquette->x;
+    this->y = raquette->y + 0.05;
+    this->z = raquette->z;
+}
 void Ball::checkObstacleHit(Obstacle obstacle){
     //si la balle touche un mur
     float delta = 0.01; // marge d'erreur pour comparer 2 float

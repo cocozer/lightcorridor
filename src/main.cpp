@@ -19,7 +19,10 @@ static float aspectRatio = 1.0;
 bool play = true; // Est-ce que la partie est lancée ou pas ?
 bool lose = false; // Est-ce que le joueur a perdu ?
 bool CorridorMoving = false; // Est-ce que le couloir est en mouvement ou pas ?
+bool ballStick = false;
 
+/* Variable globale balle pour pouvoir agir au clic gauche */
+Ball *ball = new Ball;
 /* Minimal time wanted between two images */
 static const double FRAMERATE_IN_SECONDS = 1. / 60.;
 
@@ -79,6 +82,7 @@ void MoveRaquette(GLFWwindow* window, Raquette* raquette) {
 
 }
 
+
 void MoveCorridor(Corridor* corridor, Ball* ball, std::vector<Obstacle>& obstacles) {
 	if(CorridorMoving) {
 		corridor->y+=0.01;
@@ -134,7 +138,10 @@ void mouse_button_callback(GLFWwindow* window ,int button, int action, int mods)
 
     if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) 
     {
-
+		if(ballStick) {
+			ball->vy = 0.02;
+			ballStick = false;
+		}
     }
 }
 
@@ -171,8 +178,8 @@ int main() {
 	raquette->z = 0;
 	raquette->coefftaille = 1;
 
-	/* Création de la balle */
-	Ball *ball = new Ball;
+	/* Assignation des valeurs à la balle */
+
 	ball->x = 0;
 	ball->y = 3;
 	ball->z = 0;
@@ -181,7 +188,8 @@ int main() {
 	ball->vz = 0.00;
 
 	ball->coefftaille = 1;
-
+	
+	ballStick = true; // On colle la balle au début du jeu
 	/* Création du couloir */
 	Corridor *corridor = new Corridor;
 	corridor->y = 0;
@@ -222,9 +230,14 @@ int main() {
 		ball->checkRaquetteHit(raquette); // rebond si la balle touche la raquette
 		ball->updatePosition(); // update de la position de la balle
 		MoveRaquette(window, raquette); // Raquette
+		
 
 		MoveCorridor(corridor, ball, obstacles);
 
+		if(ballStick) {
+			ball->stickBall(raquette);
+		}
+		
 		/* Cleaning buffers and setting Matrix Mode */
 		glClearColor(0.2,0.0,0.0,0.0);
 

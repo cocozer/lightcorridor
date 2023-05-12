@@ -52,19 +52,6 @@ void MoveRaquette(GLFWwindow* window, Raquette* raquette) {
     double xpos, ypos;
     glfwGetCursorPos(window, &xpos, &ypos);
 
-	// if (xpos < -0.43) { 
-	// 	xpos = -0.43;
-	// }
-	// if (xpos > 0.43) { 
-	// 	xpos = 0.43;
-	// }
-	// if (ypos < -0.43) { 
-	// 	ypos = -0.43;
-	// }
-	// if (ypos > 0.43) { 
-	// 	ypos = 0.43;
-	// }
-
 	float alpha = M_PI/3; //angle de la camera sur le plan rectangulaire ou on veut mettre la raquette = 60degre
 	float d = raquette->y; //distance camera et centre du rectangle
 	float h = tan(alpha/2)*2*d;
@@ -94,10 +81,10 @@ void MoveRaquette(GLFWwindow* window, Raquette* raquette) {
 
 void MoveCorridor(Corridor* corridor, Ball* ball, std::vector<Obstacle>& obstacles) {
 	if(CorridorMoving) {
-		corridor->y+=0.025;
-		ball->y-=0.025;
+		corridor->y+=0.01;
+		ball->y-=0.01;
 		for(auto & obstacle : obstacles){
-			obstacle._y-=0.025; //fait avancer l'obstacle
+			obstacle._y-=0.01; //fait avancer l'obstacle
 		}
 	}
 } 
@@ -187,11 +174,11 @@ int main() {
 	/* Création de la balle */
 	Ball *ball = new Ball;
 	ball->x = 0;
-	ball->y = 1;
+	ball->y = 3;
 	ball->z = 0;
-	ball->vx = 0.02;
-	ball->vy = -0.0;
-	ball->vz = 0.02;
+	ball->vx = 0.00;
+	ball->vy = -0.01;
+	ball->vz = 0.00;
 
 	ball->coefftaille = 0.5;
 

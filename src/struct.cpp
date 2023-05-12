@@ -119,7 +119,7 @@ Obstacle::Obstacle(float y, int side){ // constructeur de la structure Obstacle
 
 
 void Obstacle::drawObstacle() {
-    if (_y > 2){
+    if (_y > 5){
     glColor4f(1.0f, 0.0f, 1.0f, 0.0f); // Définir la couleur avec une opacité de 0
     //ça marche pas ???
     } else {
@@ -128,37 +128,34 @@ void Obstacle::drawObstacle() {
     }
     //glColor3f(0,0,255);
 
-    glPushMatrix();
-        glTranslatef(0, _y, 0); // Déplacement du plan pour correspondre au y du mur
-        if (_side == 1) { //mur d'en haut
-            glPushMatrix();
-                glTranslatef(0, _y, 2.5);
-                drawUpsideWall();
+    if (_side == 1) { //mur d'en haut
+        glPushMatrix();
+            glTranslatef(0, _y, 0);
+            drawUpsideWall();
+        glPopMatrix();
+        //std::cout << "le mur d'en haut a pour y" << _y <<endl;
+    }
+
+    if (_side == 2) { //mur de droite
+        glPushMatrix();
+            glTranslatef(0, _y, 0);
+            drawRightWall();
+        glPopMatrix();
+    }
+
+    if (_side == 3) { //mur du bas
+        glPushMatrix();
+            glTranslatef(0, _y, -0.25);//le meme mur que celui du haut mais décalé vers le bas
+            drawUpsideWall();
             glPopMatrix();
-         //std::cout << "le mur den haut a pour y" << _y <<endl;
-        }
+    }
 
-        if (_side == 2) { //mur de droite
-            glPushMatrix();
-                glTranslatef(0, _y, 0);
-                drawRightWall();
+    if (_side == 4) { //mur de gauche
+        glPushMatrix();
+            glTranslatef(-0.5, _y, 0);//le meme mur que celui du haut mais décalé vers la gauche
+            drawRightWall();
             glPopMatrix();
-        }
-
-        if (_side == 3) { //mur du bas
-            glPushMatrix();
-                glTranslatef(0, _y, 0);//le meme mur que celui du haut mais décalé vers le bas
-                drawUpsideWall();
-                glPopMatrix();
-        }
-
-        if (_side == 4) { //mur de gauche
-            glPushMatrix();
-                glTranslatef(-5, _y, 0);//le meme mur que celui du haut mais décalé vers la gauche
-                drawRightWall();
-                glPopMatrix();
-        }
-    glPopMatrix();
+    }
 }
 
 void drawObstacles(std::vector<Obstacle> obstacles){ //pour dessiner le vecteur des obstacles

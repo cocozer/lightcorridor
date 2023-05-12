@@ -177,10 +177,10 @@ int main() {
 	/* Création de la balle */
 	Ball *ball = new Ball;
 	ball->x = 0;
-	ball->y = 1.8;
+	ball->y = 1.6;
 	ball->z = 0;
 	ball->vx = 0.001;
-	ball->vy = -0.0005;
+	ball->vy = -0.000;
 	ball->vz = 0.001;
 	ball->coefftaille = 0.5;
 
@@ -190,8 +190,8 @@ int main() {
 
 	/*Création du vecteur des obstacles*/
 
-	//std::vector<Obstacle> obstacles ={Obstacle (2,1), Obstacle (7,2), Obstacle (9,3)};
-	std::vector<Obstacle> obstacles ={Obstacle (2.5,1)};
+	std::vector<Obstacle> obstacles ={Obstacle (1,1), Obstacle (1.2,2), Obstacle (1.4,3), Obstacle (1.6,4)};
+	// std::vector<Obstacle> obstacles ={Obstacle (1.6,1)};
 	
 
     // Make the window's context current

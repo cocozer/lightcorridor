@@ -6,7 +6,7 @@ float phy = 90.0f; // Angle between z axis and viewpoint
 float dist_zoom = 1.0f; // Distance between origin and viewpoint
 
 void setCamera() {
-	gluLookAt(0, 0, 0, // Caméra placée en 0 0 0
+	gluLookAt(1.5, 0, 0, // Caméra placée en 0 0 0
 			  0.0,1.0,0.0, // Regarde vers l'axe Y positif
 			  0.0,0.0,1.0); // Le haut de la caméra est l'axe Z positif
 }
@@ -77,29 +77,29 @@ void drawBorderCorridor() {
 void drawWall(){ //dessine un mur entier
 
     glBegin(GL_QUADS);
-		glVertex3f(-5,30,-2.5);
-		glVertex3f(-5,30,2.5);
-		glVertex3f(5,30,2.5);
-		glVertex3f(5,30,-2.5);
+		glVertex3f(-5,0,-2.5);
+		glVertex3f(-5,0,2.5);
+		glVertex3f(5,0,2.5);
+		glVertex3f(5,0,-2.5);
 	glEnd();
 }
 
 void drawUpsideWall(){ //dessine le mur du haut
 
     glBegin(GL_QUADS);
-		glVertex3f(-5,30,-2.5);
-		glVertex3f(-5,30,0);
-		glVertex3f(5,30,0);
-		glVertex3f(5,30,-2.5);
+		glVertex3f(-0.5,0,0.25);
+		glVertex3f(0.5,0,0.25);
+		glVertex3f(0.5,0,0);
+		glVertex3f(-0.5,0,0);
 	glEnd();
 }
 
 void drawRightWall(){
 	glBegin(GL_QUADS);
-		glVertex3f(0,30,-2.5);
-		glVertex3f(0,30,2.5);
-		glVertex3f(5,30,2.5);
-		glVertex3f(5,30,-2.5);
+		glVertex3f(0,0,-0.25);
+		glVertex3f(0,0,0.25);
+		glVertex3f(0.5,0,0.25);
+		glVertex3f(0.5,0,-0.25);
 	glEnd();
 
 

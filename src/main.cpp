@@ -7,10 +7,11 @@
 #include "3D_tools.h"
 #include "draw_scene.h"
 #include "struct.h"
+#include "math.h"
 
 /* Window properties */
-static const unsigned int WINDOW_WIDTH = 1000;
-static const unsigned int WINDOW_HEIGHT = 1000;
+static unsigned int WINDOW_WIDTH = 1000;
+static unsigned int WINDOW_HEIGHT = 1000;
 static const char WINDOW_TITLE[] = "TD04 Ex01";
 static float aspectRatio = 1.0;
 
@@ -20,7 +21,7 @@ bool lose = false; // Est-ce que le joueur a perdu ?
 bool CorridorMoving = false; // Est-ce que le couloir est en mouvement ou pas ?
 
 /* Minimal time wanted between two images */
-static const double FRAMERATE_IN_SECONDS = 1. / 30.;
+static const double FRAMERATE_IN_SECONDS = 1. / 60.;
 
 /* IHM flag */
 static int flag_animate_rot_scale = 0;
@@ -34,6 +35,10 @@ void onError(int error, const char* description) {
 
 void onWindowResized(GLFWwindow* window, int width, int height)
 {
+
+	WINDOW_WIDTH = width;
+	WINDOW_HEIGHT = height;
+
 	aspectRatio = width / (float) height;
 	
 	glViewport(0, 0, width, height);
@@ -47,39 +52,48 @@ void MoveRaquette(GLFWwindow* window, Raquette* raquette) {
     double xpos, ypos;
     glfwGetCursorPos(window, &xpos, &ypos);
 
-	xpos = ((xpos / (WINDOW_WIDTH/2))/2-0.5);
-    ypos = -((ypos / (WINDOW_HEIGHT/2))/2-0.5);
+	// xpos = ((xpos / (WINDOW_WIDTH/2))/2-0.5);
+    // ypos = -((ypos / (WINDOW_HEIGHT/2))/2-0.5);
 	
 	
-	if (xpos < -0.43) { 
-		xpos = -0.43;
-	}
-	if (xpos > 0.43) { 
-		xpos = 0.43;
-	}
-	if (ypos < -0.43) { 
-		ypos = -0.43;
-	}
-	if (ypos > 0.43) { 
-		ypos = 0.43;
-	}
+	// if (xpos < -0.43) { 
+	// 	xpos = -0.43;
+	// }
+	// if (xpos > 0.43) { 
+	// 	xpos = 0.43;
+	// }
+	// if (ypos < -0.43) { 
+	// 	ypos = -0.43;
+	// }
+	// if (ypos > 0.43) { 
+	// 	ypos = 0.43;
+	// }
 
-    raquette->x = xpos*1.2*(raquette->y+1); // Position X multipliée par la sensibilité (change en fonction de la profondeur de la raquette)
-    raquette->z = ypos*1.2*(raquette->y+1); // Position Y multipliée par la sensibilité (change en fonction de la profondeur de la raquette)
+	float alpha = M_PI/3; //angle de la camera sur le plan rectangulaire ou on veut mettre la raquette = 60degre
+	float d = raquette->y; //distance camera et centre du rectangle
+	float h = tan(alpha/2)*2*d;
+	float newx = (xpos-(WINDOW_WIDTH/2))*(h/WINDOW_HEIGHT);
+	float newz = (ypos-(WINDOW_HEIGHT/2))*(h/WINDOW_HEIGHT);
 
-	if (raquette->x+raquette->coefftaille*0.25 < -0.5) {
-		raquette->x = -0.5-raquette->coefftaille*0.25;
-	}
-	if (raquette->x-raquette->coefftaille*0.25 > 0.5) {
-		raquette->x = 0.5+raquette->coefftaille*0.25;
-	}
-	if (raquette->z+raquette->coefftaille*0.25 < -0.25) {
-		raquette->z = -0.25-raquette->coefftaille*0.25;
-	}
-	if (raquette->z-raquette->coefftaille*0.25 > 0.25) {
-		raquette->z = 0.25+raquette->coefftaille*0.25;
-	}
+    raquette->x = newx; // Position X 
+    raquette->z = -newz; // Position Y 
+
+	// if (raquette->x+raquette->coefftaille*0.1 < -0.5) {
+	// 	raquette->x = -0.5-raquette->coefftaille*0.1;
+	// }
+	// if (raquette->x-raquette->coefftaille*0.1 > 0.5) {
+	// 	raquette->x = 0.5+raquette->coefftaille*0.1;
+	// }
+	// if (raquette->z+raquette->coefftaille*0.1 < -0.25) {
+	// 	raquette->z = -0.25-raquette->coefftaille*0.1;
+	// }
+	// if (raquette->z-raquette->coefftaille*0.1 > 0.25) {
+	// 	raquette->z = 0.25+raquette->coefftaille*0.1;
+	// }
 	
+
+	//on veut passser du x et du z de la scène à celui de l'écran sans multiplier par 0.5
+
 }
 
 void MoveCorridor(Corridor* corridor, Ball* ball, std::vector<Obstacle>& obstacles) {
@@ -177,11 +191,11 @@ int main() {
 	/* Création de la balle */
 	Ball *ball = new Ball;
 	ball->x = 0;
-	ball->y = 0.9;
+	ball->y = 1.1;
 	ball->z = 0;
-	ball->vx = 0.0005;
-	ball->vy = -0.000;
-	ball->vz = 0.0005;
+	ball->vx = 0.02;
+	ball->vy = -0.0;
+	ball->vz = 0.02;
 	ball->coefftaille = 0.5;
 
 	/* Création du couloir */
@@ -266,16 +280,20 @@ int main() {
 		/* Poll for and process events */
 		glfwPollEvents();
 
-		/* Clear du z buffer */
-		// glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		// glClear(GL_DEPTH_BUFFER_BIT);
 		/* Elapsed time computation from loop begining */
 		// double elapsedTime = glfwGetTime() - startTime;
-		// /* If to few time is spend vs our wanted FPS, we wait */
+		/* If to few time is spend vs our wanted FPS, we wait */
 		// if(elapsedTime < FRAMERATE_IN_SECONDS) 
 		// {
 		// 	glfwWaitEventsTimeout(FRAMERATE_IN_SECONDS-elapsedTime);
 		// }
+		double endtime = startTime + FRAMERATE_IN_SECONDS;
+		double currenttime = glfwGetTime();
+
+		while(currenttime < endtime) {
+			glfwWaitEventsTimeout(endtime-currenttime);
+			currenttime = glfwGetTime();
+		}
 
 	}
 

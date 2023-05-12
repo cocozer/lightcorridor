@@ -28,7 +28,7 @@ void drawSquare() {
 
 void drawCircle() {
 	glPushMatrix(); // Sauvegarde de la matrice
-        glScalef(0.1, 0.1, 0.1); // Déplacement du plan
+        glScalef(0.05, 0.05, 0.05); // Resize du plan
     
 		glBegin(GL_TRIANGLE_FAN);
 			glVertex3f(0.0,0.0,0.0);
@@ -51,7 +51,7 @@ void drawCone() {
 }
 
 void drawSphere() {
-	gluSphere(gluNewQuadric(),1,NB_SEG_CIRCLE,NB_SEG_CIRCLE);
+	gluSphere(gluNewQuadric(),0.5,NB_SEG_CIRCLE,NB_SEG_CIRCLE);
 }
 
 void drawRaquette() {

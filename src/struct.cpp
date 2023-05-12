@@ -65,34 +65,36 @@ void Ball::checkDirection() {
     }
 }
 void Ball::checkRaquetteHit(Raquette* raquette) {
-    // Si la raquette touche la balle
-    if (this->y-0.1*this->coefftaille < raquette->y) {
-        if(this->x+0.2 > raquette->x - 0.1*raquette->coefftaille && this->z+0.2 > raquette->z - 0.1*raquette->coefftaille) { 
-            if(this->x-0.2 < raquette->x + 0.1*raquette->coefftaille && this->z-0.2 < raquette->z + 0.1*raquette->coefftaille) { 
-                
-                this->vy = -this->vy; // On inverse la vitesse de la balle en y
-                cout<<"ça touche"<<endl;
-                //  // On calcule le coefficient de direction en fonction de l'endroit où touche la balle sur la raquette
-                // float dx = this->x - raquette->x;
-                // float dz = this->z - raquette->z;
-                // if (dx < 0) {
-                //     this->vx -= 0.001;
-                // } else if (dx > 0) {
-                //     this->vx += 0.001;
-                // }
+    // Si la raquette touche la balle et que la balle va vers le joueur
+    if(this->vy < 0) {
+        if (this->y-0.1*this->coefftaille <= raquette->y) { // Balle touche raquette en y
+            if(this->x+0.2 >= raquette->x - 0.1*raquette->coefftaille && this->z+0.2 >= raquette->z - 0.1*raquette->coefftaille) { 
+                if(this->x-0.2 <= raquette->x + 0.1*raquette->coefftaille && this->z-0.2 <= raquette->z + 0.1*raquette->coefftaille) { 
+                    
+                    this->vy = -this->vy; // On inverse la vitesse de la balle en y
+                    cout<<"ça touche"<<endl;
+                    //  // On calcule le coefficient de direction en fonction de l'endroit où touche la balle sur la raquette
+                    // float dx = this->x - raquette->x;
+                    // float dz = this->z - raquette->z;
+                    // if (dx < 0) {
+                    //     this->vx -= 0.001;
+                    // } else if (dx > 0) {
+                    //     this->vx += 0.001;
+                    // }
 
-                // if (dz < 0) {
-                //     this->vz -= 0.001;
-                // } else if (dz > 0) {
-                //     this->vz += 0.001;
-                // }
-                // float Coeffdx = 1+dx;
-                // float Coeffdz = 1+dz;
-                // this->vx = this->vx * Coeffdx;
-                // this->vz = this->vz * Coeffdz;
-                // cout<<this->vx<<endl;
-                // cout<<this->vy<<endl;
-                // cout<<this->vz<<endl;
+                    // if (dz < 0) {
+                    //     this->vz -= 0.001;
+                    // } else if (dz > 0) {
+                    //     this->vz += 0.001;
+                    // }
+                    // float Coeffdx = 1+dx;
+                    // float Coeffdz = 1+dz;
+                    // this->vx = this->vx * Coeffdx;
+                    // this->vz = this->vz * Coeffdz;
+                    // cout<<this->vx<<endl;
+                    // cout<<this->vy<<endl;
+                    // cout<<this->vz<<endl;
+                }
             }
         }
     }

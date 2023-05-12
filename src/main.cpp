@@ -177,10 +177,10 @@ int main() {
 	ball->y = 3;
 	ball->z = 0;
 	ball->vx = 0.00;
-	ball->vy = -0.01;
+	ball->vy = -0.003;
 	ball->vz = 0.00;
 
-	ball->coefftaille = 0.5;
+	ball->coefftaille = 1;
 
 	/* Création du couloir */
 	Corridor *corridor = new Corridor;

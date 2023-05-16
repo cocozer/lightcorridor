@@ -140,7 +140,7 @@ void mouse_button_callback(GLFWwindow* window ,int button, int action, int mods)
     {
 		if(ballStick) {
 			ball->vy = 0.02;
-			ballStick = true;
+			ballStick = false;
 		}
     }
 }
@@ -189,7 +189,7 @@ int main() {
 
 	ball->coefftaille = 1;
 	
-	ballStick = false; // On colle la balle au début du jeu
+	ballStick = true; // On colle la balle au début du jeu
 	/* Création du couloir */
 	Corridor *corridor = new Corridor;
 	corridor->y = 0;

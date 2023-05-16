@@ -74,26 +74,26 @@ void Ball::checkRaquetteHit(Raquette* raquette) {
                     this->vy = -this->vy; // On inverse la vitesse de la balle en y
                     cout<<"ça touche"<<endl;
                     //  // On calcule le coefficient de direction en fonction de l'endroit où touche la balle sur la raquette
-                    // float dx = this->x - raquette->x;
-                    // float dz = this->z - raquette->z;
-                    // if (dx < 0) {
-                    //     this->vx -= 0.001;
-                    // } else if (dx > 0) {
-                    //     this->vx += 0.001;
-                    // }
+                    float dx = this->x - raquette->x;
+                    float dz = this->z - raquette->z;
+                    if (dx < 0) {
+                        this->vx -= 0.003;
+                    } else if (dx > 0) {
+                        this->vx += 0.003;
+                    }
 
-                    // if (dz < 0) {
-                    //     this->vz -= 0.001;
-                    // } else if (dz > 0) {
-                    //     this->vz += 0.001;
-                    // }
-                    // float Coeffdx = 1+dx;
-                    // float Coeffdz = 1+dz;
-                    // this->vx = this->vx * Coeffdx;
-                    // this->vz = this->vz * Coeffdz;
-                    // cout<<this->vx<<endl;
-                    // cout<<this->vy<<endl;
-                    // cout<<this->vz<<endl;
+                    if (dz < 0) {
+                        this->vz -= 0.003;
+                    } else if (dz > 0) {
+                        this->vz += 0.003;
+                    }
+                    float Coeffdx = 1+dx;
+                    float Coeffdz = 1+dz;
+                    this->vx = this->vx * Coeffdx;
+                    this->vz = this->vz * Coeffdz;
+                    cout<<this->vx<<endl;
+                    cout<<this->vy<<endl;
+                    cout<<this->vz<<endl;
                 }
             }
         }

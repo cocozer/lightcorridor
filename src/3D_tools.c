@@ -18,7 +18,8 @@ float toRad(float deg) {
 
 
 void drawSquare() {
-	glBegin(GL_TRIANGLE_FAN);
+	// glBegin(GL_TRIANGLE_FAN);
+	glBegin(GL_LINE_LOOP);
 		glVertex3f(-0.1,0,-0.1);
 		glVertex3f(-0.1,0,0.1);
 		glVertex3f(0.1,0,0.1);

@@ -140,7 +140,7 @@ void mouse_button_callback(GLFWwindow* window ,int button, int action, int mods)
     {
 		if(ballStick) {
 			ball->vy = 0.02;
-			ballStick = false;
+			ballStick = true;
 		}
     }
 }
@@ -184,12 +184,12 @@ int main() {
 	ball->y = 3;
 	ball->z = 0;
 	ball->vx = 0.00;
-	ball->vy = -0.003;
+	ball->vy = -0.015;
 	ball->vz = 0.00;
 
 	ball->coefftaille = 1;
 	
-	ballStick = true; // On colle la balle au début du jeu
+	ballStick = false; // On colle la balle au début du jeu
 	/* Création du couloir */
 	Corridor *corridor = new Corridor;
 	corridor->y = 0;
@@ -279,7 +279,7 @@ int main() {
 
 		/* Elapsed time computation from loop begining */
 		// double elapsedTime = glfwGetTime() - startTime;
-		/* If to few time is spend vs our wanted FPS, we wait */
+		// /* If to few time is spend vs our wanted FPS, we wait */
 		// if(elapsedTime < FRAMERATE_IN_SECONDS) 
 		// {
 		// 	glfwWaitEventsTimeout(FRAMERATE_IN_SECONDS-elapsedTime);
@@ -291,6 +291,7 @@ int main() {
 			glfwWaitEventsTimeout(endtime-currenttime);
 			currenttime = glfwGetTime();
 		}
+		
 
 	}
 

@@ -105,17 +105,32 @@ void Ball::stickBall(Raquette* raquette) {
     this->y = raquette->y + 0.05;
     this->z = raquette->z;
 }
-void Ball::checkObstacleHit(Obstacle obstacle){
-    //si la balle touche un mur
-    float delta = 0.01; // marge d'erreur pour comparer 2 float
-    if ((this->y > (obstacle._y-delta)) && (this->y < (obstacle._y+delta))) {
-        std::cout<<"les y sont pareils"<<endl;
-        //std::cout<<"la balle a pour y"<<this->y <<endl;
-        //if(obstacle._side == 1){
-            this->vy = -this->vy; // On inverse la vitesse de la balle en y
-        //}
+void Ball::checkObstacleHit(Obstacle obstacle) {
+    float delta = 0.01; // Marge d'erreur pour comparer deux nombres à virgule flottante
+
+    // Vérifier si la balle se trouve dans la plage verticale de l'obstacle
+    if ((this->y - 0.1 * this->coefftaille <= obstacle._y + delta) &&
+        (this->y + 0.1 * this->coefftaille >= obstacle._y - delta)) {
+        // Vérifier le côté de l'obstacle pour la collision
+        switch (obstacle._side) {
+            case 1: // Mur d'en haut
+                this->vy = -this->vy; // Inverser la vitesse de la balle en y
+                break;
+            case 3: // Mur du bas
+                this->vy = -this->vy; // Inverser la vitesse de la balle en y
+                break;
+            case 2: // Mur de droite
+                this->vy = -this->vy; // Inverser la vitesse de la balle en y
+                break;
+            case 4: // Mur de gauche
+                this->vx = -this->vx; // Inverser la vitesse de la balle en x
+                break;
+            default:
+                break;
+        }
     }
 }
+
 
 bool Ball::checkLoose(Raquette* raquette) {
     if(this->y < raquette->y) {

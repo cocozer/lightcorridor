@@ -97,42 +97,64 @@ void onKey(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	if (action == GLFW_PRESS) {
 		switch(key) {
-			case GLFW_KEY_A :
-			case GLFW_KEY_ESCAPE :
-				// glfwSetWindowShouldClose(window, GLFW_TRUE); // Ferme la fenêtre 
-				break;
-			case GLFW_KEY_L :
-				// glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-				break;
-			case GLFW_KEY_P :
-				// glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-				break;
-			case GLFW_KEY_R :
-				break;
-			case GLFW_KEY_T :
-				break;
-			case GLFW_KEY_KP_9 :
-				break;
-			case GLFW_KEY_KP_3 :
-				break;
+			// ...
 			case GLFW_KEY_UP :
-				if (CorridorMoving) {
-					CorridorMoving = false;
-				} else {
-					CorridorMoving = true;
-				}
+				CorridorMoving = true;
 				break;
-			case GLFW_KEY_DOWN :
-				break;
-			case GLFW_KEY_LEFT :
-				break;
-			case GLFW_KEY_RIGHT :
-				break;
+			// ...
 			default:
 				std::cout << "Touche non gérée (" << key << ")" << std::endl;
 		}
 	}
+	else if (action == GLFW_RELEASE) {
+		switch(key) {
+			case GLFW_KEY_UP :
+				CorridorMoving = false;
+				break;
+		}
+	}
 }
+
+// void onKey(GLFWwindow* window, int key, int scancode, int action, int mods)
+// {
+// 	if (action == GLFW_PRESS) {
+// 		switch(key) {
+// 			case GLFW_KEY_A :
+// 			case GLFW_KEY_ESCAPE :
+// 				// glfwSetWindowShouldClose(window, GLFW_TRUE); // Ferme la fenêtre 
+// 				break;
+// 			case GLFW_KEY_L :
+// 				// glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+// 				break;
+// 			case GLFW_KEY_P :
+// 				// glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+// 				break;
+// 			case GLFW_KEY_R :
+// 				break;
+// 			case GLFW_KEY_T :
+// 				break;
+// 			case GLFW_KEY_KP_9 :
+// 				break;
+// 			case GLFW_KEY_KP_3 :
+// 				break;
+// 			case GLFW_KEY_UP :
+// 				if (CorridorMoving) {
+// 					CorridorMoving = false;
+// 				} else {
+// 					CorridorMoving = true;
+// 				}
+// 				break;
+// 			case GLFW_KEY_DOWN :
+// 				break;
+// 			case GLFW_KEY_LEFT :
+// 				break;
+// 			case GLFW_KEY_RIGHT :
+// 				break;
+// 			default:
+// 				std::cout << "Touche non gérée (" << key << ")" << std::endl;
+// 		}
+// 	}
+// }
 
 void mouse_button_callback(GLFWwindow* window ,int button, int action, int mods) {
 

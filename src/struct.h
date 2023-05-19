@@ -20,6 +20,19 @@ struct Corridor {
     void drawCorridor();
 };
 
+struct Bonus {
+    // Position du Bonus 
+    float _x;
+    float _y;
+    float _z;
+
+    int _type; // Type du Bonus, peut être égal à 1 ou 2 (ou plus par la suite)
+    // Dessin du Bonus
+    void drawBonus();
+
+    Bonus(float x, float y, float z, int type);
+};
+
 
 struct Obstacle {
     // j'ai mis des _ avant les attributs pour ne pas avoir besoin de mettre this-> dans les fonctions 
@@ -65,3 +78,5 @@ struct Ball {
 // void initList(ListOfObstacles* list);
  void drawObstacles(std::vector<Obstacle> obstacles); //pour dessiner tous les obstacles du vecteur
  void checkObstaclesHit(Ball ball, std::vector<Obstacle> obstacles);
+
+void drawBonuss(std::vector<Bonus> bonus); //pour dessiner tous les bonus du vecteur

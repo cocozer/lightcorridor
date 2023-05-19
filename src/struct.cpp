@@ -107,13 +107,13 @@ void Ball::stickBall(Raquette* raquette) {
 }
 void Ball::checkObstacleHit(Obstacle obstacle) {
     float delta = 0.01; // Marge d'erreur pour comparer deux nombres à virgule flottante
-
     // Vérifier si la balle se trouve dans la plage verticale de l'obstacle
     if ((this->y - 0.1 * this->coefftaille <= obstacle._y + delta) &&
         (this->y + 0.1 * this->coefftaille >= obstacle._y - delta)) {
         // Vérifier le côté de l'obstacle pour la collision
         switch (obstacle._side) {
             case 1: // Mur d'en haut
+                cout << obstacle._side << endl;
                 this->vy = -this->vy; // Inverser la vitesse de la balle en y
                 break;
             case 3: // Mur du bas
@@ -123,7 +123,7 @@ void Ball::checkObstacleHit(Obstacle obstacle) {
                 this->vy = -this->vy; // Inverser la vitesse de la balle en y
                 break;
             case 4: // Mur de gauche
-                this->vx = -this->vx; // Inverser la vitesse de la balle en x
+                this->vy = -this->vy; // Inverser la vitesse de la balle en x
                 break;
             default:
                 break;
@@ -160,6 +160,40 @@ Obstacle::Obstacle(float y, int side){ // constructeur de la structure Obstacle
     _side=side;
 }
 
+Bonus::Bonus(float x, float y, float z, int type){ // constructeur de la structure Obstacle
+    _x=x;
+    _y=y;
+    _z=z;
+    _type=type;
+}
+
+void Bonus::drawBonus()  {
+    glColor3f(255, 255, 255); // Blanc
+    glPushMatrix(); // Sauvegarde de la matrice
+        glTranslatef(_x,_y, _z); // Déplacement du pot de colle aux coordonnées spécifiées
+        // Dessin de l'ombre de la balle
+        glPushMatrix();
+        glTranslatef(0, 0, -_z-0.25);
+            glPushMatrix(); // Sauvegarde de la matrice
+                glScalef(1, 1, 0.1); // Resize du plan pour correspondre au coeff de la balle
+                glColor3f(0, 0, 0); // Noir
+                drawCircle();
+            glPopMatrix(); // Reload de la matrice sauvegardée
+        glPopMatrix(); // Reload de la matrice sauvegardée
+        glPushMatrix(); // Sauvegarde de la matrice
+            glScalef(0.03, 0.03, 0.1); // Resize du pot de colle en fonction de l'échelle spécifiée
+            glColor3f(255, 255, 255); // Blanc
+            drawCone(); // Dessin de la partie supérieure du pot de colle
+        glPopMatrix(); // Reload de la matrice sauvegardée
+        
+        glPushMatrix(); // Sauvegarde de la matrice
+            glTranslatef(0, -0.03, 0); // Déplacement vers le bas pour dessiner la partie inférieure du pot de colle
+            glScalef(0.03, 0.03, 0.03); // Resize du pot de colle en fonction de l'échelle spécifiée
+            glColor3f(255, 255, 255); // Blanc
+            drawSphere(); // Dessin de la partie inférieure du pot de colle
+        glPopMatrix(); // Reload de la matrice sauvegardée
+    glPopMatrix(); // Reload de la matrice sauvegardée
+}
 
 
 void Obstacle::drawObstacle() {
@@ -200,6 +234,12 @@ void Obstacle::drawObstacle() {
             drawRightWall();
             glPopMatrix();
     }
+}
+
+void drawBonuss(std::vector<Bonus> bonuss){ //pour dessiner le vecteur des bonus
+  for (auto bonus: bonuss) {//pour tous les éléments de bonus
+    bonus.drawBonus();
+  }
 }
 
 void drawObstacles(std::vector<Obstacle> obstacles){ //pour dessiner le vecteur des obstacles

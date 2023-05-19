@@ -220,6 +220,9 @@ int main() {
 
 	// std::vector<Obstacle> obstacles ={Obstacle (1,1), Obstacle (1.2,2), Obstacle (1.4,3), Obstacle (1.6,4)};
 	std::vector<Obstacle> obstacles ={Obstacle (5,1)};
+
+	/* Création du vecteur des Bonus */
+	std::vector<Bonus> bonus ={Bonus (0,1,0,1)};
 	
 
     // Make the window's context current
@@ -277,10 +280,12 @@ int main() {
 
 		// obstacle1->drawObstacle();
 		// obstacle2->drawObstacle();
-		drawObstacles(obstacles); //dessine le vecteur des obstacles
-		//checkObstaclesHit(*ball, obstacles);
-		ball->checkObstacleHit(obstacles[1]);
+		drawBonuss(bonus); //dessine le vecteur des bonus
+		checkObstaclesHit(*ball, obstacles);
+		// ball->checkObstacleHit(obstacles[1]);
 		
+		drawObstacles(obstacles); //dessine le vecteur des obstacles
+
 		/* Draw Corridor*/
 		corridor->drawCorridor();
 
@@ -290,6 +295,7 @@ int main() {
 
 		/* Draw Raquette */
 		raquette->drawRaquette();
+		
 
 		/* Scene rendering */
 

@@ -132,6 +132,33 @@ void Ball::checkObstacleHit(Obstacle obstacle) {
     }
 }
 
+int Ball::checkBonusHit(Bonus bonus) {
+    float rayon = 0.01; // Marge d'erreur pour comparer deux nombres à virgule flottante
+    // Vérifier si la balle se trouve dans la plage verticale du bonus
+    if ((this->y - 0.1 * this->coefftaille <= bonus._y + rayon) &&
+        (this->y + 0.1 * this->coefftaille >= bonus._y - rayon)) {
+        
+        // Vérifier si la balle se trouve dans la plage horizontale du bonus
+        if ((this->x - 0.1 * this->coefftaille <= bonus._x + rayon) &&
+            (this->x + 0.1 * this->coefftaille >= bonus._x - rayon)) {
+            
+            // Vérifier si la balle se trouve dans la plage de profondeur du bonus
+            if ((this->z - 0.1 * this->coefftaille <= bonus._z + rayon) &&
+                (this->z + 0.1 * this->coefftaille >= bonus._z - rayon)) {
+                bonus._active = false;
+                std::cout << bonus._active << endl;
+                if(bonus._type == 1) {
+                    return 1;// Le premier bonus a été activé
+                } else if (bonus._type == 2) {
+                    return 2; // Le second bonus a été activé
+                }
+            }
+        }
+    }
+    return 0; // Aucun bonus n'a été retourné
+}
+
+
 
 bool Ball::checkLoose(Raquette* raquette) {
     if(this->y < raquette->y) {
@@ -238,7 +265,9 @@ void Obstacle::drawObstacle() {
 
 void drawBonuss(std::vector<Bonus> bonuss){ //pour dessiner le vecteur des bonus
   for (auto bonus: bonuss) {//pour tous les éléments de bonus
-    bonus.drawBonus();
+    if(bonus._active) {
+        bonus.drawBonus();
+    }
   }
 }
 
@@ -253,4 +282,16 @@ void checkObstaclesHit(Ball ball, std::vector<Obstacle> obstacles){
         ball.checkObstacleHit(obstacle);
     }
 
+}
+
+
+int checkBonussHit(Ball ball, std::vector<Bonus> bonuss){
+    int bonusactivation = 0;
+    for (auto bonus: bonuss) {//pour tous les éléments de obstacles
+        bonusactivation = ball.checkBonusHit(bonus);
+        if(bonusactivation != 0) { // Si un bonus a été activé, on retourne le bonus concerné
+            return bonusactivation;
+        }
+    }
+    return 0;
 }

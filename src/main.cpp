@@ -310,6 +310,8 @@ int main() {
 		drawBonuss(bonus); //dessine le vecteur des bonus
 		checkObstaclesHit(*ball, obstacles);
 		// ball->checkObstacleHit(obstacles[1]);
+		int bonusactivation = checkBonussHit(*ball, bonus);
+
 		
 		drawObstacles(obstacles); //dessine le vecteur des obstacles
 

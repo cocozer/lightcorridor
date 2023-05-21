@@ -30,7 +30,7 @@ struct Bonus {
     int _type; // Type du Bonus, peut être égal à 1 ou 2 (ou plus par la suite)
     // Dessin du Bonus
     bool _active;
-    
+
     void drawBonus();
 
     Bonus(float x, float y, float z, int type);
@@ -76,10 +76,13 @@ struct Ball {
     void stickBall(Raquette* raquette);
 
     void checkObstacleHit(Obstacle obstacle);
+
+    int checkBonusHit(Bonus bonus);
 };
 
 // void initList(ListOfObstacles* list);
  void drawObstacles(std::vector<Obstacle> obstacles); //pour dessiner tous les obstacles du vecteur
  void checkObstaclesHit(Ball ball, std::vector<Obstacle> obstacles);
+int checkBonussHit(Ball ball, std::vector<Bonus> bonuss);
 
 void drawBonuss(std::vector<Bonus> bonus); //pour dessiner tous les bonus du vecteur

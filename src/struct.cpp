@@ -64,13 +64,15 @@ void Ball::checkDirection() {
         this->vz = -(this->vz);
     }
 }
-void Ball::checkRaquetteHit(Raquette* raquette) {
+bool Ball::checkRaquetteHit(Raquette* raquette, bool raquetteSticky) {
     // Si la raquette touche la balle et que la balle va vers le joueur
     if(this->vy < 0) {
         if (this->y-0.1*this->coefftaille <= raquette->y) { // Balle touche raquette en y
             if(this->x+0.2 >= raquette->x - 0.1*raquette->coefftaille && this->z+0.2 >= raquette->z - 0.1*raquette->coefftaille) { 
                 if(this->x-0.2 <= raquette->x + 0.1*raquette->coefftaille && this->z-0.2 <= raquette->z + 0.1*raquette->coefftaille) { 
-                    
+                    if(raquetteSticky) {
+                        return true; // Si la raquette est collante, on retourne 1 pour coller la balle à la raquette
+                    }
                     this->vy = -this->vy; // On inverse la vitesse de la balle en y
                     cout<<"ça touche"<<endl;
                     //  // On calcule le coefficient de direction en fonction de l'endroit où touche la balle sur la raquette
@@ -94,10 +96,12 @@ void Ball::checkRaquetteHit(Raquette* raquette) {
                     cout<<this->vx<<endl;
                     cout<<this->vy<<endl;
                     cout<<this->vz<<endl;
+                    return false; // Si 0 est retourné, la balle rebondit normalement
                 }
             }
         }
     }
+    return false; // Si 0 est retourné, la balle n'est pas collée
 }
 
 void Ball::stickBall(Raquette* raquette) {

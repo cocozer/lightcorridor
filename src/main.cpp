@@ -23,7 +23,9 @@ bool menulose = false; // Est-ce que le menu lose est affiché ou pas ?
 bool menuwin = false; // Est-ce que le menu win est affiché ou pas ?
 bool lose = false; // Est-ce que le joueur a perdu ?
 bool CorridorMoving = false; // Est-ce que le couloir est en mouvement ou pas ?
-bool ballStick = false;
+bool ballStick = false; // Si la balle est collée au milieu de la raquette
+bool raquetteSticky = false; // Si la raquette est collante (grâce au bonus)
+bool ballIsSticked = false; // Si la balle est collée à la raquette mais pas forcément au milieu
 
 /* Variable globale du nombre de vies, 5 au départ*/
 int lives = 5;
@@ -135,9 +137,10 @@ void mouse_button_callback(GLFWwindow* window ,int button, int action, int mods)
 	if(play) {
 		if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) 
     	{
-			if(ballStick) {
+			if(ballStick || ballIsSticked) {
 				ball->vy = 0.02;
 				ballStick = false;
+				ballIsSticked = false;
 			}
     	}
 	} else {
@@ -215,7 +218,6 @@ int main() {
 	/* Création du couloir */
 	Corridor *corridor = new Corridor;
 	corridor->y = 0;
-
 	/*Création du vecteur des obstacles*/
 
 	// std::vector<Obstacle> obstacles ={Obstacle (1,1), Obstacle (1.2,2), Obstacle (1.4,3), Obstacle (1.6,4)};
@@ -262,7 +264,12 @@ int main() {
 			lose = ball->checkLoose(raquette);
 			/* Updates des positions des objets*/
 			ball->checkDirection(); // Balle (vérif de la direction de la balle pour collisions etc)
-			ball->checkRaquetteHit(raquette); // rebond si la balle touche la raquette
+			ballIsSticked = ball->checkRaquetteHit(raquette, raquetteSticky); // rebond si la balle touche la raquette
+			if(ballIsSticked) {
+				ball->vx = 0;
+				ball->vy = 0;
+				ball->vz = 0;
+			}
 			ball->updatePosition(); // update de la position de la balle
 			MoveRaquette(window, raquette); // Déplacement de la raquette (au mouvement de souris)
 		}
@@ -311,7 +318,9 @@ int main() {
 		checkObstaclesHit(*ball, obstacles);
 		// ball->checkObstacleHit(obstacles[1]);
 		int bonusactivation = checkBonussHit(*ball, bonus);
-
+		if (bonusactivation == 1) {
+			raquetteSticky = 1;
+		}
 		
 		drawObstacles(obstacles); //dessine le vecteur des obstacles
 

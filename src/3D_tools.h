@@ -22,7 +22,7 @@
 #define NB_SEG_CIRCLE 64
 
 /* Camera parameters and functions */
-static const float Z_NEAR = 0.1f;
+static const float Z_NEAR = 0.01f;
 static const float Z_FAR = 50.f;
 extern float theta;      // Angle between x axis and viewpoint
 extern float phy  ;      // Angle between z axis and viewpoint
@@ -46,6 +46,8 @@ void drawWall();
 void drawUpsideWall();
 
 void drawRightWall();
+
+void drawRectangle();
 
 /* Small tools */
 float toRad(float deg);

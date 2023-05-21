@@ -1,5 +1,6 @@
 #include "draw_scene.h"
 #include "3D_tools.h"
+#include <iostream>
 float red = 0;
 float green = 0;
 float blue = 0;
@@ -178,3 +179,90 @@ void drawDecor() {
     glPopMatrix(); // Reload de la matrice sauvegardée
 }
 
+void drawMenuStart(){ 
+    glPushMatrix(); // Sauvegarde de la matrice
+        glTranslatef(0,0.011, 0); // Déplacement du plan pour être dans le champ de vision de la caméra
+            glScalef(2, 2, 2); // Déplacement du plan pour prendre tout l'écran
+            glColor3f(0, 0, 0); // NOIR
+            drawRectangle(); // Dessin de la partie inférieure du pot de colle
+    glPopMatrix(); // Reload de la matrice sauvegardée
+    glPushMatrix(); // Sauvegarde de la matrice
+        glTranslatef(0,0.01, 0.001); // Déplacement du plan pour être dans le champ de vision de la caméra
+            glScalef(0.005, 0.005, 0.005); // Déplacement du plan pour former un bouton du menu
+            glColor3f(0, 1, 0); // VERT
+            drawRectangle(); // Dessin de la partie inférieure du pot de colle
+    glPopMatrix(); // Reload de la matrice sauvegardée
+
+    glPushMatrix(); // Sauvegarde de la matrice
+        glTranslatef(0,0.01, -0.001); // Déplacement du plan pour être dans le champ de vision de la caméra
+            glScalef(0.005, 0.005, 0.005); // Déplacement du plan pour former un bouton du menu
+            glColor3f(1, 0, 0); // BLEU
+            drawRectangle(); // Dessin de la partie inférieure du pot de colle
+    glPopMatrix(); // Reload de la matrice sauvegardée
+}
+
+void drawMenuPause(){ 
+    glPushMatrix(); // Sauvegarde de la matrice
+        glTranslatef(0,0.011, 0); // Déplacement du plan pour être dans le champ de vision de la caméra
+            glScalef(2, 2, 2); // Déplacement du plan pour prendre tout l'écran
+            glColor3f(0, 0, 0); // NOIR
+            drawRectangle(); // Dessin de la partie inférieure du pot de colle
+    glPopMatrix(); // Reload de la matrice sauvegardée
+    glPushMatrix(); // Sauvegarde de la matrice
+        glTranslatef(0,0.01, 0.001); // Déplacement du plan pour être dans le champ de vision de la caméra
+            glScalef(0.005, 0.005, 0.005); // Déplacement du plan pour former un bouton du menu
+            glColor3f(0, 1, 0); // VERT
+            drawRectangle(); // Dessin de la partie inférieure du pot de colle
+    glPopMatrix(); // Reload de la matrice sauvegardée
+
+    glPushMatrix(); // Sauvegarde de la matrice
+        glTranslatef(0,0.01, -0.001); // Déplacement du plan pour être dans le champ de vision de la caméra
+            glScalef(0.005, 0.005, 0.005); // Déplacement du plan pour former un bouton du menu
+            glColor3f(1, 0, 0); // BLEU
+            drawRectangle(); // Dessin de la partie inférieure du pot de colle
+    glPopMatrix(); // Reload de la matrice sauvegardée
+}
+
+void drawMenuWin(){ 
+    glPushMatrix(); // Sauvegarde de la matrice
+        glTranslatef(0,0.011, 0); // Déplacement du plan pour être dans le champ de vision de la caméra
+            glScalef(2, 2, 2); // Déplacement du plan pour prendre tout l'écran
+            glColor3f(0, 0, 0); // NOIR
+            drawRectangle(); // Dessin de la partie inférieure du pot de colle
+    glPopMatrix(); // Reload de la matrice sauvegardée
+    glPushMatrix(); // Sauvegarde de la matrice
+        glTranslatef(0,0.01, 0.001); // Déplacement du plan pour être dans le champ de vision de la caméra
+            glScalef(0.005, 0.005, 0.005); // Déplacement du plan pour former un bouton du menu
+            glColor3f(0, 1, 0); // VERT
+            drawRectangle(); // Dessin de la partie inférieure du pot de colle
+    glPopMatrix(); // Reload de la matrice sauvegardée
+
+    glPushMatrix(); // Sauvegarde de la matrice
+        glTranslatef(0,0.01, -0.001); // Déplacement du plan pour être dans le champ de vision de la caméra
+            glScalef(0.005, 0.005, 0.005); // Déplacement du plan pour former un bouton du menu
+            glColor3f(1, 0, 0); // BLEU
+            drawRectangle(); // Dessin de la partie inférieure du pot de colle
+    glPopMatrix(); // Reload de la matrice sauvegardée
+}
+
+void drawMenuLose(){ 
+    glPushMatrix(); // Sauvegarde de la matrice
+        glTranslatef(0,0.011, 0); // Déplacement du plan pour être dans le champ de vision de la caméra
+            glScalef(2, 2, 2); // Déplacement du plan pour prendre tout l'écran
+            glColor3f(0, 0, 0); // NOIR
+            drawRectangle(); // Dessin de la partie inférieure du pot de colle
+    glPopMatrix(); // Reload de la matrice sauvegardée
+    glPushMatrix(); // Sauvegarde de la matrice
+        glTranslatef(0,0.01, 0.001); // Déplacement du plan pour être dans le champ de vision de la caméra
+            glScalef(0.005, 0.005, 0.005); // Déplacement du plan pour former un bouton du menu
+            glColor3f(0, 1, 0); // VERT
+            drawRectangle(); // Dessin de la partie inférieure du pot de colle
+    glPopMatrix(); // Reload de la matrice sauvegardée
+
+    glPushMatrix(); // Sauvegarde de la matrice
+        glTranslatef(0,0.01, -0.001); // Déplacement du plan pour être dans le champ de vision de la caméra
+            glScalef(0.005, 0.005, 0.005); // Déplacement du plan pour former un bouton du menu
+            glColor3f(1, 0, 0); // BLEU
+            drawRectangle(); // Dessin de la partie inférieure du pot de colle
+    glPopMatrix(); // Reload de la matrice sauvegardée
+}

@@ -16,11 +16,17 @@ static const char WINDOW_TITLE[] = "TD04 Ex01";
 static float aspectRatio = 1.0;
 
 /* Etats du jeu */
-bool play = true; // Est-ce que la partie est lancée ou pas ?
+bool play = false; // Est-ce que la partie est lancée ou pas ?
+bool menupause = true; // Est-ce que le menu pause est affiché ou pas ?
+bool menustart = true; // Est-ce que le menu start est affiché ou pas ?
+bool menulose = false; // Est-ce que le menu lose est affiché ou pas ?
+bool menuwin = false; // Est-ce que le menu win est affiché ou pas ?
 bool lose = false; // Est-ce que le joueur a perdu ?
 bool CorridorMoving = false; // Est-ce que le couloir est en mouvement ou pas ?
 bool ballStick = false;
 
+/* Variable globale du nombre de vies, 5 au départ*/
+int lives = 5;
 /* Variable globale balle pour pouvoir agir au clic gauche */
 Ball *ball = new Ball;
 /* Minimal time wanted between two images */
@@ -98,8 +104,14 @@ void onKey(GLFWwindow* window, int key, int scancode, int action, int mods)
 	if (action == GLFW_PRESS) {
 		switch(key) {
 			// ...
+			case GLFW_KEY_ESCAPE :
+				menupause = true;
+				play = false;
+				break;
 			case GLFW_KEY_UP :
-				CorridorMoving = true;
+				if(play) {
+					CorridorMoving = true;
+				}
 				break;
 			// ...
 			default:
@@ -109,62 +121,50 @@ void onKey(GLFWwindow* window, int key, int scancode, int action, int mods)
 	else if (action == GLFW_RELEASE) {
 		switch(key) {
 			case GLFW_KEY_UP :
-				CorridorMoving = false;
+				if(play) {
+					CorridorMoving = false;
+				}
 				break;
 		}
 	}
 }
 
-// void onKey(GLFWwindow* window, int key, int scancode, int action, int mods)
-// {
-// 	if (action == GLFW_PRESS) {
-// 		switch(key) {
-// 			case GLFW_KEY_A :
-// 			case GLFW_KEY_ESCAPE :
-// 				// glfwSetWindowShouldClose(window, GLFW_TRUE); // Ferme la fenêtre 
-// 				break;
-// 			case GLFW_KEY_L :
-// 				// glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-// 				break;
-// 			case GLFW_KEY_P :
-// 				// glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-// 				break;
-// 			case GLFW_KEY_R :
-// 				break;
-// 			case GLFW_KEY_T :
-// 				break;
-// 			case GLFW_KEY_KP_9 :
-// 				break;
-// 			case GLFW_KEY_KP_3 :
-// 				break;
-// 			case GLFW_KEY_UP :
-// 				if (CorridorMoving) {
-// 					CorridorMoving = false;
-// 				} else {
-// 					CorridorMoving = true;
-// 				}
-// 				break;
-// 			case GLFW_KEY_DOWN :
-// 				break;
-// 			case GLFW_KEY_LEFT :
-// 				break;
-// 			case GLFW_KEY_RIGHT :
-// 				break;
-// 			default:
-// 				std::cout << "Touche non gérée (" << key << ")" << std::endl;
-// 		}
-// 	}
-// }
 
 void mouse_button_callback(GLFWwindow* window ,int button, int action, int mods) {
 
-    if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) 
-    {
-		if(ballStick) {
-			ball->vy = 0.02;
-			ballStick = false;
-		}
-    }
+	if(play) {
+		if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) 
+    	{
+			if(ballStick) {
+				ball->vy = 0.02;
+				ballStick = false;
+			}
+    	}
+	} else {
+		if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) 
+    	{
+			double mouseX, mouseY;
+			float alpha = M_PI / 3; 
+    		float d = 0.01; // distance entre la caméra et le centre du rectangle
+			float h = tan(alpha / 2) * 2 * d;
+        	glfwGetCursorPos(window, &mouseX, &mouseY);
+			float newx = (mouseX - (WINDOW_WIDTH / 2)) * (h / WINDOW_HEIGHT);
+    		float newz = -(mouseY - (WINDOW_HEIGHT / 2)) * (h / WINDOW_HEIGHT);
+
+			if(newx > -0.0026 && newx < 0.0026 && newz > 0.0004 && newz < 0.0016) { // Si on clique sur le rect du haut
+				menustart = false;
+				menupause = false;
+				menuwin = false;
+				menulose = false;
+				play = true;
+			}
+			
+			if(newx > -0.0026 && newx < 0.0026 && newz < -0.0004 && newz > -0.0016) { // Si on clique sur le rect du bas
+				glfwSetWindowShouldClose(window, GLFW_TRUE);
+			}
+    	}
+	}
+    
 }
 
 int main() {
@@ -246,15 +246,27 @@ int main() {
         deltaTime = currentTime - startTime;
         startTime = currentTime;
 		
-		
+		if(lose) { // Si le joueur perd, on enlève une vie et on met colle la balle sur la raquette
+			lives--;
+			ballStick = true;
+		}
+		if(lives < 0) { // Si le joueur n'a plus de vies, la partie est perdue
+			play = false;
+			menulose = true;
+			corridor->y = 0;
+			// Reset tous les obstacles
+			// Reset tous les bonus
+		}
+		if(play) { // Si la partie est lancée
+			/* On vérifie si le joueur a perdu */
+			lose = ball->checkLoose(raquette);
+			/* Updates des positions des objets*/
+			ball->checkDirection(); // Balle (vérif de la direction de la balle pour collisions etc)
+			ball->checkRaquetteHit(raquette); // rebond si la balle touche la raquette
+			ball->updatePosition(); // update de la position de la balle
+			MoveRaquette(window, raquette); // Déplacement de la raquette (au mouvement de souris)
+		}
 
-		/* On vérifie si le joueur a perdu */
-		lose = ball->checkLoose(raquette);
-		/* Updates des positions des objets*/
-		ball->checkDirection(); // Balle (vérif de la direction de la balle pour collisions etc)
-		ball->checkRaquetteHit(raquette); // rebond si la balle touche la raquette
-		ball->updatePosition(); // update de la position de la balle
-		MoveRaquette(window, raquette); // Raquette
 		
 
 		MoveCorridor(corridor, ball, obstacles);
@@ -277,6 +289,21 @@ int main() {
 
 		/* Initial scenery setup */
 		drawDecor();
+
+		if(menustart) {
+			drawMenuStart();
+		}
+		if(menupause) {
+			drawMenuPause();
+		}
+		if(menulose) {
+			drawMenuLose();
+		}
+		if(menuwin) {
+			drawMenuWin();
+		}
+
+
 
 		// obstacle1->drawObstacle();
 		// obstacle2->drawObstacle();

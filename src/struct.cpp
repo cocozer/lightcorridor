@@ -169,7 +169,6 @@ Bonus::Bonus(float x, float y, float z, int type){ // constructeur de la structu
 }
 
 void Bonus::drawBonus()  {
-    glColor3f(255, 255, 255); // Blanc
     glPushMatrix(); // Sauvegarde de la matrice
         glTranslatef(_x,_y, _z); // Déplacement du pot de colle aux coordonnées spécifiées
         // Dessin de l'ombre de la balle
@@ -183,14 +182,14 @@ void Bonus::drawBonus()  {
         glPopMatrix(); // Reload de la matrice sauvegardée
         glPushMatrix(); // Sauvegarde de la matrice
             glScalef(0.03, 0.03, 0.1); // Resize du pot de colle en fonction de l'échelle spécifiée
-            glColor3f(255, 255, 255); // Blanc
+            glColor3f(1, 1, 0); // Blanc
             drawCone(); // Dessin de la partie supérieure du pot de colle
         glPopMatrix(); // Reload de la matrice sauvegardée
         
         glPushMatrix(); // Sauvegarde de la matrice
             glTranslatef(0, -0.03, 0); // Déplacement vers le bas pour dessiner la partie inférieure du pot de colle
             glScalef(0.03, 0.03, 0.03); // Resize du pot de colle en fonction de l'échelle spécifiée
-            glColor3f(255, 255, 255); // Blanc
+            glColor3f(1, 1, 0); // Jaune
             drawSphere(); // Dessin de la partie inférieure du pot de colle
         glPopMatrix(); // Reload de la matrice sauvegardée
     glPopMatrix(); // Reload de la matrice sauvegardée

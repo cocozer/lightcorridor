@@ -106,3 +106,11 @@ void drawRightWall(){
 
 }
 
+void drawRectangle() {
+	glBegin(GL_QUADS);
+		glVertex3f(-0.5,0,-0.1);
+		glVertex3f(-0.5,0,0.1);
+		glVertex3f(0.5,0,0.1);
+		glVertex3f(0.5,0,-0.1);
+	glEnd();
+}

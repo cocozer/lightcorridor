@@ -10,3 +10,7 @@
 void drawDecorX();
 void drawDecorZ();
 void drawDecor();
+void drawMenuStart();
+void drawMenuPause();
+void drawMenuLose();
+void drawMenuWin();

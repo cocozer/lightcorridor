@@ -20,6 +20,7 @@ struct Corridor {
     void drawCorridor();
 };
 
+
 struct Bonus {
     // Position du Bonus 
     float _x;
@@ -28,6 +29,8 @@ struct Bonus {
 
     int _type; // Type du Bonus, peut être égal à 1 ou 2 (ou plus par la suite)
     // Dessin du Bonus
+    bool _active;
+    
     void drawBonus();
 
     Bonus(float x, float y, float z, int type);

@@ -320,6 +320,8 @@ int main() {
 		int bonusactivation = checkBonussHit(*ball, bonus);
 		if (bonusactivation == 1) {
 			raquetteSticky = 1;
+		} else if (bonusactivation == 2) {
+			lives++;
 		}
 		
 		drawObstacles(obstacles); //dessine le vecteur des obstacles

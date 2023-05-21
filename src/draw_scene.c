@@ -58,7 +58,7 @@ void drawDecor() {
 
     // CADRE 2
     glPushMatrix(); // Sauvegarde de la matrice
-        glTranslatef(0, 2, 0); // Déplacement du plan
+        glTranslatef(0, 2.5, 0); // Déplacement du plan
         // Couleur
         red = 161.0/255; // Rouge
         green = 224.0/255; // Vert
@@ -74,7 +74,7 @@ void drawDecor() {
         drawDecorZ();
         // CADRE 3
         glPushMatrix(); // Sauvegarde de la matrice
-            glTranslatef(0, 2, 0); // Déplacement du plan
+            glTranslatef(0, 2.5, 0); // Déplacement du plan
             // Couleur
             red = 105.0/255; // Rouge
             green = 205.0/255; // Vert
@@ -91,7 +91,7 @@ void drawDecor() {
 
             // CADRE 4
             glPushMatrix(); // Sauvegarde de la matrice
-                glTranslatef(0, 2, 0); // Déplacement du plan
+                glTranslatef(0, 2.5, 0); // Déplacement du plan
                 // Couleur
                 red = 49.0/255; // Rouge
                 green = 187.0/255; // Vert
@@ -107,7 +107,7 @@ void drawDecor() {
                 drawDecorZ();
                 // CADRE 5
                 glPushMatrix(); // Sauvegarde de la matrice
-                    glTranslatef(0, 2, 0); // Déplacement du plan
+                    glTranslatef(0, 2.5, 0); // Déplacement du plan
                     // Couleur
                     red = 20.0/255; // Rouge
                     green = 170.0/255; // Vert
@@ -123,7 +123,7 @@ void drawDecor() {
                     drawDecorZ();
                     // CADRE 5
                     glPushMatrix(); // Sauvegarde de la matrice
-                        glTranslatef(0, 2, 0); // Déplacement du plan
+                        glTranslatef(0, 2.5, 0); // Déplacement du plan
                         // Couleur
                         red = 15.0/255; // Rouge
                         green = 128.0/255; // Vert
@@ -139,7 +139,7 @@ void drawDecor() {
                         drawDecorZ();
                         // CADRE 6
                         glPushMatrix(); // Sauvegarde de la matrice
-                            glTranslatef(0, 2, 0); // Déplacement du plan
+                            glTranslatef(0, 2.5, 0); // Déplacement du plan
                             // Couleur
                             red = 10.0/255; // Rouge
                             green = 85.0/255; // Vert
@@ -155,7 +155,7 @@ void drawDecor() {
                             drawDecorZ();
                             // CADRE 7
                             glPushMatrix(); // Sauvegarde de la matrice
-                                glTranslatef(0, 2, 0); // Déplacement du plan
+                                glTranslatef(0, 2.5, 0); // Déplacement du plan
                                 // Couleur
                                 red = 5.0/255; // Rouge
                                 green = 43.0/255; // Vert

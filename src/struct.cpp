@@ -110,16 +110,17 @@ void Ball::checkObstacleHit(Obstacle obstacle) {
     // Vérifier si la balle se trouve dans la plage verticale de l'obstacle
     if ((this->y - 0.1 * this->coefftaille <= obstacle._y + delta) &&
         (this->y + 0.1 * this->coefftaille >= obstacle._y - delta)) {
+            cout << "rebond" << endl;
         // Vérifier le côté de l'obstacle pour la collision
         switch (obstacle._side) {
             case 1: // Mur d'en haut
                 cout << obstacle._side << endl;
                 this->vy = -this->vy; // Inverser la vitesse de la balle en y
                 break;
-            case 3: // Mur du bas
+            case 2: // Mur du bas
                 this->vy = -this->vy; // Inverser la vitesse de la balle en y
                 break;
-            case 2: // Mur de droite
+            case 3: // Mur de droite
                 this->vy = -this->vy; // Inverser la vitesse de la balle en y
                 break;
             case 4: // Mur de gauche

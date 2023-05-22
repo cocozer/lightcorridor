@@ -101,7 +101,7 @@ bool Ball::checkRaquetteHit(Raquette* raquette, bool raquetteSticky) {
             }
         }
     }
-    return false; // Si 0 est retourné, la balle n'est pas collée
+    return false; // Si 0 est retourné, la balle n'est pas collée et n'a pas touché la raquette
 }
 
 void Ball::stickBall(Raquette* raquette) {
@@ -200,30 +200,35 @@ Bonus::Bonus(float x, float y, float z, int type){ // constructeur de la structu
 }
 
 void Bonus::drawBonus()  {
-    glPushMatrix(); // Sauvegarde de la matrice
-        glTranslatef(_x,_y, _z); // Déplacement du pot de colle aux coordonnées spécifiées
-        // Dessin de l'ombre de la balle
-        glPushMatrix();
-        glTranslatef(0, 0, -_z-0.25);
+    if(_type == 1) {
+        glPushMatrix(); // Sauvegarde de la matrice
+            glTranslatef(_x,_y, _z); // Déplacement du pot de colle aux coordonnées spécifiées
+            // Dessin de l'ombre de la balle
+            glPushMatrix();
+            glTranslatef(0, 0, -_z-0.25);
+                glPushMatrix(); // Sauvegarde de la matrice
+                    glScalef(1, 1, 0.1); // Resize du plan pour correspondre au coeff de la balle
+                    glColor3f(0, 0, 0); // Noir
+                    drawCircle();
+                glPopMatrix(); // Reload de la matrice sauvegardée
+            glPopMatrix(); // Reload de la matrice sauvegardée
             glPushMatrix(); // Sauvegarde de la matrice
-                glScalef(1, 1, 0.1); // Resize du plan pour correspondre au coeff de la balle
-                glColor3f(0, 0, 0); // Noir
-                drawCircle();
+                glScalef(0.03, 0.03, 0.1); // Resize du pot de colle en fonction de l'échelle spécifiée
+                glColor3f(1, 1, 0); // Blanc
+                drawCone(); // Dessin de la partie supérieure du pot de colle
+            glPopMatrix(); // Reload de la matrice sauvegardée
+            
+            glPushMatrix(); // Sauvegarde de la matrice
+                glTranslatef(0, -0.03, 0); // Déplacement vers le bas pour dessiner la partie inférieure du pot de colle
+                glScalef(0.03, 0.03, 0.03); // Resize du pot de colle en fonction de l'échelle spécifiée
+                glColor3f(1, 1, 0); // Jaune
+                drawSphere(); // Dessin de la partie inférieure du pot de colle
             glPopMatrix(); // Reload de la matrice sauvegardée
         glPopMatrix(); // Reload de la matrice sauvegardée
-        glPushMatrix(); // Sauvegarde de la matrice
-            glScalef(0.03, 0.03, 0.1); // Resize du pot de colle en fonction de l'échelle spécifiée
-            glColor3f(1, 1, 0); // Blanc
-            drawCone(); // Dessin de la partie supérieure du pot de colle
-        glPopMatrix(); // Reload de la matrice sauvegardée
+    } else if (_type == 2) {
         
-        glPushMatrix(); // Sauvegarde de la matrice
-            glTranslatef(0, -0.03, 0); // Déplacement vers le bas pour dessiner la partie inférieure du pot de colle
-            glScalef(0.03, 0.03, 0.03); // Resize du pot de colle en fonction de l'échelle spécifiée
-            glColor3f(1, 1, 0); // Jaune
-            drawSphere(); // Dessin de la partie inférieure du pot de colle
-        glPopMatrix(); // Reload de la matrice sauvegardée
-    glPopMatrix(); // Reload de la matrice sauvegardée
+    }
+    
 }
 
 
@@ -297,5 +302,5 @@ int checkBonussHit(Ball ball, std::vector<Bonus> bonuss){
             return bonusactivation;
         }
     }
-    return 0;
+    return bonusactivation;
 }

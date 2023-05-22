@@ -251,6 +251,7 @@ int main() {
 		if(lose) { // Si le joueur perd, on enlève une vie et on met colle la balle sur la raquette
 			lives--;
 			ballStick = true;
+			lose = false;
 		}
 		if(lives < 0) { // Si le joueur n'a plus de vies, la partie est perdue
 			play = false;

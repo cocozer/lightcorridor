@@ -39,6 +39,8 @@ static int flag_animate_rot_scale = 0;
 static int flag_animate_rot_arm = 0;
 
 
+
+
 /* Error handling function */
 void onError(int error, const char* description) {
     std::cout << "GLFW Error: " << description << std::endl;
@@ -220,8 +222,8 @@ int main() {
 	corridor->y = 0;
 	/*Création du vecteur des obstacles*/
 
-	// std::vector<Obstacle> obstacles ={Obstacle (1,1), Obstacle (1.2,2), Obstacle (1.4,3), Obstacle (1.6,4)};
-	std::vector<Obstacle> obstacles ={Obstacle (5,1)};
+	std::vector<Obstacle> obstacles ={Obstacle (1,1), Obstacle (1.4,2), Obstacle (1.8,3), Obstacle (2,4)};
+	//std::vector<Obstacle> obstacles ={Obstacle (1,1)};
 
 	/* Création du vecteur des Bonus */
 	std::vector<Bonus> bonus ={Bonus (0,1,0,1)};
@@ -265,6 +267,7 @@ int main() {
 			lose = ball->checkLoose(raquette);
 			/* Updates des positions des objets*/
 			ball->checkDirection(); // Balle (vérif de la direction de la balle pour collisions etc)
+			ball->checkObstaclesHit(obstacles);
 			ballIsSticked = ball->checkRaquetteHit(raquette, raquetteSticky); // rebond si la balle touche la raquette
 			if(ballIsSticked) {
 				ball->vx = 0;
@@ -316,7 +319,7 @@ int main() {
 		// obstacle1->drawObstacle();
 		// obstacle2->drawObstacle();
 		drawBonuss(bonus); //dessine le vecteur des bonus
-		checkObstaclesHit(*ball, obstacles);
+
 		// ball->checkObstacleHit(obstacles[1]);
 		int bonusactivation = checkBonussHit(*ball, bonus);
 		if (bonusactivation == 1) {

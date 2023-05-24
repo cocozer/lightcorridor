@@ -109,30 +109,50 @@ void Ball::stickBall(Raquette* raquette) {
     this->y = raquette->y + 0.05;
     this->z = raquette->z;
 }
-void Ball::checkObstacleHit(Obstacle obstacle) {
-    float delta = 0.01; // Marge d'erreur pour comparer deux nombres à virgule flottante
+void Ball::checkObstacleHit(Obstacle* obstacle) {
+    float delta = 0.001; // Marge d'erreur pour comparer deux nombres à virgule flottante
     // Vérifier si la balle se trouve dans la plage verticale de l'obstacle
-    if ((this->y - 0.1 * this->coefftaille <= obstacle._y + delta) &&
-        (this->y + 0.1 * this->coefftaille >= obstacle._y - delta)) {
-            cout << "rebond" << endl;
+    if ((this->y - 0.1*this->coefftaille <= obstacle->_y + delta) &&
+        (this->y + 0.1*this->coefftaille >= obstacle->_y - delta)) {
+            canBounce+=1; //permet de ne faire rebondir qu'une fois la balle au lieu de plein de fois
+            cout << canBounce << endl;
         // Vérifier le côté de l'obstacle pour la collision
-        switch (obstacle._side) {
-            case 1: // Mur d'en haut
-                cout << obstacle._side << endl;
-                this->vy = -this->vy; // Inverser la vitesse de la balle en y
-                break;
-            case 2: // Mur du bas
-                this->vy = -this->vy; // Inverser la vitesse de la balle en y
-                break;
-            case 3: // Mur de droite
-                this->vy = -this->vy; // Inverser la vitesse de la balle en y
-                break;
-            case 4: // Mur de gauche
-                this->vy = -this->vy; // Inverser la vitesse de la balle en x
-                break;
-            default:
-                break;
+        if(canBounce==6){
+            canBounce = 0; //on réinitialise la variable canBounce
+            //cout <<"la balle est inversée" << endl;
+            this->vz=this->vz; //pour corriger les bugs de variation du z de la balle après rebond
+            switch (obstacle->_side) {
+                case 1: // Mur d'en haut
+                    if(this->z + 0.1*this->coefftaille >0){
+                        this->vy=-this->vy; // Inverser la vitesse de la balle en y
+                    }
+                    break;
+                case 2: // Mur du bas
+                    if(this->z + 0.1*this->coefftaille <0){
+                        this->vy *=-1; // Inverser la vitesse de la balle en y
+                    }
+                    break;
+                case 3: // Mur de droite
+                    if(this->x+ 0.1*this->coefftaille  >0){
+                        this->vy = -this->vy; // Inverser la vitesse de la balle en y
+                        break;
+                    }
+                case 4: // Mur de gauche
+                    if(this->x+ 0.1*this->coefftaille <0){
+                        this->vy = -this->vy; // Inverser la vitesse de la balle en y
+                        break;
+                    }
+                default:
+                    break;
+            }
         }
+        
+    }
+}
+
+void Ball::checkObstaclesHit(std::vector<Obstacle> obstacles){
+    for (auto obstacle: obstacles) { //pour tous les éléments de obstacles
+        checkObstacleHit(&obstacle);
     }
 }
 
@@ -150,7 +170,7 @@ int Ball::checkBonusHit(Bonus bonus) {
             if ((this->z - 0.1 * this->coefftaille <= bonus._z + rayon) &&
                 (this->z + 0.1 * this->coefftaille >= bonus._z - rayon)) {
                 bonus._active = false;
-                std::cout << bonus._active << endl;
+                // std::cout << bonus._active << endl;
                 if(bonus._type == 1) {
                     return 1;// Le premier bonus a été activé
                 } else if (bonus._type == 2) {
@@ -286,12 +306,11 @@ void drawObstacles(std::vector<Obstacle> obstacles){ //pour dessiner le vecteur 
   }
 }
 
-void checkObstaclesHit(Ball ball, std::vector<Obstacle> obstacles){
-    for (auto obstacle: obstacles) {//pour tous les éléments de obstacles
-        ball.checkObstacleHit(obstacle);
-    }
-
-}
+// void checkObstaclesHit(Ball ball, std::vector<Obstacle> obstacles){
+//     for (auto obstacle: obstacles) {//pour tous les éléments de obstacles
+//         ball.checkObstacleHit(&obstacle);
+//     }
+// }
 
 
 int checkBonussHit(Ball ball, std::vector<Bonus> bonuss){

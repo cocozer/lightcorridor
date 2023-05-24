@@ -1,5 +1,11 @@
 #include <vector>
 using namespace std;
+
+
+/*pour la gestion du rebond sur les obstacles*/
+static int canBounce = 0;
+
+
 struct Raquette {
     float x;
     float y;
@@ -74,15 +80,15 @@ struct Ball {
     bool checkLoose(Raquette* Raquette);
 
     void stickBall(Raquette* raquette);
-
-    void checkObstacleHit(Obstacle obstacle);
+    void checkObstaclesHit(std::vector<Obstacle> obstacles);
+    void checkObstacleHit(Obstacle* obstacle);
 
     int checkBonusHit(Bonus bonus);
 };
 
 // void initList(ListOfObstacles* list);
  void drawObstacles(std::vector<Obstacle> obstacles); //pour dessiner tous les obstacles du vecteur
- void checkObstaclesHit(Ball ball, std::vector<Obstacle> obstacles);
+//  void checkObstaclesHit(Ball ball, std::vector<Obstacle> obstacles);
 int checkBonussHit(Ball ball, std::vector<Bonus> bonuss);
 
 void drawBonuss(std::vector<Bonus> bonus); //pour dessiner tous les bonus du vecteur

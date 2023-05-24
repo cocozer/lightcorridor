@@ -14,6 +14,10 @@ struct Raquette {
 
     // Dessin de la raquette
     void drawRaquette();
+    //Test de la collision avec les obstacles 
+    // void checkObstacleCollision(Obstacle* obstacle);
+    //void checkObstaclesCollision(std::vector<Obstacle> obstacles);
+
 };
 
 
@@ -92,3 +96,5 @@ struct Ball {
 int checkBonussHit(Ball ball, std::vector<Bonus> bonuss);
 
 void drawBonuss(std::vector<Bonus> bonus); //pour dessiner tous les bonus du vecteur
+
+bool checkRaquetteObstacleCollison(Raquette *raquette, std::vector<Obstacle> obstacles);

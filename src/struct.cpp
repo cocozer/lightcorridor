@@ -7,15 +7,6 @@ void Raquette::drawRaquette() {
     glColor3f(255, 255, 255); // Blanc
     glPushMatrix(); // Sauvegarde de la matrice
         glTranslatef(this->x, this->y, this->z); // Déplacement du plan pour correspondre au x et au y de la raquette
-        // // Dessin de l'ombre de la raquette
-        // glPushMatrix();
-        // glTranslatef(0, 0, -this->z-0.25);
-        //     glPushMatrix(); // Sauvegarde de la matrice
-        //         glScalef(this->coefftaille, this->coefftaille, 0.05); // Resize du plan pour correspondre au coeff de la raquette
-        //         glColor3f(0, 0, 0); // Noir
-        //         drawSquare();
-        //     glPopMatrix(); // Reload de la matrice sauvegardée
-        // glPopMatrix(); // Reload de la matrice sauvegardée
         glPushMatrix(); // Sauvegarde de la matrice
             glScalef(this->coefftaille, 1, this->coefftaille); // Resize du plan pour correspondre au coeff de la raquette
             glColor3f(255, 255, 255); // Blanc
@@ -24,6 +15,7 @@ void Raquette::drawRaquette() {
     glPopMatrix(); // Reload de la matrice sauvegardée
     
 }
+
 
 void Ball::drawBall() {
     glPushMatrix(); // Sauvegarde de la matrice
@@ -112,41 +104,47 @@ void Ball::stickBall(Raquette* raquette) {
 void Ball::checkObstacleHit(Obstacle* obstacle) {
     float delta = 0.001; // Marge d'erreur pour comparer deux nombres à virgule flottante
     // Vérifier si la balle se trouve dans la plage verticale de l'obstacle
-    if ((this->y - 0.1*this->coefftaille <= obstacle->_y + delta) &&
-        (this->y + 0.1*this->coefftaille >= obstacle->_y - delta)) {
+    if ((this->y - 0.05*this->coefftaille <= obstacle->_y + delta) &&
+        (this->y + 0.05*this->coefftaille >= obstacle->_y - delta)) {
             canBounce+=1; //permet de ne faire rebondir qu'une fois la balle au lieu de plein de fois
-            cout << canBounce << endl;
+            //cout << canBounce << endl;
         // Vérifier le côté de l'obstacle pour la collision
-        if(canBounce==6){
+        if(canBounce==4){
             canBounce = 0; //on réinitialise la variable canBounce
             //cout <<"la balle est inversée" << endl;
-            this->vz=this->vz; //pour corriger les bugs de variation du z de la balle après rebond
             switch (obstacle->_side) {
                 case 1: // Mur d'en haut
-                    if(this->z + 0.1*this->coefftaille >0){
+                    if(this->z + 0.05*this->coefftaille >0){
                         this->vy=-this->vy; // Inverser la vitesse de la balle en y
+                        this->vz=this->vz; //pour corriger les bugs de variation du z de la balle après rebond
+                        this->vx=this->vx;
                     }
                     break;
-                case 2: // Mur du bas
-                    if(this->z + 0.1*this->coefftaille <0){
-                        this->vy *=-1; // Inverser la vitesse de la balle en y
-                    }
-                    break;
-                case 3: // Mur de droite
-                    if(this->x+ 0.1*this->coefftaille  >0){
+                case 2: // Mur de droite
+                    if(this->x+ 0.05*this->coefftaille >0){
                         this->vy = -this->vy; // Inverser la vitesse de la balle en y
-                        break;
+                        this->vz=this->vz; //pour corriger les bugs de variation du z de la balle après rebond
+                        this->vx=this->vx;
                     }
+                    break;
+                case 3: // Mur de bas
+                    if(this->z-0.05*this->coefftaille <0){
+                        this->vy = -this->vy; // Inverser la vitesse de la balle en y
+                        this->vz=this->vz; //pour corriger les bugs de variation du z de la balle après rebond
+                        this->vx=this->vx;
+                    }
+                    break;
                 case 4: // Mur de gauche
-                    if(this->x+ 0.1*this->coefftaille <0){
+                    if(this->x- 0.05*this->coefftaille <0){
                         this->vy = -this->vy; // Inverser la vitesse de la balle en y
-                        break;
+                        this->vz=this->vz; //pour corriger les bugs de variation du z de la balle après rebond
+                        this->vx=this->vx;
                     }
+                    break;
                 default:
                     break;
             }
         }
-        
     }
 }
 
@@ -253,43 +251,51 @@ void Bonus::drawBonus()  {
 
 
 void Obstacle::drawObstacle() {
-    if (_y > 5){
-    glColor4f(1.0f, 0.0f, 1.0f, 0.0f); // Définir la couleur avec une opacité de 0
-    //ça marche pas ???
-    } else {
-    glColor4f(0.0f, 0.0f, 1.0f, 1.0f); // Définir la couleur sans transparence
-    //std::cout <<_y << endl;
-    }
-    //glColor3f(0,0,255);
 
-    if (_side == 1) { //mur d'en haut
-        glPushMatrix();
-            glTranslatef(0, _y, 0);
-            drawUpsideWall();
-        glPopMatrix();
-        //std::cout << "le mur d'en haut a pour y" << _y <<endl;
+    if (_y > 2.0) {
+        glColor3f(0.0, 0.0, 0.36); 
+    } else if (_y > 1.6) {
+        glColor3f(0.007, 0.24, 0.54);
+    } else if (_y > 1.2) {
+        glColor3f(0.0, 0.46, 0.7);
+    } else if (_y > 0.8) {
+        glColor3f(0.0, 0.58, 0.78);
+    }else if (_y > 0.4) {
+        glColor3f(0.0, 0.7, 0.84);
+    }else {
+        glColor3f(0.67, 0.9, 1.0);
     }
 
-    if (_side == 2) { //mur de droite
-        glPushMatrix();
-            glTranslatef(0, _y, 0);
-            drawRightWall();
-        glPopMatrix();
-    }
+    if (_y > 0.5){ //on ne dessine pas les murs qui sont trop proches
 
-    if (_side == 3) { //mur du bas
-        glPushMatrix();
-            glTranslatef(0, _y, -0.25);//le meme mur que celui du haut mais décalé vers le bas
-            drawUpsideWall();
+        if (_side == 1) { //mur d'en haut
+            glPushMatrix();
+                glTranslatef(0, _y, 0);
+                drawUpsideWall();
             glPopMatrix();
-    }
+        }
 
-    if (_side == 4) { //mur de gauche
-        glPushMatrix();
-            glTranslatef(-0.5, _y, 0);//le meme mur que celui du haut mais décalé vers la gauche
-            drawRightWall();
+        if (_side == 2) { //mur de droite
+            glPushMatrix();
+                glTranslatef(0, _y, 0);
+                drawRightWall();
             glPopMatrix();
-    }
+        }
+
+        if (_side == 3) { //mur du bas
+            glPushMatrix();
+                glTranslatef(0, _y, -0.25);//le meme mur que celui du haut mais décalé vers le bas
+                drawUpsideWall();
+                glPopMatrix();
+        }
+
+        if (_side == 4) { //mur de gauche
+            glPushMatrix();
+                glTranslatef(-0.5, _y, 0);//le meme mur que celui du haut mais décalé vers la gauche
+                drawRightWall();
+                glPopMatrix();
+        }
+    }  
 }
 
 void drawBonuss(std::vector<Bonus> bonuss){ //pour dessiner le vecteur des bonus
@@ -306,12 +312,6 @@ void drawObstacles(std::vector<Obstacle> obstacles){ //pour dessiner le vecteur 
   }
 }
 
-// void checkObstaclesHit(Ball ball, std::vector<Obstacle> obstacles){
-//     for (auto obstacle: obstacles) {//pour tous les éléments de obstacles
-//         ball.checkObstacleHit(&obstacle);
-//     }
-// }
-
 
 int checkBonussHit(Ball ball, std::vector<Bonus> bonuss){
     int bonusactivation = 0;
@@ -322,4 +322,38 @@ int checkBonussHit(Ball ball, std::vector<Bonus> bonuss){
         }
     }
     return bonusactivation;
+}
+
+bool checkRaquetteObstacleCollison(Raquette *raquette, std::vector<Obstacle> obstacles){
+    float delta = 0.01;
+    //la raquette fait 0.2 de côté
+    //son y initial est égal à 0.6
+    float raquetteDemiLargeur = (0.2*raquette->coefftaille)/2;
+    for (auto obstacle: obstacles) { //pour tous les éléments de obstacles
+        if((obstacle._y <0.62) && (obstacle._y>0.605)){
+            //si l'obstacle est égal au y de la raquette + ou - delta 
+            if(obstacle._side==1){//mur d'en haut
+                if(raquette->z+raquetteDemiLargeur>0){
+                    return true;
+                }
+            }
+            if(obstacle._side==2){//mur de droite
+                if(raquette->x+raquetteDemiLargeur>0){
+                    return true;
+                }
+            }
+            if(obstacle._side==3){//mur du bas
+                if(raquette->z-raquetteDemiLargeur<0){
+                    return true;
+                }
+            }
+            if(obstacle._side==4){ //mur de gauche
+                if(raquette->x-raquetteDemiLargeur<0){
+                    return true;
+                }
+            }
+            cout <<"la raquette touche un mur"<<endl;
+        }
+    }
+    return false;
 }

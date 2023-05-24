@@ -26,6 +26,7 @@ bool CorridorMoving = false; // Est-ce que le couloir est en mouvement ou pas ?
 bool ballStick = false; // Si la balle est collée au milieu de la raquette
 bool raquetteSticky = false; // Si la raquette est collante (grâce au bonus)
 bool ballIsSticked = false; // Si la balle est collée à la raquette mais pas forcément au milieu
+//bool raquetteObstacleCollision = false; //check si la raquette touche un obstacle
 
 /* Variable globale du nombre de vies, 5 au départ*/
 int lives = 5;
@@ -93,8 +94,8 @@ void MoveRaquette(GLFWwindow* window, Raquette* raquette) {
 }
 
 
-void MoveCorridor(Corridor* corridor, Ball* ball, std::vector<Obstacle>& obstacles) {
-	if(CorridorMoving) {
+void MoveCorridor(Corridor* corridor, Ball* ball, Raquette *raquette, std::vector<Obstacle>& obstacles) {
+	if(CorridorMoving && (checkRaquetteObstacleCollison(raquette, obstacles)==false)) {
 		corridor->y+=0.01;
 		ball->y-=0.01;
 		for(auto & obstacle : obstacles){
@@ -222,11 +223,14 @@ int main() {
 	corridor->y = 0;
 	/*Création du vecteur des obstacles*/
 
-	std::vector<Obstacle> obstacles ={Obstacle (1,1), Obstacle (1.4,2), Obstacle (1.8,3), Obstacle (2,4)};
+	//std::vector<Obstacle> obstacles ={Obstacle (1,1), Obstacle (1.4,2), Obstacle (1.8,3), Obstacle (2,4)};
 	//std::vector<Obstacle> obstacles ={Obstacle (1,1)};
 
+	std::vector<Obstacle> obstacles ={Obstacle (1,4), Obstacle (2,2), Obstacle (3,1), Obstacle (4,2), Obstacle (5,3), Obstacle (6,4), Obstacle (7,3), Obstacle (7.2,1), Obstacle (7.8,2), Obstacle (8,3), Obstacle (8.8,4), Obstacle (9,3), Obstacle (9,2)};
+
 	/* Création du vecteur des Bonus */
-	std::vector<Bonus> bonus ={Bonus (0,1,0,1)};
+	//std::vector<Bonus> bonus ={Bonus (0,1,0,1)};
+	std::vector<Bonus> bonus ={};
 	
 
     // Make the window's context current
@@ -280,7 +284,7 @@ int main() {
 
 		
 
-		MoveCorridor(corridor, ball, obstacles);
+		MoveCorridor(corridor, ball, raquette, obstacles);
 
 		if(ballStick) {
 			ball->stickBall(raquette);
@@ -301,6 +305,10 @@ int main() {
 		/* Initial scenery setup */
 		drawDecor();
 
+		//checkRaquetteObstacleCollison(raquette, obstacles, raquetteObstacleCollision);
+		//cout << raquetteObstacleCollision <<endl;
+
+
 		if(menustart) {
 			drawMenuStart();
 		}
@@ -319,6 +327,8 @@ int main() {
 		// obstacle1->drawObstacle();
 		// obstacle2->drawObstacle();
 		drawBonuss(bonus); //dessine le vecteur des bonus
+
+
 
 		// ball->checkObstacleHit(obstacles[1]);
 		int bonusactivation = checkBonussHit(*ball, bonus);

@@ -226,7 +226,8 @@ int main() {
 	//std::vector<Obstacle> obstacles ={Obstacle (1,1)};
 
 	/* Création du vecteur des Bonus */
-	std::vector<Bonus> bonus ={Bonus (0,1,0,1)};
+	// std::vector<Bonus> bonus ={Bonus (0,1,0,1)};
+    std::vector<Bonus> bonus ={};
 	
 
     // Make the window's context current

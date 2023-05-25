@@ -67,9 +67,9 @@ void Ball::checkDirection() {
 bool Ball::checkRaquetteHit(Raquette* raquette, bool raquetteSticky) {
     // Si la raquette touche la balle et que la balle va vers le joueur
     if(this->vy < 0) {
-        if (this->y-0.1*this->coefftaille <= raquette->y) { // Balle touche raquette en y
-            if(this->x+0.2 >= raquette->x - 0.1*raquette->coefftaille && this->z+0.2 >= raquette->z - 0.1*raquette->coefftaille) { 
-                if(this->x-0.2 <= raquette->x + 0.1*raquette->coefftaille && this->z-0.2 <= raquette->z + 0.1*raquette->coefftaille) { 
+        if (this->y-0.05*this->coefftaille <= raquette->y) { // Balle touche raquette en y
+            if(this->x+0.2 >= raquette->x - 0.05*raquette->coefftaille && this->z+0.2 >= raquette->z - 0.05*raquette->coefftaille) { 
+                if(this->x-0.2 <= raquette->x + 0.05*raquette->coefftaille && this->z-0.2 <= raquette->z + 0.05*raquette->coefftaille) { 
                     if(raquetteSticky) {
                         return true; // Si la raquette est collante, on retourne 1 pour coller la balle à la raquette
                     }
@@ -112,8 +112,8 @@ void Ball::stickBall(Raquette* raquette) {
 void Ball::checkObstacleHit(Obstacle* obstacle) {
     float delta = 0.001; // Marge d'erreur pour comparer deux nombres à virgule flottante
     // Vérifier si la balle se trouve dans la plage verticale de l'obstacle
-    if ((this->y - 0.1*this->coefftaille <= obstacle->_y + delta) &&
-        (this->y + 0.1*this->coefftaille >= obstacle->_y - delta)) {
+    if ((this->y - 0.05*this->coefftaille <= obstacle->_y + delta) &&
+        (this->y + 0.05*this->coefftaille >= obstacle->_y - delta)) {
             canBounce+=1; //permet de ne faire rebondir qu'une fois la balle au lieu de plein de fois
             cout << canBounce << endl;
         // Vérifier le côté de l'obstacle pour la collision
@@ -123,22 +123,22 @@ void Ball::checkObstacleHit(Obstacle* obstacle) {
             this->vz=this->vz; //pour corriger les bugs de variation du z de la balle après rebond
             switch (obstacle->_side) {
                 case 1: // Mur d'en haut
-                    if(this->z + 0.1*this->coefftaille >0){
+                    if(this->z + 0.05*this->coefftaille >0){
                         this->vy=-this->vy; // Inverser la vitesse de la balle en y
                     }
                     break;
                 case 2: // Mur du bas
-                    if(this->z + 0.1*this->coefftaille <0){
+                    if(this->z + 0.05*this->coefftaille <0){
                         this->vy *=-1; // Inverser la vitesse de la balle en y
                     }
                     break;
                 case 3: // Mur de droite
-                    if(this->x+ 0.1*this->coefftaille  >0){
+                    if(this->x+ 0.05*this->coefftaille  >0){
                         this->vy = -this->vy; // Inverser la vitesse de la balle en y
                         break;
                     }
                 case 4: // Mur de gauche
-                    if(this->x+ 0.1*this->coefftaille <0){
+                    if(this->x+ 0.05*this->coefftaille <0){
                         this->vy = -this->vy; // Inverser la vitesse de la balle en y
                         break;
                     }

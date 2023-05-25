@@ -26,6 +26,7 @@ bool CorridorMoving = false; // Est-ce que le couloir est en mouvement ou pas ?
 bool ballStick = false; // Si la balle est collée au milieu de la raquette
 bool raquetteSticky = false; // Si la raquette est collante (grâce au bonus)
 bool ballIsSticked = false; // Si la balle est collée à la raquette mais pas forcément au milieu
+int effectDuration;
 //bool raquetteObstacleCollision = false; //check si la raquette touche un obstacle
 
 /* Variable globale du nombre de vies, 5 au départ*/
@@ -159,7 +160,7 @@ void mouse_button_callback(GLFWwindow* window ,int button, int action, int mods)
 			float newx = (mouseX - (WINDOW_WIDTH / 2)) * (h / WINDOW_HEIGHT);
     		float newz = -(mouseY - (WINDOW_HEIGHT / 2)) * (h / WINDOW_HEIGHT);
 
-			if(newx > -0.0026 && newx < 0.0026 && newz > 0.0004 && newz < 0.0016) { // Si on clique sur le bouton du haut
+			if(newx > -0.0026 && newx < 0.0026 && newz > 0.0004 && newz < 0.0016) { // Si on clique sur le rect du haut
 				menustart = false;
 				menupause = false;
 				menuwin = false;
@@ -167,21 +168,14 @@ void mouse_button_callback(GLFWwindow* window ,int button, int action, int mods)
 				play = true;
 			}
 			
-			if(newx > -0.0026 && newx < 0.0026 && newz < -0.0004 && newz > -0.0016) { // Si on clique sur le bouton du bas
+			if(newx > -0.0026 && newx < 0.0026 && newz < -0.0004 && newz > -0.0016) { // Si on clique sur le rect du bas
 				glfwSetWindowShouldClose(window, GLFW_TRUE);
-			}
-			if(menupause) { // Si le menu est celui de pause, alors on permet de reset la partie
-				
-				if(newx > -0.0015 && newx < 0.0015 && newz > 0.0027 && newz < 0.0034) { // Si on clique sur le bouton de reset de niveau (tout en haut)
-					// RESET LE NIVEAU
-
-					menupause = false;
-					play = true;
-				}
 			}
     	}
 	}
-	
+	if(menupause) { // Si le menu est celui de
+
+	}
     
 }
 
@@ -241,7 +235,7 @@ int main() {
 	std::vector<Obstacle> obstacles ={Obstacle (1,4), Obstacle (2,2), Obstacle (3,1), Obstacle (4,2), Obstacle (5,3), Obstacle (6,4), Obstacle (7,3), Obstacle (7.2,1), Obstacle (7.8,2), Obstacle (8,3), Obstacle (8.8,4), Obstacle (9,3), Obstacle (9,2)};
 
 	/* Création du vecteur des Bonus */
-	std::vector<Bonus> bonus ={Bonus (0.2,0.8,0,2), Bonus (0.2, 2.4, 0, 1)};
+	std::vector<Bonus> bonus ={Bonus (0.2,0.8,0,2), Bonus (0.2, 2.4, 0, 1), Bonus (-0.2,0.8,0, 1)};
 	//std::vector<Bonus> bonus ={};
 	
 
@@ -278,9 +272,9 @@ int main() {
 		if(lives < 0) { // Si le joueur n'a plus de vies, la partie est perdue
 			play = false;
 			menulose = true;
-
-			// RESET LE NIVEAU
-			
+			corridor->y = 0;
+			// Reset tous les obstacles
+			// Reset tous les bonus
 		}
 		if(play) { // Si la partie est lancée
 			/* On vérifie si le joueur a perdu */
@@ -293,11 +287,17 @@ int main() {
 				ball->vx = 0;
 				ball->vy = 0;
 				ball->vz = 0;
+				ballStick = true;
 			}
 			ball->updatePosition(); // update de la position de la balle
 			MoveRaquette(window, raquette); // Déplacement de la raquette (au mouvement de souris)
 		}
-
+		if(raquetteSticky) { // Si la raquette colle encore, on décrémente la durée de l'effet
+			effectDuration--;
+		}
+		if (effectDuration <= 0) { // Si l'effet est arrivé a expiration, la raquette ne colle plus
+			raquetteSticky = false;
+		}
 		
 
 		MoveCorridor(corridor, ball, raquette, obstacles, bonus);
@@ -346,6 +346,7 @@ int main() {
 		int bonusactivation = checkBonussHit(*ball, bonus);
 		if (bonusactivation == 1) {
 			raquetteSticky = 1;
+			effectDuration = 300; // L'effet dure 300 frames
 		} else if (bonusactivation == 2) {
 			lives++;
 		}

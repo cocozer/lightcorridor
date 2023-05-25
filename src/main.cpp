@@ -17,7 +17,7 @@ static float aspectRatio = 1.0;
 
 /* Etats du jeu */
 bool play = false; // Est-ce que la partie est lancée ou pas ?
-bool menupause = true; // Est-ce que le menu pause est affiché ou pas ?
+bool menupause = false; // Est-ce que le menu pause est affiché ou pas ?
 bool menustart = true; // Est-ce que le menu start est affiché ou pas ?
 bool menulose = false; // Est-ce que le menu lose est affiché ou pas ?
 bool menuwin = false; // Est-ce que le menu win est affiché ou pas ?
@@ -257,9 +257,13 @@ int main() {
         startTime = currentTime;
 		
 		if(lose) { // Si le joueur perd, on enlève une vie et on met colle la balle sur la raquette
-			lives--;
-			ballStick = true;
 			lose = false;
+			lives--;
+			cout << "vie en moins" << endl;
+			ballStick = true;
+			ball->vx = 0;
+			ball->vy = 0;
+			ball->vz = 0;
 		}
 		if(lives < 0) { // Si le joueur n'a plus de vies, la partie est perdue
 			play = false;

@@ -218,7 +218,14 @@ void drawMenuPause(){
     glPushMatrix(); // Sauvegarde de la matrice
         glTranslatef(0,0.01, -0.001); // Déplacement du plan pour être dans le champ de vision de la caméra
             glScalef(0.005, 0.005, 0.005); // Déplacement du plan pour former un bouton du menu
-            glColor3f(1, 0, 0); // BLEU
+            glColor3f(1, 0, 0); // ROUGE
+            drawRectangle(); // Dessin du bouton de menu
+    glPopMatrix(); // Reload de la matrice sauvegardée
+
+    glPushMatrix(); // Sauvegarde de la matrice
+        glTranslatef(0,0.01, 0.003); // Déplacement du plan pour être dans le champ de vision de la caméra
+            glScalef(0.005, 0.005, 0.005); // Déplacement du plan pour former un bouton du menu
+            glColor3f(1, 1, 0); // JAUNE
             drawRectangle(); // Dessin de la partie inférieure du pot de colle
     glPopMatrix(); // Reload de la matrice sauvegardée
 }

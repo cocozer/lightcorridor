@@ -246,7 +246,7 @@ void Bonus::drawBonus()  {
         //bonus colle
         glPushMatrix(); // Sauvegarde de la matrice
             glTranslatef(_x,_y, _z); // Déplacement du pot de colle aux coordonnées spécifiées
-            // Dessin de l'ombre de la balle
+            // Dessin de l'ombre du bonus
             glPushMatrix();
             glTranslatef(0, 0, -_z-0.25);
                 glPushMatrix(); // Sauvegarde de la matrice

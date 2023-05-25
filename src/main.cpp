@@ -159,7 +159,7 @@ void mouse_button_callback(GLFWwindow* window ,int button, int action, int mods)
 			float newx = (mouseX - (WINDOW_WIDTH / 2)) * (h / WINDOW_HEIGHT);
     		float newz = -(mouseY - (WINDOW_HEIGHT / 2)) * (h / WINDOW_HEIGHT);
 
-			if(newx > -0.0026 && newx < 0.0026 && newz > 0.0004 && newz < 0.0016) { // Si on clique sur le rect du haut
+			if(newx > -0.0026 && newx < 0.0026 && newz > 0.0004 && newz < 0.0016) { // Si on clique sur le bouton du haut
 				menustart = false;
 				menupause = false;
 				menuwin = false;
@@ -167,11 +167,21 @@ void mouse_button_callback(GLFWwindow* window ,int button, int action, int mods)
 				play = true;
 			}
 			
-			if(newx > -0.0026 && newx < 0.0026 && newz < -0.0004 && newz > -0.0016) { // Si on clique sur le rect du bas
+			if(newx > -0.0026 && newx < 0.0026 && newz < -0.0004 && newz > -0.0016) { // Si on clique sur le bouton du bas
 				glfwSetWindowShouldClose(window, GLFW_TRUE);
+			}
+			if(menupause) { // Si le menu est celui de pause, alors on permet de reset la partie
+				
+				if(newx > -0.0015 && newx < 0.0015 && newz > 0.0027 && newz < 0.0034) { // Si on clique sur le bouton de reset de niveau (tout en haut)
+					// RESET LE NIVEAU
+
+					menupause = false;
+					play = true;
+				}
 			}
     	}
 	}
+	
     
 }
 
@@ -268,9 +278,9 @@ int main() {
 		if(lives < 0) { // Si le joueur n'a plus de vies, la partie est perdue
 			play = false;
 			menulose = true;
-			corridor->y = 0;
-			// Reset tous les obstacles
-			// Reset tous les bonus
+
+			// RESET LE NIVEAU
+			
 		}
 		if(play) { // Si la partie est lancée
 			/* On vérifie si le joueur a perdu */

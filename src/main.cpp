@@ -41,7 +41,6 @@ static int flag_animate_rot_arm = 0;
 
 
 
-
 /* Error handling function */
 void onError(int error, const char* description) {
     std::cout << "GLFW Error: " << description << std::endl;
@@ -94,12 +93,15 @@ void MoveRaquette(GLFWwindow* window, Raquette* raquette) {
 }
 
 
-void MoveCorridor(Corridor* corridor, Ball* ball, Raquette *raquette, std::vector<Obstacle>& obstacles) {
+void MoveCorridor(Corridor* corridor, Ball* ball, Raquette *raquette, std::vector<Obstacle>& obstacles, std::vector<Bonus>& bonuss) {
 	if(CorridorMoving && (checkRaquetteObstacleCollison(raquette, obstacles)==false)) {
 		corridor->y+=0.01;
 		ball->y-=0.01;
 		for(auto & obstacle : obstacles){
 			obstacle._y-=0.01; //fait avancer l'obstacle
+		}
+		for(auto & bonus : bonuss){
+			bonus._y-=0.01; //fait avancer le bonus
 		}
 	}
 } 
@@ -224,13 +226,13 @@ int main() {
 	/*Création du vecteur des obstacles*/
 
 	//std::vector<Obstacle> obstacles ={Obstacle (1,1), Obstacle (1.4,2), Obstacle (1.8,3), Obstacle (2,4)};
-	//std::vector<Obstacle> obstacles ={Obstacle (1,1)};
+	//std::vector<Obstacle> obstacles ={};
 
 	std::vector<Obstacle> obstacles ={Obstacle (1,4), Obstacle (2,2), Obstacle (3,1), Obstacle (4,2), Obstacle (5,3), Obstacle (6,4), Obstacle (7,3), Obstacle (7.2,1), Obstacle (7.8,2), Obstacle (8,3), Obstacle (8.8,4), Obstacle (9,3), Obstacle (9,2)};
 
 	/* Création du vecteur des Bonus */
-	//std::vector<Bonus> bonus ={Bonus (0,1,0,1)};
-	std::vector<Bonus> bonus ={};
+	std::vector<Bonus> bonus ={Bonus (0.2,0.8,0,2), Bonus (0.2, 2.4, 0, 1)};
+	//std::vector<Bonus> bonus ={};
 	
 
     // Make the window's context current
@@ -284,7 +286,7 @@ int main() {
 
 		
 
-		MoveCorridor(corridor, ball, raquette, obstacles);
+		MoveCorridor(corridor, ball, raquette, obstacles, bonus);
 
 		if(ballStick) {
 			ball->stickBall(raquette);
@@ -322,10 +324,6 @@ int main() {
 			drawMenuWin();
 		}
 
-
-
-		// obstacle1->drawObstacle();
-		// obstacle2->drawObstacle();
 		drawBonuss(bonus); //dessine le vecteur des bonus
 
 

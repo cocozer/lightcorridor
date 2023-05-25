@@ -2,6 +2,8 @@
 #include "3D_tools.h"
 #include <iostream>
 
+
+
 // Struct Raquette fonctions
 void Raquette::drawRaquette() {
     glColor3f(255, 255, 255); // Blanc
@@ -60,8 +62,10 @@ bool Ball::checkRaquetteHit(Raquette* raquette, bool raquetteSticky) {
     // Si la raquette touche la balle et que la balle va vers le joueur
     if(this->vy < 0) {
         if (this->y-0.1*this->coefftaille <= raquette->y) { // Balle touche raquette en y
-            if(this->x+0.2 >= raquette->x - 0.1*raquette->coefftaille && this->z+0.2 >= raquette->z - 0.1*raquette->coefftaille) { 
-                if(this->x-0.2 <= raquette->x + 0.1*raquette->coefftaille && this->z-0.2 <= raquette->z + 0.1*raquette->coefftaille) { 
+            // if(this->x+0.2 >= raquette->x - 0.1*raquette->coefftaille && this->z+0.2 >= raquette->z - 0.1*raquette->coefftaille) { 
+            //     if(this->x-0.2 <= raquette->x + 0.1*raquette->coefftaille && this->z-0.2 <= raquette->z + 0.1*raquette->coefftaille) { 
+            if(this->x+0.05 >= raquette->x - 0.1 && this->z+0.05 >= raquette->z - 0.1*raquette->coefftaille) { 
+                if(this->x-0.05 <= raquette->x + 0.1 && this->z-0.05 <= raquette->z + 0.1*raquette->coefftaille) { 
                     if(raquetteSticky) {
                         return true; // Si la raquette est collante, on retourne 1 pour coller la balle à la raquette
                     }
@@ -101,23 +105,31 @@ void Ball::stickBall(Raquette* raquette) {
     this->y = raquette->y + 0.05;
     this->z = raquette->z;
 }
-void Ball::checkObstacleHit(Obstacle* obstacle) {
+void Ball::checkObstacleHit(Obstacle& obstacle) {
     float delta = 0.001; // Marge d'erreur pour comparer deux nombres à virgule flottante
     // Vérifier si la balle se trouve dans la plage verticale de l'obstacle
-    if ((this->y - 0.05*this->coefftaille <= obstacle->_y + delta) &&
-        (this->y + 0.05*this->coefftaille >= obstacle->_y - delta)) {
+    //obstacle.changeColor=false;
+    counter +=1;
+    if(counter ==15){
+        counter =0;
+        obstacle.changeColor=false;
+    }
+    if ((this->y - 0.05*this->coefftaille <= obstacle._y + delta) &&
+        (this->y + 0.05*this->coefftaille >= obstacle._y - delta)) {
             canBounce+=1; //permet de ne faire rebondir qu'une fois la balle au lieu de plein de fois
             //cout << canBounce << endl;
         // Vérifier le côté de l'obstacle pour la collision
         if(canBounce==4){
             canBounce = 0; //on réinitialise la variable canBounce
             //cout <<"la balle est inversée" << endl;
-            switch (obstacle->_side) {
+           
+            switch (obstacle._side) {
                 case 1: // Mur d'en haut
                     if(this->z + 0.05*this->coefftaille >0){
                         this->vy=-this->vy; // Inverser la vitesse de la balle en y
                         this->vz=this->vz; //pour corriger les bugs de variation du z de la balle après rebond
                         this->vx=this->vx;
+                         obstacle.changeColorObstacle();
                     }
                     break;
                 case 2: // Mur de droite
@@ -125,6 +137,7 @@ void Ball::checkObstacleHit(Obstacle* obstacle) {
                         this->vy = -this->vy; // Inverser la vitesse de la balle en y
                         this->vz=this->vz; //pour corriger les bugs de variation du z de la balle après rebond
                         this->vx=this->vx;
+                         obstacle.changeColorObstacle();
                     }
                     break;
                 case 3: // Mur de bas
@@ -132,6 +145,7 @@ void Ball::checkObstacleHit(Obstacle* obstacle) {
                         this->vy = -this->vy; // Inverser la vitesse de la balle en y
                         this->vz=this->vz; //pour corriger les bugs de variation du z de la balle après rebond
                         this->vx=this->vx;
+                         obstacle.changeColorObstacle();
                     }
                     break;
                 case 4: // Mur de gauche
@@ -139,6 +153,7 @@ void Ball::checkObstacleHit(Obstacle* obstacle) {
                         this->vy = -this->vy; // Inverser la vitesse de la balle en y
                         this->vz=this->vz; //pour corriger les bugs de variation du z de la balle après rebond
                         this->vx=this->vx;
+                         obstacle.changeColorObstacle();
                     }
                     break;
                 default:
@@ -148,9 +163,9 @@ void Ball::checkObstacleHit(Obstacle* obstacle) {
     }
 }
 
-void Ball::checkObstaclesHit(std::vector<Obstacle> obstacles){
-    for (auto obstacle: obstacles) { //pour tous les éléments de obstacles
-        checkObstacleHit(&obstacle);
+void Ball::checkObstaclesHit(std::vector<Obstacle>& obstacles){
+    for (auto& obstacle: obstacles) { //pour tous les éléments de obstacles
+        checkObstacleHit(obstacle);
     }
 }
 
@@ -210,6 +225,10 @@ Obstacle::Obstacle(float y, int side){ // constructeur de la structure Obstacle
     _side=side;
 }
 
+void Obstacle::changeColorObstacle(){
+    this->changeColor=true;
+}
+
 Bonus::Bonus(float x, float y, float z, int type){ // constructeur de la structure Obstacle
     _x=x;
     _y=y;
@@ -218,7 +237,13 @@ Bonus::Bonus(float x, float y, float z, int type){ // constructeur de la structu
 }
 
 void Bonus::drawBonus()  {
-    if(_type == 1) {
+
+    rotationAngle += 1.0; // Augmenter l'angle de rotation
+    if (rotationAngle >= 360.0) {
+        rotationAngle =0; // Remise à zéro de l'angle
+    }
+    if((_type == 1)&&(_y>0.2)) {
+        //bonus colle
         glPushMatrix(); // Sauvegarde de la matrice
             glTranslatef(_x,_y, _z); // Déplacement du pot de colle aux coordonnées spécifiées
             // Dessin de l'ombre de la balle
@@ -243,28 +268,59 @@ void Bonus::drawBonus()  {
                 drawSphere(); // Dessin de la partie inférieure du pot de colle
             glPopMatrix(); // Reload de la matrice sauvegardée
         glPopMatrix(); // Reload de la matrice sauvegardée
-    } else if (_type == 2) {
-        
+    } if ((_type == 2)&&(_y>0.2)) {
+        //bonus coeur
+       updateRotationAngle();
+        glColor3f(0, 0, 255); // Bleu
+        glPushMatrix();
+            glPushMatrix(); // Sauvegarde de la matrice
+                glTranslatef(_x, _y, _z); // Déplacement du plan pour correspondre au x et au y du bonus
+                    glTranslatef(0.02,0,0);
+                    //glRotatef(rotationAngle, 0, 0, 1.); // Rotation autour de l'axe y
+                    glPushMatrix(); // Sauvegarde de la matrice
+                        glTranslatef(-0.02,0,-0.006);
+                        glScalef(1.4,1,1);
+                        drawScaledCube(0.25f,0);
+                    glPopMatrix();
+                    drawHeartCube();
+            glPopMatrix(); // Reload 
+            glPushMatrix(); //ombre du bonus
+                glTranslatef(_x, _y, _z); // Déplacement du plan pour correspondre au x et au y du bonus
+                glPushMatrix();
+                    glTranslatef(0, 0, -_z-0.25);
+                    glRotatef(90,1,0,0);
+                    glScalef(0.5,0.4,0.4);
+                    glColor3f(0, 0, 0); // Noir
+                    drawFilledSquare();
+                glPopMatrix();
+            glPopMatrix(); // Reload de la matrice sauvegardée
+        glPopMatrix();
+        //cout << _y <<endl;
     }
     
 }
 
 
 void Obstacle::drawObstacle() {
-
-    if (_y > 2.0) {
+    //cout<< this->changeColor <<endl;
+    if(changeColor){
+        glColor3f(0.7,0.9,1.0);
+    } else {
+        if (_y > 2.0) {
         glColor3f(0.0, 0.0, 0.36); 
-    } else if (_y > 1.6) {
-        glColor3f(0.007, 0.24, 0.54);
-    } else if (_y > 1.2) {
-        glColor3f(0.0, 0.46, 0.7);
-    } else if (_y > 0.8) {
-        glColor3f(0.0, 0.58, 0.78);
-    }else if (_y > 0.4) {
-        glColor3f(0.0, 0.7, 0.84);
-    }else {
-        glColor3f(0.67, 0.9, 1.0);
+        } else if (_y > 1.6) {
+            glColor3f(0.007, 0.24, 0.54);
+        } else if (_y > 1.2) {
+            glColor3f(0.0, 0.46, 0.7);
+        } else if (_y > 0.8) {
+            glColor3f(0.0, 0.58, 0.78);
+        }else if (_y > 0.4) {
+            glColor3f(0.0, 0.7, 0.84);
+        }else {
+            glColor3f(0.67, 0.9, 1.0);
+        }
     }
+  
 
     if (_y > 0.5){ //on ne dessine pas les murs qui sont trop proches
 

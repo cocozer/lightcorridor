@@ -27,6 +27,8 @@ static const float Z_FAR = 50.f;
 extern float theta;      // Angle between x axis and viewpoint
 extern float phy  ;      // Angle between z axis and viewpoint
 extern float dist_zoom ; // Distance between origin and viewpoint
+/*pour faire tourner les bonus*/
+static float rotationAngle = 0;
 
 void setCamera();
 
@@ -48,6 +50,22 @@ void drawUpsideWall();
 void drawRightWall();
 
 void drawRectangle();
+
+void drawFilledSquare();
+
+void drawCube();
+
+void drawScaledSquare(float scale);
+
+void drawScaledCube(float scale, float rotate);
+
+void drawRotatedCube();
+
+void updateRotationAngle();
+
+void drawHeartCube();
+
+
 
 /* Small tools */
 float toRad(float deg);

@@ -289,7 +289,7 @@ void Bonus::drawBonus()  {
                 glPushMatrix();
                     glTranslatef(0, 0, -_z-0.25);
                     glRotatef(90,1,0,0);
-                    glScalef(0.5,0.4,0.4);
+                    glScalef(0.4,0.3,0.3);
                     glColor3f(0, 0, 0); // Noir
                     drawFilledSquare();
                 glPopMatrix();

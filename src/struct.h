@@ -1,5 +1,6 @@
 #include <vector>
 using namespace std;
+#include "Texture.h"
 
 
 /*pour la gestion du rebond sur les obstacles*/
@@ -74,8 +75,10 @@ struct Ball {
 
     float coefftaille;
 
+    //Texture _texture;
+
     // Dessin de la balle
-    void drawBall();
+    void drawBall(Texture texture);
 
     // Update la position de la balle en fonction de sa vélocité en x, y et z
     void updatePosition();

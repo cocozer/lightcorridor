@@ -157,6 +157,36 @@ void drawSphere() {
 	gluSphere(gluNewQuadric(),0.5,NB_SEG_CIRCLE,NB_SEG_CIRCLE);
 }
 
+void drawTexturedSphere(float radius, int stacks, int slices) {
+    float stackStep = M_PI / stacks;
+    float sliceStep = 2.0f * M_PI / slices;
+
+    for (int i = 0; i < stacks; i++) {
+        float theta1 = i * stackStep;
+        float theta2 = (i + 1) * stackStep;
+
+        glBegin(GL_QUAD_STRIP);
+        for (int j = 0; j <= slices; j++) {
+            float phi = j * sliceStep;
+
+            // Vertex 1
+            float x1 = radius* sin(theta1) * cos(phi);
+            float y1 = radius * cos(theta1);
+            float z1 = radius * sin(theta1) * sin(phi);
+            glTexCoord2f((float)j / slices, (float)i / stacks);
+            glVertex3f(x1, y1, z1);
+
+            // Vertex 2
+            float x2 = radius * sin(theta2) * cos(phi);
+            float y2 = radius * cos(theta2);
+            float z2 = radius * sin(theta2) * sin(phi);
+            glTexCoord2f((float)j / slices, (float)(i + 1) / stacks);
+            glVertex3f(x2, y2, z2);
+        }
+        glEnd();
+    }
+}
+
 void drawRaquette() {
 	glBegin(GL_LINE);
 		glVertex3f(-0.25,0,-0.25);

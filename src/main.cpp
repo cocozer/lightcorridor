@@ -8,6 +8,7 @@
 #include "draw_scene.h"
 #include "struct.h"
 #include "math.h"
+// #include "Texture.h"
 
 /* Window properties */
 static unsigned int WINDOW_WIDTH = 1000;
@@ -33,6 +34,8 @@ int effectDuration;
 int lives = 5;
 /* Variable globale balle pour pouvoir agir au clic gauche */
 Ball *ball = new Ball;
+
+Texture texture;
 /* Minimal time wanted between two images */
 static const double FRAMERATE_IN_SECONDS = 1. / 60.;
 
@@ -245,6 +248,8 @@ int main() {
     glfwSetWindowSizeCallback(window,onWindowResized);
 	glfwSetKeyCallback(window, onKey);
 	glfwSetMouseButtonCallback(window, mouse_button_callback);
+			
+	texture.loadTexture();
 
     onWindowResized(window, WINDOW_WIDTH, WINDOW_HEIGHT);
 
@@ -318,6 +323,19 @@ int main() {
 		glLoadIdentity();
 		setCamera();
 
+		glPushMatrix();
+		glTranslatef(0,1,0);
+		glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D,texture.textureID);
+            drawTexturedSphere(0.05, 20,20);
+        glBindTexture(GL_TEXTURE_2D,0); //détache la texture du point de bind une fois les données chargées
+        glDisable(GL_TEXTURE_2D);
+		glPopMatrix();
+
+		
+		/* Draw Ball*/
+		ball->drawBall(texture);
+
 		/* Initial scenery setup */
 		drawDecor();
 
@@ -356,10 +374,6 @@ int main() {
 		/* Draw Corridor*/
 		corridor->drawCorridor();
 
-		/* Draw Ball*/
-		ball->drawBall();
-		//std::cout<<"la balle a pour y" <<ball->y<<endl;
-
 		/* Draw Raquette */
 		raquette->drawRaquette();
 		
@@ -389,7 +403,7 @@ int main() {
 		
 
 	}
-
+	// glDeleteTextures(1,textures);
     glfwTerminate();
     return 0;
 }

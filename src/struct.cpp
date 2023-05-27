@@ -19,7 +19,7 @@ void Raquette::drawRaquette() {
 }
 
 
-void Ball::drawBall() {
+void Ball::drawBall(Texture texture) {
     glPushMatrix(); // Sauvegarde de la matrice
         glTranslatef(this->x, this->y, this->z); // Déplacement du plan pour correspondre au x, au y et au z de la balle
         // Dessin de l'ombre de la balle
@@ -32,9 +32,14 @@ void Ball::drawBall() {
             glPopMatrix(); // Reload de la matrice sauvegardée
         glPopMatrix(); // Reload de la matrice sauvegardée
         glPushMatrix(); // Sauvegarde de la matrice
-            glScalef(0.1*this->coefftaille, 0.1*this->coefftaille, 0.1*this->coefftaille); // Resize du plan pour correspondre au coeff de la balle
-            glColor3f(0, 255, 0); // Couleur de la balle
-            drawSphere();
+            //glScalef(0.1*this->coefftaille, 0.1*this->coefftaille, 0.1*this->coefftaille); // Resize du plan pour correspondre au coeff de la balle
+            //glColor3f(0, 255, 0); // Couleur de la balle
+            glEnable(GL_TEXTURE_2D);
+            glBindTexture(GL_TEXTURE_2D,1);
+            //cout << texture.textureData<<endl;
+            drawTexturedSphere(0.05, 20,20);
+            glBindTexture(GL_TEXTURE_2D,0); //détache la texture du point de bind une fois les données chargées
+            glDisable(GL_TEXTURE_2D);
         glPopMatrix(); // Reload de la matrice sauvegardée
     glPopMatrix(); // Reload de la matrice sauvegardée
 }

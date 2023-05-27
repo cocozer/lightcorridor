@@ -66,7 +66,7 @@ void updateRotationAngle();
 void drawHeartCube();
 
 void drawTexturedSphere(float radius, int stacks, int slices);
-
+void drawTexturedRectangle();
 
 
 /* Small tools */

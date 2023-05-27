@@ -78,7 +78,7 @@ struct Ball {
     //Texture _texture;
 
     // Dessin de la balle
-    void drawBall(Texture texture);
+    void drawBall(Texture& texture);
 
     // Update la position de la balle en fonction de sa vélocité en x, y et z
     void updatePosition();

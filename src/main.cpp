@@ -35,7 +35,7 @@ int lives = 5;
 /* Variable globale balle pour pouvoir agir au clic gauche */
 Ball *ball = new Ball;
 
-Texture texture;
+// Texture texture;
 /* Minimal time wanted between two images */
 static const double FRAMERATE_IN_SECONDS = 1. / 60.;
 
@@ -249,7 +249,9 @@ int main() {
 	glfwSetKeyCallback(window, onKey);
 	glfwSetMouseButtonCallback(window, mouse_button_callback);
 			
-	texture.loadTexture();
+	// texture.loadTexture();
+	Texture texture = Texture::loadTexture("../doc/MetalGrate.jpg");
+	//Texture texture2 = Texture::loadTexture();
 
     onWindowResized(window, WINDOW_WIDTH, WINDOW_HEIGHT);
 
@@ -322,19 +324,12 @@ int main() {
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		setCamera();
-
-		glPushMatrix();
-		glTranslatef(0,1,0);
-		glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D,texture.textureID);
-            drawTexturedSphere(0.05, 20,20);
-        glBindTexture(GL_TEXTURE_2D,0); //détache la texture du point de bind une fois les données chargées
-        glDisable(GL_TEXTURE_2D);
-		glPopMatrix();
-
-		
+						
 		/* Draw Ball*/
 		ball->drawBall(texture);
+
+		
+
 
 		/* Initial scenery setup */
 		drawDecor();

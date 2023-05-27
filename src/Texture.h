@@ -16,6 +16,7 @@ struct Texture {
     unsigned char* textureData;
 
     // Texture(std::string fileName);
-    void loadTexture();
+   // void loadTexture();
+    static Texture loadTexture(const char* fileName);
 
 };

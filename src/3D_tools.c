@@ -245,3 +245,16 @@ void drawRectangle() {
 		glVertex3f(0.5,0,-0.1);
 	glEnd();
 }
+
+void drawTexturedRectangle() {
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(-0.5,0,-0.1);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(-0.5,0,0.1);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(0.5,0,0.1);
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(0.5,0,-0.1);
+	glEnd();
+}

@@ -87,11 +87,11 @@ struct Ball {
     // Vérification de si la raquette touche la balle pour la faire rebondir
     bool checkRaquetteHit(Raquette* raquette, bool raquetteSticky);
     // Vérifie si la balle est passée entre la raquette et la caméra
-    bool checkLoose(Raquette* Raquette);
+    bool checkLoose(Raquette* Raquette, bool& canLose);
 
     void stickBall(Raquette* raquette);
-    void checkObstaclesHit(std::vector<Obstacle>& obstacles);
-    void checkObstacleHit(Obstacle& obstacle);
+    void checkObstaclesHit(std::vector<Obstacle>& obstacles,  bool& BallIsBetweenObstacleAndRaquette);
+    void checkObstacleHit(Obstacle& obstacle, bool& BallIsBetweenObstacleAndRaquette);
 
     int checkBonusHit(Bonus bonus);
 };

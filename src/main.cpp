@@ -28,10 +28,12 @@ bool ballStick = false; // Si la balle est collée au milieu de la raquette
 bool raquetteSticky = false; // Si la raquette est collante (grâce au bonus)
 bool ballIsSticked = false; // Si la balle est collée à la raquette mais pas forcément au milieu
 int effectDuration;
+bool canLose =false; //pour éviter la perte de 2 vies en meme temps
+bool BallIsBetweenObstacleAndRaquette=false;
 //bool raquetteObstacleCollision = false; //check si la raquette touche un obstacle
 
 /* Variable globale du nombre de vies, 5 au départ*/
-int lives = 5;
+int lives = 4;
 /* Variable globale balle pour pouvoir agir au clic gauche */
 Ball *ball = new Ball;
 
@@ -98,7 +100,7 @@ void MoveRaquette(GLFWwindow* window, Raquette* raquette) {
 
 
 void MoveCorridor(Corridor* corridor, Ball* ball, Raquette *raquette, std::vector<Obstacle>& obstacles, std::vector<Bonus>& bonuss) {
-	if(CorridorMoving && (checkRaquetteObstacleCollison(raquette, obstacles)==false)) {
+	if(CorridorMoving && (checkRaquetteObstacleCollison(raquette, obstacles)==false)&&(!BallIsBetweenObstacleAndRaquette)) {
 		corridor->y+=0.01;
 		ball->y-=0.01;
 		for(auto & obstacle : obstacles){
@@ -150,6 +152,8 @@ void mouse_button_callback(GLFWwindow* window ,int button, int action, int mods)
 				ball->vy = 0.02;
 				ballStick = false;
 				ballIsSticked = false;
+				canLose=true;
+				cout<<canLose<<endl;
 			}
     	}
 	} else {
@@ -238,8 +242,8 @@ int main() {
 	std::vector<Obstacle> obstacles ={Obstacle (1,4), Obstacle (2,2), Obstacle (3,1), Obstacle (4,2), Obstacle (5,3), Obstacle (6,4), Obstacle (7,3), Obstacle (7.2,1), Obstacle (7.8,2), Obstacle (8,3), Obstacle (8.8,4), Obstacle (9,3), Obstacle (9,2)};
 
 	/* Création du vecteur des Bonus */
-	std::vector<Bonus> bonus ={Bonus (0.2,0.8,0,2), Bonus (0.2, 2.4, 0, 1), Bonus (-0.2,0.8,0, 1)};
-	//std::vector<Bonus> bonus ={};
+	//std::vector<Bonus> bonus ={Bonus (0.2,0.8,0,2), Bonus (0.2, 2.4, 0, 1), Bonus (-0.2,0.8,0, 1)};
+	std::vector<Bonus> bonus ={};
 	
 
     // Make the window's context current
@@ -249,9 +253,12 @@ int main() {
 	glfwSetKeyCallback(window, onKey);
 	glfwSetMouseButtonCallback(window, mouse_button_callback);
 			
-	// texture.loadTexture();
 	Texture texture = Texture::loadTexture("../doc/MetalGrate.jpg");
-	//Texture texture2 = Texture::loadTexture();
+	Texture texture2 = Texture::loadTexture("../doc/fond.jpg");
+	Texture textureplay = Texture::loadTexture("../doc/start.jpg");
+	Texture textureexit = Texture::loadTexture("../doc/quit.jpg");
+	Texture texture3 = Texture::loadTexture("../doc/cio60416.jpg");
+	Texture vie = Texture::loadTexture("../doc/coeur.jpg");
 
     onWindowResized(window, WINDOW_WIDTH, WINDOW_HEIGHT);
 
@@ -270,6 +277,7 @@ int main() {
 		if(lose) { // Si le joueur perd, on enlève une vie et on met colle la balle sur la raquette
 			lose = false;
 			lives--;
+			canLose=false;
 			cout << "vie en moins" << endl;
 			ballStick = true;
 			ball->vx = 0;
@@ -285,11 +293,14 @@ int main() {
 		}
 		if(play) { // Si la partie est lancée
 			/* On vérifie si le joueur a perdu */
-			lose = ball->checkLoose(raquette);
+			if(canLose){
+				lose = ball->checkLoose(raquette, canLose);
+			}
 			/* Updates des positions des objets*/
 			ball->checkDirection(); // Balle (vérif de la direction de la balle pour collisions etc)
-			ball->checkObstaclesHit(obstacles);
+			
 			ballIsSticked = ball->checkRaquetteHit(raquette, raquetteSticky); // rebond si la balle touche la raquette
+			ball->checkObstaclesHit(obstacles, BallIsBetweenObstacleAndRaquette);
 			if(ballIsSticked) {
 				ball->vx = 0;
 				ball->vy = 0;
@@ -324,22 +335,11 @@ int main() {
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		setCamera();
-						
-		/* Draw Ball*/
-		ball->drawBall(texture);
+
 
 		
-
-
-		/* Initial scenery setup */
-		drawDecor();
-
-		//checkRaquetteObstacleCollison(raquette, obstacles, raquetteObstacleCollision);
-		//cout << raquetteObstacleCollision <<endl;
-
-
 		if(menustart) {
-			drawMenuStart();
+			drawMenuStart(texture2, textureplay, textureexit);
 		}
 		if(menupause) {
 			drawMenuPause();
@@ -350,6 +350,42 @@ int main() {
 		if(menuwin) {
 			drawMenuWin();
 		}
+
+		if(!menustart) {
+
+			for (int i=0; i<=lives ; i++){
+				glPushMatrix();
+				glTranslatef(-0.02+i*0.008,0.1,0.055);
+				glScalef(0.03,0.03,0.03);
+				glEnable(GL_TEXTURE_2D);
+				glBindTexture(GL_TEXTURE_2D,vie.textureID);
+				// drawTexturedSphere(0.05, 20,20);
+				drawTexturedSquare();
+				glBindTexture(GL_TEXTURE_2D,0); //détache la texture du point de bind une fois les données chargées
+				glDisable(GL_TEXTURE_2D);
+				glPopMatrix();
+			}
+			glPushMatrix();
+				//glRotatef(90,1,0,0);
+				glTranslatef(-0.000,0.1001,0.055);
+				glScalef(0.05,0.03,0.03);
+				//glColor3f(0,0,0);
+				drawRectangle();
+			glPopMatrix();
+		}				
+
+
+		/* Draw Ball*/
+		ball->drawBall(texture);
+		
+
+		/* Initial scenery setup */
+		drawDecor();
+
+		// checkRaquetteObstacleCollison(raquette, obstacles, raquetteObstacleCollision);
+		//cout << raquetteObstacleCollision <<endl;
+
+
 
 		drawBonuss(bonus); //dessine le vecteur des bonus
 

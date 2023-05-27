@@ -37,4 +37,5 @@ Texture Texture::loadTexture(const char* fileName) {
     glBindTexture(GL_TEXTURE_2D, 0);
 
     stbi_image_free(texture.textureData);
+    return texture;
 }

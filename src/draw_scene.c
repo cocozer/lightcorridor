@@ -179,25 +179,39 @@ void drawDecor() {
     glPopMatrix(); // Reload de la matrice sauvegardée
 }
 
-void drawMenuStart(){ 
-    glPushMatrix(); // Sauvegarde de la matrice
-        glTranslatef(0,0.011, 0); // Déplacement du plan pour être dans le champ de vision de la caméra
-            glScalef(2, 2, 2); // Déplacement du plan pour prendre tout l'écran
-            glColor3f(0, 0, 0); // NOIR
-            drawTexturedRectangle(); // Dessin de la partie inférieure du pot de colle
-    glPopMatrix(); // Reload de la matrice sauvegardée
+void drawMenuStart(Texture& texturefond, Texture& textureplay, Texture& texturequit){ 
+    	glPushMatrix();
+            glTranslatef(0,0.3,0);
+            glScalef(1,1,2);
+            glEnable(GL_TEXTURE_2D);
+            glBindTexture(GL_TEXTURE_2D,texturefond.textureID);
+            drawTexturedRectangle();
+            //drawTexturedSphere(1,20,20);
+            glBindTexture(GL_TEXTURE_2D,0); //détache la texture du point de bind une fois les données chargées
+            glDisable(GL_TEXTURE_2D);
+		glPopMatrix();
+           
     glPushMatrix(); // Sauvegarde de la matrice
         glTranslatef(0,0.01, 0.001); // Déplacement du plan pour être dans le champ de vision de la caméra
             glScalef(0.005, 0.005, 0.005); // Déplacement du plan pour former un bouton du menu
-            glColor3f(0, 1, 0); // VERT
-            drawTexturedRectangle(); // Dessin de la partie inférieure du pot de colle
+            //glColor3f(0, 1, 0); // VERT
+            glEnable(GL_TEXTURE_2D);
+            glBindTexture(GL_TEXTURE_2D,textureplay.textureID);
+            drawTexturedRectangle();
+            //drawTexturedSphere(1,20,20);
+            glBindTexture(GL_TEXTURE_2D,0); //détache la texture du point de bind une fois les données chargées
+            glDisable(GL_TEXTURE_2D);
     glPopMatrix(); // Reload de la matrice sauvegardée
 
     glPushMatrix(); // Sauvegarde de la matrice
         glTranslatef(0,0.01, -0.001); // Déplacement du plan pour être dans le champ de vision de la caméra
             glScalef(0.005, 0.005, 0.005); // Déplacement du plan pour former un bouton du menu
-            glColor3f(1, 0, 0); // BLEU
-            drawTexturedRectangle(); // Dessin de la partie inférieure du pot de colle
+            //glColor3f(1, 0, 0);
+            glEnable(GL_TEXTURE_2D);
+            glBindTexture(GL_TEXTURE_2D,texturequit.textureID);
+            drawTexturedRectangle();
+            glBindTexture(GL_TEXTURE_2D,0); //détache la texture du point de bind une fois les données chargées
+            glDisable(GL_TEXTURE_2D);
     glPopMatrix(); // Reload de la matrice sauvegardée
 }
 

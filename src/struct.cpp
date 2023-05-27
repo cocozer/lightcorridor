@@ -110,7 +110,7 @@ void Ball::stickBall(Raquette* raquette) {
     this->y = raquette->y + 0.05;
     this->z = raquette->z;
 }
-void Ball::checkObstacleHit(Obstacle& obstacle) {
+void Ball::checkObstacleHit(Obstacle& obstacle, bool& BallIsBetweenObstacleAndRaquette) {
     float delta = 0.001; // Marge d'erreur pour comparer deux nombres à virgule flottante
     // Vérifier si la balle se trouve dans la plage verticale de l'obstacle
     //obstacle.changeColor=false;
@@ -165,12 +165,18 @@ void Ball::checkObstacleHit(Obstacle& obstacle) {
                     break;
             }
         }
+        if(this->y <0.75){ //pour stoper l'avancement du couloir si la balle se trouve entre la raquette et un mur
+            BallIsBetweenObstacleAndRaquette = true;
+            //cout <<"danger la balle peut passer à travers" <<endl;
+        } else {
+            BallIsBetweenObstacleAndRaquette = false;
+        }
     }
 }
 
-void Ball::checkObstaclesHit(std::vector<Obstacle>& obstacles){
+void Ball::checkObstaclesHit(std::vector<Obstacle>& obstacles, bool& BallIsBetweenObstacleAndRaquette){
     for (auto& obstacle: obstacles) { //pour tous les éléments de obstacles
-        checkObstacleHit(obstacle);
+        checkObstacleHit(obstacle, BallIsBetweenObstacleAndRaquette);
     }
 }
 
@@ -202,9 +208,11 @@ int Ball::checkBonusHit(Bonus bonus) {
 
 
 
-bool Ball::checkLoose(Raquette* raquette) {
-    if(this->y < raquette->y) {
+bool Ball::checkLoose(Raquette* raquette, bool& canLose) {
+    if(this->y <raquette->y-0.1) {
+        canLose=false;
         return true;
+
     } else {
         return false;
     }
@@ -387,7 +395,6 @@ int checkBonussHit(Ball ball, std::vector<Bonus> bonuss){
 
 bool checkRaquetteObstacleCollison(Raquette *raquette, std::vector<Obstacle> obstacles){
     float delta = 0.01;
-    //la raquette fait 0.2 de côté
     //son y initial est égal à 0.6
     float raquetteDemiLargeur = (0.2*raquette->coefftaille)/2;
     for (auto obstacle: obstacles) { //pour tous les éléments de obstacles

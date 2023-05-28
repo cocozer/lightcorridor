@@ -199,6 +199,8 @@ int Ball::checkBonusHit(Bonus &bonus) {
                     return 1;// Le premier bonus a été activé
                 } else if (bonus._type == 2) {
                     return 2; // Le second bonus a été activé
+                } else if (bonus._type == 3) {
+                    return 3; // Le second bonus a été activé
                 }
             }
         }
@@ -220,11 +222,11 @@ bool Ball::checkLoose(Raquette* raquette, bool& canLose) {
 
 void Corridor::drawCorridor() {
     glColor3f(255, 255, 255); // Blanc
-    for(int i=0; i<9; i++) {
+    for(int i=0; i<27; i++) {
         glPushMatrix(); // Sauvegarde de la matrice
         float translateY = (0.2*i)-this->y;
         while(translateY < 0) {
-            translateY +=1.8;
+            translateY +=5.4;
         }
             glTranslatef(0, translateY, 0);
             drawBorderCorridor();
@@ -281,7 +283,7 @@ void Bonus::drawBonus()  {
                 drawSphere(); // Dessin de la partie inférieure du pot de colle
             glPopMatrix(); // Reload de la matrice sauvegardée
         glPopMatrix(); // Reload de la matrice sauvegardée
-    } if ((_type == 2)&&(_y>0.2)) {
+    } else if ((_type == 2)&&(_y>0.2)) {
         //bonus coeur
        updateRotationAngle();
         glColor3f(0, 0, 255); // Bleu
@@ -309,6 +311,32 @@ void Bonus::drawBonus()  {
             glPopMatrix(); // Reload de la matrice sauvegardée
         glPopMatrix();
         //cout << _y <<endl;
+    } else if((_type == 3)&&(_y>0.2)) {
+        //bonus colle
+        glPushMatrix(); // Sauvegarde de la matrice
+            glTranslatef(_x,_y, _z); // Déplacement du pot de colle aux coordonnées spécifiées
+            // Dessin de l'ombre du bonus
+            glPushMatrix();
+            glTranslatef(0, 0, -_z-0.25);
+                glPushMatrix(); // Sauvegarde de la matrice
+                    glScalef(1, 1, 0.1); // Resize du plan pour correspondre au coeff de la balle
+                    glColor3f(0, 0, 0); // Noir
+                    drawCircle();
+                glPopMatrix(); // Reload de la matrice sauvegardée
+            glPopMatrix(); // Reload de la matrice sauvegardée
+            glPushMatrix(); // Sauvegarde de la matrice
+                glScalef(0.03, 0.03, 0.1); // Resize du pot de colle en fonction de l'échelle spécifiée
+                glColor3f(1, 0, 0); // Rouge
+                drawCone(); // Dessin de la partie supérieure du pot de colle
+            glPopMatrix(); // Reload de la matrice sauvegardée
+            
+            glPushMatrix(); // Sauvegarde de la matrice
+                glTranslatef(0, -0.03, 0); // Déplacement vers le bas pour dessiner la partie inférieure du pot de colle
+                glScalef(0.03, 0.03, 0.03); // Resize du pot de colle en fonction de l'échelle spécifiée
+                glColor3f(1, 0, 0); // Rouge
+                drawSphere(); // Dessin de la partie inférieure du pot de colle
+            glPopMatrix(); // Reload de la matrice sauvegardée
+        glPopMatrix(); // Reload de la matrice sauvegardée
     }
     
 }

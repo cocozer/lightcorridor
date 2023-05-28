@@ -40,7 +40,7 @@ struct Bonus {
     float _y;
     float _z;
 
-    int _type; // Type du Bonus, peut être égal à 1 ou 2 (ou plus par la suite)
+    int _type; // Type du Bonus, peut être égal à 1 ou 2 ou 3
     // Dessin du Bonus
     bool _active;
 

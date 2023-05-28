@@ -27,7 +27,8 @@ bool CorridorMoving = false; // Est-ce que le couloir est en mouvement ou pas ?
 bool ballStick = false; // Si la balle est collée au milieu de la raquette
 bool raquetteSticky = false; // Si la raquette est collante (grâce au bonus)
 bool ballIsSticked = false; // Si la balle est collée à la raquette mais pas forcément au milieu
-int effectDuration;
+int effectDurationStick; // Durée restant de l'effet stick
+int effectDurationBigRaquette; // Durée restant de l'effet BigRaquette
 bool canLose =false; //pour éviter la perte de 2 vies en meme temps
 bool BallIsBetweenObstacleAndRaquette=false;
 //bool raquetteObstacleCollision = false; //check si la raquette touche un obstacle
@@ -46,12 +47,80 @@ Corridor *corridor = new Corridor;
 /*Création du vecteur des obstacles*/
 
 //std::vector<Obstacle> obstacles ={Obstacle (1,1), Obstacle (1.4,2), Obstacle (1.8,3), Obstacle (2,4)};
-//std::vector<Obstacle> obstacles ={};
+// std::vector<Obstacle> obstacles ={};
 
-std::vector<Obstacle> obstacles ={Obstacle (1,4), Obstacle (2,2), Obstacle (3,1), Obstacle (4,2), Obstacle (5,3), Obstacle (6,4), Obstacle (7,3), Obstacle (7.2,1), Obstacle (7.8,2), Obstacle (8,3), Obstacle (8.8,4), Obstacle (9,3), Obstacle (9,2)};
+std::vector<Obstacle> obstacles = {
+    Obstacle(0.2, 3),
+    Obstacle(1.0, 4),
+    Obstacle(1.8, 1),
+    Obstacle(2.6, 2),
+    Obstacle(3.6, 2),
+    Obstacle(4.8, 3),
+    Obstacle(5.6, 3),
+    Obstacle(6.6, 3),
+    Obstacle(7.8, 2),
+    Obstacle(8.6, 3),
+    Obstacle(10.0, 4),
+    Obstacle(10.8, 1),
+    Obstacle(11.6, 2),
+    Obstacle(12.6, 3),
+    Obstacle(13.6, 1),
+    Obstacle(14.6, 4),
+    Obstacle(15.6, 3),
+    Obstacle(16.8, 2),
+    Obstacle(17.6, 3),
+    Obstacle(18.6, 2),
+    Obstacle(19.8, 1),
+    Obstacle(20.6, 3),
+    Obstacle(21.8, 2),
+    Obstacle(22.6, 4),
+    Obstacle(23.6, 1),
+    Obstacle(24.8, 4),
+    Obstacle(25.8, 3),
+    Obstacle(26.8, 4),
+    Obstacle(27.8, 2),
+    Obstacle(28.6, 3),
+    Obstacle(29.6, 2),
+    Obstacle(30.8, 1),
+    Obstacle(31.6, 2),
+    Obstacle(32.8, 4),
+    Obstacle(33.6, 1),
+    Obstacle(34.6, 4),
+    Obstacle(35.8, 2),
+    Obstacle(36.6, 3),
+    Obstacle(37.8, 1),
+    Obstacle(38.8, 3),
+    Obstacle(39.8, 1),
+    Obstacle(40.8, 4),
+    Obstacle(41.6, 2),
+    Obstacle(42.8, 3),
+    Obstacle(43.8, 2),
+    Obstacle(44.8, 1),
+    Obstacle(45.6, 3),
+    Obstacle(46.8, 4),
+    Obstacle(47.8, 2),
+    Obstacle(48.6, 1),
+    Obstacle(49.4, 4),
+    Obstacle(50, 3),
+};
 
 /* Création du vecteur des Bonus */
-std::vector<Bonus> bonus ={Bonus (0.2,0.8,0,2), Bonus (0.2, 2.4, 0, 1), Bonus (-0.2,0.8,0, 1)};
+std::vector<Bonus> bonus = {
+	Bonus(0.0, 1, 0.1, 3),
+    Bonus(0.0, 3.4, 0.1, 2),
+    Bonus(-0.1, 7.0, -0.1, 2),
+    Bonus(-0.1, 9.2, 0.2, 2),
+    Bonus(0.1, 14.2, -0.2, 1),
+    Bonus(-0.3, 17.4, 0.2, 2),
+    Bonus(-0.3, 24.4, -0.2, 2),
+    Bonus(0.2, 28.8, -0.1, 1),
+    Bonus(-0.2, 31.8, -0.1, 1),
+    Bonus(0.1, 35.0, -0.1, 2),
+    Bonus(-0.2, 40.6, -0.2, 1),
+    Bonus(-0.3, 46, -0.2, 1),
+};
+
+
 // std::vector<Bonus> bonus ={};
 
 // Texture texture;
@@ -324,6 +393,12 @@ int main() {
 			/* Updates des positions des objets*/
 			ball->checkDirection(); // Balle (vérif de la direction de la balle pour collisions etc)
 			
+			if(corridor->y >= 50) { // Si le joueur dépasse 50 (unité d'avancement du couloir), il gagne
+				play = false;
+				menuwin = true;
+				ResetGame(corridor, bonus, obstacles);
+			}
+
 			ballIsSticked = ball->checkRaquetteHit(raquette, raquetteSticky); // rebond si la balle touche la raquette
 			ball->checkObstaclesHit(obstacles, BallIsBetweenObstacleAndRaquette);
 			if(ballIsSticked) {
@@ -336,10 +411,16 @@ int main() {
 			MoveRaquette(window, raquette); // Déplacement de la raquette (au mouvement de souris)
 		}
 		if(raquetteSticky) { // Si la raquette colle encore, on décrémente la durée de l'effet
-			effectDuration--;
+			effectDurationStick--;
 		}
-		if (effectDuration <= 0) { // Si l'effet est arrivé a expiration, la raquette ne colle plus
+		if (effectDurationStick <= 0) { // Si l'effet est arrivé a expiration, la raquette ne colle plus
 			raquetteSticky = false;
+		}
+		if(raquette->coefftaille != 1){// Si la raquette n'a pas sa forme normale, on décrémente la durée de l'effet 
+			effectDurationBigRaquette--;
+		} 
+		if (effectDurationBigRaquette <= 0) { // Si l'effet est arrivé a expiration, la raquette reprend sa taille initiale
+			raquette->coefftaille = 1;
 		}
 		
 
@@ -420,9 +501,12 @@ int main() {
 		int bonusactivation = checkBonussHit(*ball, bonus);
 		if (bonusactivation == 1) {
 			raquetteSticky = 1;
-			effectDuration = 300; // L'effet dure 300 frames
+			effectDurationStick = 300; // L'effet dure 300 frames
 		} else if (bonusactivation == 2) {
 			lives++;
+		} else if (bonusactivation == 3) {
+			effectDurationBigRaquette = 300; // L'effet dure 300 frames
+			raquette->coefftaille = 1.5;
 		}
 		
 		drawObstacles(obstacles); //dessine le vecteur des obstacles

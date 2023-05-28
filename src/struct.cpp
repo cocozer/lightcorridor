@@ -180,7 +180,7 @@ void Ball::checkObstaclesHit(std::vector<Obstacle>& obstacles, bool& BallIsBetwe
     }
 }
 
-int Ball::checkBonusHit(Bonus bonus) {
+int Ball::checkBonusHit(Bonus &bonus) {
     float rayon = 0.01; // Marge d'erreur pour comparer deux nombres à virgule flottante
     // Vérifier si la balle se trouve dans la plage verticale du bonus
     if ((this->y - 0.1 * this->coefftaille <= bonus._y + rayon) &&
@@ -382,12 +382,14 @@ void drawObstacles(std::vector<Obstacle> obstacles){ //pour dessiner le vecteur 
 }
 
 
-int checkBonussHit(Ball ball, std::vector<Bonus> bonuss){
+int checkBonussHit(Ball ball, std::vector<Bonus>& bonuss){
     int bonusactivation = 0;
-    for (auto bonus: bonuss) {//pour tous les éléments de obstacles
-        bonusactivation = ball.checkBonusHit(bonus);
-        if(bonusactivation != 0) { // Si un bonus a été activé, on retourne le bonus concerné
-            return bonusactivation;
+    for (auto& bonus : bonuss) {//pour tous les éléments de obstacles
+        if(bonus._active == true) {
+            bonusactivation = ball.checkBonusHit(bonus);
+            if(bonusactivation != 0) { // Si un bonus a été activé, on retourne le bonus concerné
+                return bonusactivation;
+            }
         }
     }
     return bonusactivation;

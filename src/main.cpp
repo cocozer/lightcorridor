@@ -51,8 +51,8 @@ Corridor *corridor = new Corridor;
 std::vector<Obstacle> obstacles ={Obstacle (1,4), Obstacle (2,2), Obstacle (3,1), Obstacle (4,2), Obstacle (5,3), Obstacle (6,4), Obstacle (7,3), Obstacle (7.2,1), Obstacle (7.8,2), Obstacle (8,3), Obstacle (8.8,4), Obstacle (9,3), Obstacle (9,2)};
 
 /* Création du vecteur des Bonus */
-//std::vector<Bonus> bonus ={Bonus (0.2,0.8,0,2), Bonus (0.2, 2.4, 0, 1), Bonus (-0.2,0.8,0, 1)};
-std::vector<Bonus> bonus ={};
+std::vector<Bonus> bonus ={Bonus (0.2,0.8,0,2), Bonus (0.2, 2.4, 0, 1), Bonus (-0.2,0.8,0, 1)};
+// std::vector<Bonus> bonus ={};
 
 // Texture texture;
 /* Minimal time wanted between two images */

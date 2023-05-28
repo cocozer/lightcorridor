@@ -93,13 +93,13 @@ struct Ball {
     void checkObstaclesHit(std::vector<Obstacle>& obstacles,  bool& BallIsBetweenObstacleAndRaquette);
     void checkObstacleHit(Obstacle& obstacle, bool& BallIsBetweenObstacleAndRaquette);
 
-    int checkBonusHit(Bonus bonus);
+    int checkBonusHit(Bonus &bonus);
 };
 
 // void initList(ListOfObstacles* list);
  void drawObstacles(std::vector<Obstacle> obstacles); //pour dessiner tous les obstacles du vecteur
 //  void checkObstaclesHit(Ball ball, std::vector<Obstacle> obstacles);
-int checkBonussHit(Ball ball, std::vector<Bonus> bonuss);
+int checkBonussHit(Ball ball, std::vector<Bonus> &bonuss);
 
 void drawBonuss(std::vector<Bonus> bonus); //pour dessiner tous les bonus du vecteur
 

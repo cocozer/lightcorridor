@@ -37,6 +37,23 @@ int lives = 4;
 /* Variable globale balle pour pouvoir agir au clic gauche */
 Ball *ball = new Ball;
 
+/* Variable globale raquette */
+Raquette *raquette = new Raquette;
+
+/* Variable globale couloir*/
+Corridor *corridor = new Corridor;
+
+/*Création du vecteur des obstacles*/
+
+//std::vector<Obstacle> obstacles ={Obstacle (1,1), Obstacle (1.4,2), Obstacle (1.8,3), Obstacle (2,4)};
+//std::vector<Obstacle> obstacles ={};
+
+std::vector<Obstacle> obstacles ={Obstacle (1,4), Obstacle (2,2), Obstacle (3,1), Obstacle (4,2), Obstacle (5,3), Obstacle (6,4), Obstacle (7,3), Obstacle (7.2,1), Obstacle (7.8,2), Obstacle (8,3), Obstacle (8.8,4), Obstacle (9,3), Obstacle (9,2)};
+
+/* Création du vecteur des Bonus */
+//std::vector<Bonus> bonus ={Bonus (0.2,0.8,0,2), Bonus (0.2, 2.4, 0, 1), Bonus (-0.2,0.8,0, 1)};
+std::vector<Bonus> bonus ={};
+
 // Texture texture;
 /* Minimal time wanted between two images */
 static const double FRAMERATE_IN_SECONDS = 1. / 60.;
@@ -98,6 +115,18 @@ void MoveRaquette(GLFWwindow* window, Raquette* raquette) {
 
 }
 
+void ResetGame(Corridor* corridor, std::vector<Bonus>& bonuss, std::vector<Obstacle>& obstacles) {
+	for (auto& bonus : bonuss) { // pour tous les éléments de bonus
+		bonus._active = true;
+		bonus._y += corridor->y;
+	}
+	for (auto& obstacle : obstacles) { // pour tous les éléments de obstacles
+		obstacle._y += corridor->y;
+	}
+	ballStick = true;
+	corridor->y = 0;
+	lives = 5;
+}
 
 void MoveCorridor(Corridor* corridor, Ball* ball, Raquette *raquette, std::vector<Obstacle>& obstacles, std::vector<Bonus>& bonuss) {
 	if(CorridorMoving && (checkRaquetteObstacleCollison(raquette, obstacles)==false)&&(!BallIsBetweenObstacleAndRaquette)) {
@@ -168,22 +197,31 @@ void mouse_button_callback(GLFWwindow* window ,int button, int action, int mods)
     		float newz = -(mouseY - (WINDOW_HEIGHT / 2)) * (h / WINDOW_HEIGHT);
 
 			if(newx > -0.0026 && newx < 0.0026 && newz > 0.0004 && newz < 0.0016) { // Si on clique sur le rect du haut
-				menustart = false;
-				menupause = false;
-				menuwin = false;
-				menulose = false;
-				play = true;
+				if(newx > -0.0026 && newx < 0.0026 && newz > 0.0004 && newz < 0.0016) { // Si on clique sur le bouton du haut
+					menustart = false;
+					menupause = false;
+					menuwin = false;
+					menulose = false;
+					play = true;
+				}
 			}
-			
 			if(newx > -0.0026 && newx < 0.0026 && newz < -0.0004 && newz > -0.0016) { // Si on clique sur le rect du bas
-				glfwSetWindowShouldClose(window, GLFW_TRUE);
+				if(newx > -0.0026 && newx < 0.0026 && newz < -0.0004 && newz > -0.0016) { // Si on clique sur le bouton du bas
+					glfwSetWindowShouldClose(window, GLFW_TRUE);
+				}
 			}
-    	}
-	}
-	if(menupause) { // Si le menu est celui de
+			if(menupause) { // Si le menu est celui de pause, alors on permet de reset la partie
 
+				if(newx > -0.0015 && newx < 0.0015 && newz > 0.0027 && newz < 0.0034) { // Si on clique sur le bouton de reset de niveau (tout en haut)
+					cout << "clic" << endl;
+					// RESET LE NIVEAU
+					ResetGame(corridor, bonus, obstacles);
+					menupause = false;
+					play = true;
+				}
+			}							
+		}
 	}
-    
 }
 
 int main() {
@@ -213,7 +251,7 @@ int main() {
 	//glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 
 	/* Création de la raquette */
-	Raquette *raquette = new Raquette;
+	/* Assignation des valeurs à la raquette*/
 	raquette->x = 0;
 	raquette->y = 0.6;
 	raquette->z = 0;
@@ -231,19 +269,8 @@ int main() {
 	ball->coefftaille = 1;
 	
 	ballStick = true; // On colle la balle au début du jeu
-	/* Création du couloir */
-	Corridor *corridor = new Corridor;
+	/* Set le couloir au départ*/
 	corridor->y = 0;
-	/*Création du vecteur des obstacles*/
-
-	//std::vector<Obstacle> obstacles ={Obstacle (1,1), Obstacle (1.4,2), Obstacle (1.8,3), Obstacle (2,4)};
-	//std::vector<Obstacle> obstacles ={};
-
-	std::vector<Obstacle> obstacles ={Obstacle (1,4), Obstacle (2,2), Obstacle (3,1), Obstacle (4,2), Obstacle (5,3), Obstacle (6,4), Obstacle (7,3), Obstacle (7.2,1), Obstacle (7.8,2), Obstacle (8,3), Obstacle (8.8,4), Obstacle (9,3), Obstacle (9,2)};
-
-	/* Création du vecteur des Bonus */
-	//std::vector<Bonus> bonus ={Bonus (0.2,0.8,0,2), Bonus (0.2, 2.4, 0, 1), Bonus (-0.2,0.8,0, 1)};
-	std::vector<Bonus> bonus ={};
 	
 
     // Make the window's context current
@@ -287,9 +314,7 @@ int main() {
 		if(lives < 0) { // Si le joueur n'a plus de vies, la partie est perdue
 			play = false;
 			menulose = true;
-			corridor->y = 0;
-			// Reset tous les obstacles
-			// Reset tous les bonus
+			ResetGame(corridor, bonus, obstacles);
 		}
 		if(play) { // Si la partie est lancée
 			/* On vérifie si le joueur a perdu */

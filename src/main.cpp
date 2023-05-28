@@ -33,7 +33,7 @@ bool canLose =false; //pour éviter la perte de 2 vies en meme temps
 bool BallIsBetweenObstacleAndRaquette=false;
 //bool raquetteObstacleCollision = false; //check si la raquette touche un obstacle
 
-/* Variable globale du nombre de vies, 5 au départ*/
+/* Variable globale du nombre de vies, 4 au départ*/
 int lives = 4;
 /* Variable globale balle pour pouvoir agir au clic gauche */
 Ball *ball = new Ball;
@@ -195,6 +195,7 @@ void ResetGame(Corridor* corridor, std::vector<Bonus>& bonuss, std::vector<Obsta
 	ballStick = true;
 	corridor->y = 0;
 	lives = 5;
+	CorridorMoving = false;
 }
 
 void MoveCorridor(Corridor* corridor, Ball* ball, Raquette *raquette, std::vector<Obstacle>& obstacles, std::vector<Bonus>& bonuss) {
@@ -395,6 +396,7 @@ int main() {
 			
 			if(corridor->y >= 50) { // Si le joueur dépasse 50 (unité d'avancement du couloir), il gagne
 				play = false;
+				CorridorMoving = false;
 				menuwin = true;
 				ResetGame(corridor, bonus, obstacles);
 			}
@@ -442,8 +444,6 @@ int main() {
 		glLoadIdentity();
 		setCamera();
 
-
-		
 		if(menustart) {
 			drawMenuStart(texture2, textureplay, textureexit);
 		}

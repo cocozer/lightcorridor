@@ -80,15 +80,15 @@ bool Ball::checkRaquetteHit(Raquette* raquette, bool raquetteSticky) {
                     float dx = this->x - raquette->x;
                     float dz = this->z - raquette->z;
                     if (dx < 0) {
-                        this->vx -= 0.003;
-                    } else if (dx > 0) {
                         this->vx += 0.003;
+                    } else if (dx > 0) {
+                        this->vx -= 0.003;
                     }
 
                     if (dz < 0) {
-                        this->vz -= 0.003;
-                    } else if (dz > 0) {
                         this->vz += 0.003;
+                    } else if (dz > 0) {
+                        this->vz -= 0.003;
                     }
                     float Coeffdx = 1+dx;
                     float Coeffdz = 1+dz;

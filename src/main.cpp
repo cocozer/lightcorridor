@@ -317,7 +317,7 @@ int main() {
         glfwTerminate();
         return -1;
     }
-
+	
 	//glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 
 	/* Création de la raquette */

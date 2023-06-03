@@ -64,6 +64,25 @@ void drawCube() {
 	glEnd();
 }
 
+void drawFilledCube() {
+	drawFilledSquare();
+		glPushMatrix(); // Sauvegarde de la matrice
+		glTranslatef(0., 0.2f, 0.); // Déplacement du plan
+			drawFilledSquare();
+		glPopMatrix();
+		glPushMatrix();
+			glRotatef(90, 0., 0., 1.); // rotation
+			glTranslatef(0.1f, 0.1f, 0.); // Déplacement du plan
+			drawFilledSquare();
+		glPopMatrix();
+		glPushMatrix();
+			glRotatef(90, 0., 0., 1.); // rotation
+			glTranslatef(0.1f, -0.1f, 0.); // Déplacement du plan
+			drawFilledSquare();
+		glPopMatrix();
+
+}
+
 void updateRotationAngle(){
 	rotationAngle += 1.0; // Augmenter l'angle de rotation
     if (rotationAngle >= 360.0) {
@@ -98,13 +117,18 @@ void drawRotatedCube() {
 	glEnd();
 }
 
-void drawScaledCube(float scale, float rotate){
+void drawScaledCube(float scale, float rotate, float full){
 	glPushMatrix(); // Sauvegarde de la matrice
     glScalef(scale, scale, scale); // Scaling
 	if (rotate ==1){
 		glRotatef(rotationAngle,0,0,1);
 	}
-    drawCube();
+	if (full == 0){
+		drawCube();
+	} else {
+		drawFilledCube();
+	}
+    
     glPopMatrix(); // Reload de la matrice sauvegardée
 }
 
@@ -128,18 +152,67 @@ void drawHeartCube(){
 		glPushMatrix();
 			glTranslatef(-0.002,0,0.002);
 			glRotatef(40,0,1,0);
-			drawScaledCube(0.1,0);
+			drawScaledCube(0.1,0,1);
 		glPopMatrix();
 		glPushMatrix();
 			glTranslatef(-0.04,0,0);
 			glRotatef(40,0,1,0);
-			drawScaledCube(0.1,0);
+			drawScaledCube(0.1,0,1);
 		glPopMatrix();
 		glPushMatrix();
 			glTranslatef(-0.02,0,-0.015);
 			glRotatef(40,0,1,0);
-			drawScaledCube(0.12,0);
+			drawScaledCube(0.13,0,1);
 		glPopMatrix();
+	glPopMatrix();
+}
+
+void drawArrow(){
+	glColor3f(0,255,0); //vert
+	glPushMatrix();
+		glPushMatrix();
+			glTranslatef(-0.01,0,0.002);
+			glRotatef(40,0,1,0);
+			glScalef(2,0,0.7);
+			drawScaledCube(0.1,0,1);
+		glPopMatrix();
+		glPushMatrix();
+			glTranslatef(-0.03,0,0);
+			glRotatef(135,0,1,0);
+			glScalef(2,0,0.7);
+			drawScaledCube(0.1,0,1);
+		glPopMatrix();
+		glPushMatrix();
+			glTranslatef(-0.02,0,-0.01);
+			glRotatef(90,0,1,0);
+			glScalef(2,0,0.7);
+			drawScaledCube(0.1,0,1);
+		glPopMatrix();
+	glPopMatrix();
+	
+	glPushMatrix();
+		glColor3f(0,0,0); // foncé
+		glTranslatef(0,0.02,0);
+		glScalef(1.1,1.1,1.1);
+		glPushMatrix();
+			glTranslatef(-0.01,0,0.002);
+			glRotatef(40,0,1,0);
+			glScalef(2,0,0.7);
+			drawScaledCube(0.1,0,1);
+		glPopMatrix();
+		glPushMatrix();
+			glTranslatef(-0.03,0,0);
+			glRotatef(135,0,1,0);
+			glScalef(2,0,0.7);
+			drawScaledCube(0.1,0,1);
+		glPopMatrix();
+		glPushMatrix();
+			glTranslatef(-0.02,0,-0.01);
+			glRotatef(90,0,1,0);
+			glScalef(2,0,0.7);
+			drawScaledCube(0.1,0,1);
+		glPopMatrix();
+
 	glPopMatrix();
 }
 

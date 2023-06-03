@@ -23,7 +23,7 @@
 
 /* Camera parameters and functions */
 static const float Z_NEAR = 0.01f;
-static const float Z_FAR = 50.f;
+static const float Z_FAR = 100.f;
 extern float theta;      // Angle between x axis and viewpoint
 extern float phy  ;      // Angle between z axis and viewpoint
 extern float dist_zoom ; // Distance between origin and viewpoint
@@ -57,13 +57,14 @@ void drawCube();
 
 void drawScaledSquare(float scale);
 
-void drawScaledCube(float scale, float rotate);
+void drawScaledCube(float scale, float rotate, float full);
 
 void drawRotatedCube();
 
 void updateRotationAngle();
 
 void drawHeartCube();
+void drawArrow();
 
 void drawTexturedSphere(float radius, int stacks, int slices);
 void drawTexturedRectangle();

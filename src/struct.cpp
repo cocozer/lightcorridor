@@ -80,15 +80,15 @@ bool Ball::checkRaquetteHit(Raquette* raquette, bool raquetteSticky) {
                     float dx = this->x - raquette->x;
                     float dz = this->z - raquette->z;
                     if (dx < 0) {
-                        this->vx -= 0.003;
-                    } else if (dx > 0) {
                         this->vx += 0.003;
+                    } else if (dx > 0) {
+                        this->vx -= 0.003;
                     }
 
                     if (dz < 0) {
-                        this->vz -= 0.003;
-                    } else if (dz > 0) {
                         this->vz += 0.003;
+                    } else if (dz > 0) {
+                        this->vz -= 0.003;
                     }
                     float Coeffdx = 1+dx;
                     float Coeffdz = 1+dz;
@@ -180,7 +180,7 @@ void Ball::checkObstaclesHit(std::vector<Obstacle>& obstacles, bool& BallIsBetwe
     }
 }
 
-int Ball::checkBonusHit(Bonus bonus) {
+int Ball::checkBonusHit(Bonus &bonus) {
     float rayon = 0.01; // Marge d'erreur pour comparer deux nombres à virgule flottante
     // Vérifier si la balle se trouve dans la plage verticale du bonus
     if ((this->y - 0.1 * this->coefftaille <= bonus._y + rayon) &&
@@ -199,6 +199,8 @@ int Ball::checkBonusHit(Bonus bonus) {
                     return 1;// Le premier bonus a été activé
                 } else if (bonus._type == 2) {
                     return 2; // Le second bonus a été activé
+                } else if (bonus._type == 3) {
+                    return 3; // Le second bonus a été activé
                 }
             }
         }
@@ -220,11 +222,11 @@ bool Ball::checkLoose(Raquette* raquette, bool& canLose) {
 
 void Corridor::drawCorridor() {
     glColor3f(255, 255, 255); // Blanc
-    for(int i=0; i<9; i++) {
+    for(int i=0; i<27; i++) {
         glPushMatrix(); // Sauvegarde de la matrice
         float translateY = (0.2*i)-this->y;
         while(translateY < 0) {
-            translateY +=1.8;
+            translateY +=5.4;
         }
             glTranslatef(0, translateY, 0);
             drawBorderCorridor();
@@ -259,17 +261,22 @@ void Bonus::drawBonus()  {
         //bonus colle
         glPushMatrix(); // Sauvegarde de la matrice
             glTranslatef(_x,_y, _z); // Déplacement du pot de colle aux coordonnées spécifiées
-            // Dessin de l'ombre du bonus
+            glPushMatrix(); // Sauvegarde de la matrice
+                    glColor3f(255,255,255);
+                    glTranslatef(0,-0.02,0.035);
+                    glScalef(1,1,2.3);
+                    drawScaledCube(0.25f,0,0);
+            glPopMatrix();
             glPushMatrix();
             glTranslatef(0, 0, -_z-0.25);
                 glPushMatrix(); // Sauvegarde de la matrice
-                    glScalef(1, 1, 0.1); // Resize du plan pour correspondre au coeff de la balle
+                    glScalef(1, 1, 0.06);
                     glColor3f(0, 0, 0); // Noir
                     drawCircle();
                 glPopMatrix(); // Reload de la matrice sauvegardée
             glPopMatrix(); // Reload de la matrice sauvegardée
             glPushMatrix(); // Sauvegarde de la matrice
-                glScalef(0.03, 0.03, 0.1); // Resize du pot de colle en fonction de l'échelle spécifiée
+                glScalef(0.03, 0.03, 0.1); // Resize du pot de colle
                 glColor3f(1, 1, 0); // Blanc
                 drawCone(); // Dessin de la partie supérieure du pot de colle
             glPopMatrix(); // Reload de la matrice sauvegardée
@@ -281,10 +288,11 @@ void Bonus::drawBonus()  {
                 drawSphere(); // Dessin de la partie inférieure du pot de colle
             glPopMatrix(); // Reload de la matrice sauvegardée
         glPopMatrix(); // Reload de la matrice sauvegardée
-    } if ((_type == 2)&&(_y>0.2)) {
-        //bonus coeur
+        
+    } else if ((_type == 2)&&(_y>0.2)) {
+        //bonus coeur qui rajoute une vie
        updateRotationAngle();
-        glColor3f(0, 0, 255); // Bleu
+        glColor3f(255, 255, 255);
         glPushMatrix();
             glPushMatrix(); // Sauvegarde de la matrice
                 glTranslatef(_x, _y, _z); // Déplacement du plan pour correspondre au x et au y du bonus
@@ -293,7 +301,7 @@ void Bonus::drawBonus()  {
                     glPushMatrix(); // Sauvegarde de la matrice
                         glTranslatef(-0.02,0,-0.006);
                         glScalef(1.4,1,1);
-                        drawScaledCube(0.25f,0);
+                        drawScaledCube(0.25f,0,0);
                     glPopMatrix();
                     drawHeartCube();
             glPopMatrix(); // Reload 
@@ -309,8 +317,30 @@ void Bonus::drawBonus()  {
             glPopMatrix(); // Reload de la matrice sauvegardée
         glPopMatrix();
         //cout << _y <<endl;
+    } else if((_type == 3)&&(_y>0.2)) {
+        //bonus/malus agrandissement de la raquette
+        glColor3f(255,255,255);
+        glPushMatrix(); // Sauvegarde de la matrice
+            glTranslatef(_x, _y, _z); // Déplacement du plan pour correspondre au x et au y du bonus
+                glTranslatef(0.02,0,0);
+                glPushMatrix(); // Sauvegarde de la matrice
+                    glTranslatef(-0.02,0,-0.006);
+                    glScalef(1.4,1,1);
+                    drawScaledCube(0.25f,0,0);
+                glPopMatrix();
+                drawArrow();
+        glPopMatrix(); // Reload 
+        glPushMatrix(); //ombre du bonus
+                glTranslatef(_x, _y, _z); // Déplacement du plan pour correspondre au x et au y du bonus
+                glPushMatrix();
+                    glTranslatef(0, 0, -_z-0.25);
+                    glRotatef(90,1,0,0);
+                    glScalef(0.4,0.3,0.3);
+                    glColor3f(0, 0, 0); // Noir
+                    drawFilledSquare();
+                glPopMatrix();
+        glPopMatrix(); // Reload de la matrice sauvegardée
     }
-    
 }
 
 
@@ -382,12 +412,14 @@ void drawObstacles(std::vector<Obstacle> obstacles){ //pour dessiner le vecteur 
 }
 
 
-int checkBonussHit(Ball ball, std::vector<Bonus> bonuss){
+int checkBonussHit(Ball ball, std::vector<Bonus>& bonuss){
     int bonusactivation = 0;
-    for (auto bonus: bonuss) {//pour tous les éléments de obstacles
-        bonusactivation = ball.checkBonusHit(bonus);
-        if(bonusactivation != 0) { // Si un bonus a été activé, on retourne le bonus concerné
-            return bonusactivation;
+    for (auto& bonus : bonuss) {//pour tous les éléments de obstacles
+        if(bonus._active == true) {
+            bonusactivation = ball.checkBonusHit(bonus);
+            if(bonusactivation != 0) { // Si un bonus a été activé, on retourne le bonus concerné
+                return bonusactivation;
+            }
         }
     }
     return bonusactivation;

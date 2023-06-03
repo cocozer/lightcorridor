@@ -27,15 +27,101 @@ bool CorridorMoving = false; // Est-ce que le couloir est en mouvement ou pas ?
 bool ballStick = false; // Si la balle est collée au milieu de la raquette
 bool raquetteSticky = false; // Si la raquette est collante (grâce au bonus)
 bool ballIsSticked = false; // Si la balle est collée à la raquette mais pas forcément au milieu
-int effectDuration;
+int effectDurationStick; // Durée restant de l'effet stick
+int effectDurationBigRaquette; // Durée restant de l'effet BigRaquette
 bool canLose =false; //pour éviter la perte de 2 vies en meme temps
 bool BallIsBetweenObstacleAndRaquette=false;
 //bool raquetteObstacleCollision = false; //check si la raquette touche un obstacle
 
-/* Variable globale du nombre de vies, 5 au départ*/
+/* Variable globale du nombre de vies, 4 au départ*/
 int lives = 4;
 /* Variable globale balle pour pouvoir agir au clic gauche */
 Ball *ball = new Ball;
+
+/* Variable globale raquette */
+Raquette *raquette = new Raquette;
+
+/* Variable globale couloir*/
+Corridor *corridor = new Corridor;
+
+/*Création du vecteur des obstacles*/
+
+//std::vector<Obstacle> obstacles ={Obstacle (1,1), Obstacle (1.4,2), Obstacle (1.8,3), Obstacle (2,4)};
+// std::vector<Obstacle> obstacles ={};
+
+std::vector<Obstacle> obstacles = {
+    Obstacle(0.2, 3),
+    Obstacle(1.0, 4),
+    Obstacle(1.8, 1),
+    Obstacle(2.6, 2),
+    Obstacle(3.6, 2),
+    Obstacle(4.8, 3),
+    Obstacle(5.6, 3),
+    Obstacle(6.6, 3),
+    Obstacle(7.8, 2),
+    Obstacle(8.6, 3),
+    Obstacle(10.0, 4),
+    Obstacle(10.8, 1),
+    Obstacle(11.6, 2),
+    Obstacle(12.6, 3),
+    Obstacle(13.6, 1),
+    Obstacle(14.6, 4),
+    Obstacle(15.6, 3),
+    Obstacle(16.8, 2),
+    Obstacle(17.6, 3),
+    Obstacle(18.6, 2),
+    Obstacle(19.8, 1),
+    Obstacle(20.6, 3),
+    Obstacle(21.8, 2),
+    Obstacle(22.6, 4),
+    Obstacle(23.6, 1),
+    Obstacle(24.8, 4),
+    Obstacle(25.8, 3),
+    Obstacle(26.8, 4),
+    Obstacle(27.8, 2),
+    Obstacle(28.6, 3),
+    Obstacle(29.6, 2),
+    Obstacle(30.8, 1),
+    Obstacle(31.6, 2),
+    Obstacle(32.8, 4),
+    Obstacle(33.6, 1),
+    Obstacle(34.6, 4),
+    Obstacle(35.8, 2),
+    Obstacle(36.6, 3),
+    Obstacle(37.8, 1),
+    Obstacle(38.8, 3),
+    Obstacle(39.8, 1),
+    Obstacle(40.8, 4),
+    Obstacle(41.6, 2),
+    Obstacle(42.8, 3),
+    Obstacle(43.8, 2),
+    Obstacle(44.8, 1),
+    Obstacle(45.6, 3),
+    Obstacle(46.8, 4),
+    Obstacle(47.8, 2),
+    Obstacle(48.6, 1),
+    Obstacle(49.4, 4),
+    Obstacle(50, 3),
+};
+
+/* Création du vecteur des Bonus */
+std::vector<Bonus> bonus = {
+	Bonus(0.1, 1.2, 0.1, 3),
+    Bonus(0.0, 3.4, 0.1, 2),
+    Bonus(-0.1, 7.0, -0.1, 2),
+    Bonus(-0.1, 9.2, 0.2, 2),
+    Bonus(0.1, 14.2, -0.2, 1),
+    Bonus(-0.3, 17.4, 0.2, 2),
+    Bonus(-0.3, 24.4, -0.2, 2),
+    Bonus(0.2, 28.8, -0.1, 1),
+    Bonus(-0.2, 31.8, -0.1, 1),
+    Bonus(0.1, 35.0, -0.1, 2),
+    Bonus(-0.2, 40.6, -0.2, 1),
+    Bonus(-0.3, 46, -0.2, 1),
+};
+
+
+// std::vector<Bonus> bonus ={};
 
 // Texture texture;
 /* Minimal time wanted between two images */
@@ -98,6 +184,19 @@ void MoveRaquette(GLFWwindow* window, Raquette* raquette) {
 
 }
 
+void ResetGame(Corridor* corridor, std::vector<Bonus>& bonuss, std::vector<Obstacle>& obstacles) {
+	for (auto& bonus : bonuss) { // pour tous les éléments de bonus
+		bonus._active = true;
+		bonus._y += corridor->y;
+	}
+	for (auto& obstacle : obstacles) { // pour tous les éléments de obstacles
+		obstacle._y += corridor->y;
+	}
+	ballStick = true;
+	corridor->y = 0;
+	lives = 5;
+	CorridorMoving = false;
+}
 
 void MoveCorridor(Corridor* corridor, Ball* ball, Raquette *raquette, std::vector<Obstacle>& obstacles, std::vector<Bonus>& bonuss) {
 	if(CorridorMoving && (checkRaquetteObstacleCollison(raquette, obstacles)==false)&&(!BallIsBetweenObstacleAndRaquette)) {
@@ -168,22 +267,31 @@ void mouse_button_callback(GLFWwindow* window ,int button, int action, int mods)
     		float newz = -(mouseY - (WINDOW_HEIGHT / 2)) * (h / WINDOW_HEIGHT);
 
 			if(newx > -0.0026 && newx < 0.0026 && newz > 0.0004 && newz < 0.0016) { // Si on clique sur le rect du haut
-				menustart = false;
-				menupause = false;
-				menuwin = false;
-				menulose = false;
-				play = true;
+				if(newx > -0.0026 && newx < 0.0026 && newz > 0.0004 && newz < 0.0016) { // Si on clique sur le bouton du haut
+					menustart = false;
+					menupause = false;
+					menuwin = false;
+					menulose = false;
+					play = true;
+				}
 			}
-			
 			if(newx > -0.0026 && newx < 0.0026 && newz < -0.0004 && newz > -0.0016) { // Si on clique sur le rect du bas
-				glfwSetWindowShouldClose(window, GLFW_TRUE);
+				if(newx > -0.0026 && newx < 0.0026 && newz < -0.0004 && newz > -0.0016) { // Si on clique sur le bouton du bas
+					glfwSetWindowShouldClose(window, GLFW_TRUE);
+				}
 			}
-    	}
-	}
-	if(menupause) { // Si le menu est celui de
+			if(menupause) { // Si le menu est celui de pause, alors on permet de reset la partie
 
+				if(newx > -0.0015 && newx < 0.0015 && newz > 0.0027 && newz < 0.0034) { // Si on clique sur le bouton de reset de niveau (tout en haut)
+					cout << "clic" << endl;
+					// RESET LE NIVEAU
+					ResetGame(corridor, bonus, obstacles);
+					menupause = false;
+					play = true;
+				}
+			}							
+		}
 	}
-    
 }
 
 int main() {
@@ -209,11 +317,11 @@ int main() {
         glfwTerminate();
         return -1;
     }
-
+	
 	//glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 
 	/* Création de la raquette */
-	Raquette *raquette = new Raquette;
+	/* Assignation des valeurs à la raquette*/
 	raquette->x = 0;
 	raquette->y = 0.6;
 	raquette->z = 0;
@@ -231,19 +339,8 @@ int main() {
 	ball->coefftaille = 1;
 	
 	ballStick = true; // On colle la balle au début du jeu
-	/* Création du couloir */
-	Corridor *corridor = new Corridor;
+	/* Set le couloir au départ*/
 	corridor->y = 0;
-	/*Création du vecteur des obstacles*/
-
-	//std::vector<Obstacle> obstacles ={Obstacle (1,1), Obstacle (1.4,2), Obstacle (1.8,3), Obstacle (2,4)};
-	//std::vector<Obstacle> obstacles ={};
-
-	std::vector<Obstacle> obstacles ={Obstacle (1,4), Obstacle (2,2), Obstacle (3,1), Obstacle (4,2), Obstacle (5,3), Obstacle (6,4), Obstacle (7,3), Obstacle (7.2,1), Obstacle (7.8,2), Obstacle (8,3), Obstacle (8.8,4), Obstacle (9,3), Obstacle (9,2)};
-
-	/* Création du vecteur des Bonus */
-	//std::vector<Bonus> bonus ={Bonus (0.2,0.8,0,2), Bonus (0.2, 2.4, 0, 1), Bonus (-0.2,0.8,0, 1)};
-	std::vector<Bonus> bonus ={};
 	
 
     // Make the window's context current
@@ -253,12 +350,18 @@ int main() {
 	glfwSetKeyCallback(window, onKey);
 	glfwSetMouseButtonCallback(window, mouse_button_callback);
 			
-	Texture texture = Texture::loadTexture("../doc/MetalGrate.jpg");
+	Texture texture = Texture::loadTexture("../doc/txtureballe.jpg");
 	Texture texture2 = Texture::loadTexture("../doc/fond.jpg");
 	Texture textureplay = Texture::loadTexture("../doc/start.jpg");
 	Texture textureexit = Texture::loadTexture("../doc/quit.jpg");
 	Texture texture3 = Texture::loadTexture("../doc/cio60416.jpg");
 	Texture vie = Texture::loadTexture("../doc/coeur.jpg");
+	Texture continue1 = Texture::loadTexture("../doc/continue.jpg");
+	Texture pausefond = Texture::loadTexture("../doc/pausefond.jpg");
+	Texture losescreen = Texture::loadTexture("../doc/losescreen.jpg");
+	Texture winscreen = Texture::loadTexture("../doc/winscreen.jpg");
+	Texture stick = Texture::loadTexture("../doc/colle.jpg");
+	Texture fleche = Texture::loadTexture("../doc/fleche.jpg");
 
     onWindowResized(window, WINDOW_WIDTH, WINDOW_HEIGHT);
 
@@ -287,9 +390,7 @@ int main() {
 		if(lives < 0) { // Si le joueur n'a plus de vies, la partie est perdue
 			play = false;
 			menulose = true;
-			corridor->y = 0;
-			// Reset tous les obstacles
-			// Reset tous les bonus
+			ResetGame(corridor, bonus, obstacles);
 		}
 		if(play) { // Si la partie est lancée
 			/* On vérifie si le joueur a perdu */
@@ -299,6 +400,13 @@ int main() {
 			/* Updates des positions des objets*/
 			ball->checkDirection(); // Balle (vérif de la direction de la balle pour collisions etc)
 			
+			if(corridor->y >= 50) { // Si le joueur dépasse 50 (unité d'avancement du couloir), il gagne
+				play = false;
+				CorridorMoving = false;
+				menuwin = true;
+				ResetGame(corridor, bonus, obstacles);
+			}
+
 			ballIsSticked = ball->checkRaquetteHit(raquette, raquetteSticky); // rebond si la balle touche la raquette
 			ball->checkObstaclesHit(obstacles, BallIsBetweenObstacleAndRaquette);
 			if(ballIsSticked) {
@@ -311,10 +419,16 @@ int main() {
 			MoveRaquette(window, raquette); // Déplacement de la raquette (au mouvement de souris)
 		}
 		if(raquetteSticky) { // Si la raquette colle encore, on décrémente la durée de l'effet
-			effectDuration--;
+			effectDurationStick--;
 		}
-		if (effectDuration <= 0) { // Si l'effet est arrivé a expiration, la raquette ne colle plus
+		if (effectDurationStick <= 0) { // Si l'effet est arrivé a expiration, la raquette ne colle plus
 			raquetteSticky = false;
+		}
+		if(raquette->coefftaille != 1){// Si la raquette n'a pas sa forme normale, on décrémente la durée de l'effet 
+			effectDurationBigRaquette--;
+		} 
+		if (effectDurationBigRaquette <= 0) { // Si l'effet est arrivé a expiration, la raquette reprend sa taille initiale
+			raquette->coefftaille = 1;
 		}
 		
 
@@ -336,35 +450,58 @@ int main() {
 		glLoadIdentity();
 		setCamera();
 
-
-		
 		if(menustart) {
 			drawMenuStart(texture2, textureplay, textureexit);
 		}
 		if(menupause) {
-			drawMenuPause();
+			drawMenuPause(pausefond, continue1, textureexit);
 		}
 		if(menulose) {
-			drawMenuLose();
+			drawMenuLose(losescreen, textureplay, textureexit);
 		}
 		if(menuwin) {
-			drawMenuWin();
+			drawMenuWin(winscreen, textureplay, textureexit);
 		}
 
-		if(!menustart) {
-
+		if(!menustart && !menulose && !menuwin) { // quand les menus ne sont pas affichés
+		//on affiche les vies et les bonus en cours
 			for (int i=0; i<=lives ; i++){
 				glPushMatrix();
 				glTranslatef(-0.02+i*0.008,0.1,0.055);
 				glScalef(0.03,0.03,0.03);
 				glEnable(GL_TEXTURE_2D);
 				glBindTexture(GL_TEXTURE_2D,vie.textureID);
-				// drawTexturedSphere(0.05, 20,20);
 				drawTexturedSquare();
 				glBindTexture(GL_TEXTURE_2D,0); //détache la texture du point de bind une fois les données chargées
 				glDisable(GL_TEXTURE_2D);
 				glPopMatrix();
 			}
+			if(raquetteSticky){ // si le bonus jaune est activé
+				//on affiche l'icone colle
+				glPushMatrix();
+				glTranslatef(-0.05,0.1,0.055);
+				glScalef(0.03,0.03,0.03);
+				glEnable(GL_TEXTURE_2D);
+				glBindTexture(GL_TEXTURE_2D,stick.textureID);
+				drawTexturedSquare();
+				glBindTexture(GL_TEXTURE_2D,0); //détache la texture du point de bind une fois les données chargées
+				glDisable(GL_TEXTURE_2D);
+				glPopMatrix();
+
+			}
+			if(effectDurationBigRaquette>0){
+				//on affiche l'icone grande raquette
+				glPushMatrix();
+				glTranslatef(-0.05,0.1,0.055);
+				glScalef(0.03,0.03,0.03);
+				glEnable(GL_TEXTURE_2D);
+				glBindTexture(GL_TEXTURE_2D,fleche.textureID);
+				drawTexturedSquare();
+				glBindTexture(GL_TEXTURE_2D,0); //détache la texture du point de bind une fois les données chargées
+				glDisable(GL_TEXTURE_2D);
+				glPopMatrix();
+			}
+
 			glPushMatrix();
 				//glRotatef(90,1,0,0);
 				glTranslatef(-0.000,0.1001,0.055);
@@ -372,6 +509,8 @@ int main() {
 				//glColor3f(0,0,0);
 				drawRectangle();
 			glPopMatrix();
+
+			
 		}				
 
 
@@ -382,22 +521,17 @@ int main() {
 		/* Initial scenery setup */
 		drawDecor();
 
-		// checkRaquetteObstacleCollison(raquette, obstacles, raquetteObstacleCollision);
-		//cout << raquetteObstacleCollision <<endl;
-
-
-
 		drawBonuss(bonus); //dessine le vecteur des bonus
 
-
-
-		// ball->checkObstacleHit(obstacles[1]);
 		int bonusactivation = checkBonussHit(*ball, bonus);
 		if (bonusactivation == 1) {
 			raquetteSticky = 1;
-			effectDuration = 300; // L'effet dure 300 frames
+			effectDurationStick = 300; // L'effet dure 300 frames
 		} else if (bonusactivation == 2) {
 			lives++;
+		} else if (bonusactivation == 3) {
+			effectDurationBigRaquette = 300; // L'effet dure 300 frames
+			raquette->coefftaille = 1.5;
 		}
 		
 		drawObstacles(obstacles); //dessine le vecteur des obstacles
@@ -434,7 +568,6 @@ int main() {
 		
 
 	}
-	// glDeleteTextures(1,textures);
     glfwTerminate();
     return 0;
 }

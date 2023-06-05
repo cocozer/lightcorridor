@@ -16,7 +16,8 @@ Texture Texture::loadTexture(const char* fileName) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture.textureWidth, texture.textureHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, texture.textureData);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture.textureWidth, texture.textureHeight, 0, GL_RGB, GL_UNSIGNED_BYTE,
+    texture.textureData);
     glBindTexture(GL_TEXTURE_2D, 0);
 
     stbi_image_free(texture.textureData);

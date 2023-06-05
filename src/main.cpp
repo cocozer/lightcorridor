@@ -31,7 +31,6 @@ int effectDurationStick; // Durée restant de l'effet stick
 int effectDurationBigRaquette; // Durée restant de l'effet BigRaquette
 bool canLose =false; //pour éviter la perte de 2 vies en meme temps
 bool BallIsBetweenObstacleAndRaquette=false;
-//bool raquetteObstacleCollision = false; //check si la raquette touche un obstacle
 
 /* Variable globale du nombre de vies, 4 au départ*/
 int lives = 4;
@@ -46,7 +45,6 @@ Corridor *corridor = new Corridor;
 
 /*Création du vecteur des obstacles*/
 
-//std::vector<Obstacle> obstacles ={Obstacle (1,1), Obstacle (1.4,2), Obstacle (1.8,3), Obstacle (2,4)};
 // std::vector<Obstacle> obstacles ={};
 
 std::vector<Obstacle> obstacles = {
@@ -123,7 +121,6 @@ std::vector<Bonus> bonus = {
 
 // std::vector<Bonus> bonus ={};
 
-// Texture texture;
 /* Minimal time wanted between two images */
 static const double FRAMERATE_IN_SECONDS = 1. / 60.;
 
@@ -179,9 +176,6 @@ void MoveRaquette(GLFWwindow* window, Raquette* raquette) {
 		raquette->z = 0.25-raquette->coefftaille*0.1;
 	}
 	
-
-	//on veut passser du x et du z de la scène à celui de l'écran sans multiplier par 0.5
-
 }
 
 void ResetGame(Corridor* corridor, std::vector<Bonus>& bonuss, std::vector<Obstacle>& obstacles) {
@@ -252,7 +246,6 @@ void mouse_button_callback(GLFWwindow* window ,int button, int action, int mods)
 				ballStick = false;
 				ballIsSticked = false;
 				canLose=true;
-				cout<<canLose<<endl;
 			}
     	}
 	} else {
@@ -349,12 +342,13 @@ int main() {
     glfwSetWindowSizeCallback(window,onWindowResized);
 	glfwSetKeyCallback(window, onKey);
 	glfwSetMouseButtonCallback(window, mouse_button_callback);
+
+	/*Chargement des textures*/
 			
 	Texture texture = Texture::loadTexture("../doc/txtureballe.jpg");
 	Texture texture2 = Texture::loadTexture("../doc/fond.jpg");
 	Texture textureplay = Texture::loadTexture("../doc/start.jpg");
 	Texture textureexit = Texture::loadTexture("../doc/quit.jpg");
-	Texture texture3 = Texture::loadTexture("../doc/cio60416.jpg");
 	Texture vie = Texture::loadTexture("../doc/coeur.jpg");
 	Texture continue1 = Texture::loadTexture("../doc/continue.jpg");
 	Texture pausefond = Texture::loadTexture("../doc/pausefond.jpg");
@@ -381,7 +375,6 @@ int main() {
 			lose = false;
 			lives--;
 			canLose=false;
-			cout << "vie en moins" << endl;
 			ballStick = true;
 			ball->vx = 0;
 			ball->vy = 0;
@@ -400,7 +393,7 @@ int main() {
 			/* Updates des positions des objets*/
 			ball->checkDirection(); // Balle (vérif de la direction de la balle pour collisions etc)
 			
-			if(corridor->y >= 50) { // Si le joueur dépasse 50 (unité d'avancement du couloir), il gagne
+			if(corridor->y >= 49) { // Si le joueur dépasse 49 (unité d'avancement du couloir), il gagne
 				play = false;
 				CorridorMoving = false;
 				menuwin = true;
@@ -551,13 +544,7 @@ int main() {
 		/* Poll for and process events */
 		glfwPollEvents();
 
-		/* Elapsed time computation from loop begining */
-		// double elapsedTime = glfwGetTime() - startTime;
-		// /* If to few time is spend vs our wanted FPS, we wait */
-		// if(elapsedTime < FRAMERATE_IN_SECONDS) 
-		// {
-		// 	glfwWaitEventsTimeout(FRAMERATE_IN_SECONDS-elapsedTime);
-		// }
+
 		double endtime = startTime + FRAMERATE_IN_SECONDS;
 		double currenttime = glfwGetTime();
 

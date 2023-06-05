@@ -5,8 +5,6 @@
 #include <GL/glu.h>
 #include <string>
 
-// #define STB_IMAGE_IMPLEMENTATION
-// #include "stb_image.h"
 
 struct Texture {
     unsigned int textureID;
@@ -15,8 +13,6 @@ struct Texture {
     int textureChannels;
     unsigned char* textureData;
 
-    // Texture(std::string fileName);
-   // void loadTexture();
     static Texture loadTexture(const char* fileName);
 
 };

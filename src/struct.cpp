@@ -67,15 +67,12 @@ bool Ball::checkRaquetteHit(Raquette* raquette, bool raquetteSticky) {
     // Si la raquette touche la balle et que la balle va vers le joueur
     if(this->vy < 0) {
         if (this->y-0.1*this->coefftaille <= raquette->y) { // Balle touche raquette en y
-            // if(this->x+0.2 >= raquette->x - 0.1*raquette->coefftaille && this->z+0.2 >= raquette->z - 0.1*raquette->coefftaille) { 
-            //     if(this->x-0.2 <= raquette->x + 0.1*raquette->coefftaille && this->z-0.2 <= raquette->z + 0.1*raquette->coefftaille) { 
             if(this->x+0.05 >= raquette->x - 0.1 && this->z+0.05 >= raquette->z - 0.1*raquette->coefftaille) { 
                 if(this->x-0.05 <= raquette->x + 0.1 && this->z-0.05 <= raquette->z + 0.1*raquette->coefftaille) { 
                     if(raquetteSticky) {
                         return true; // Si la raquette est collante, on retourne 1 pour coller la balle à la raquette
                     }
                     this->vy = -this->vy; // On inverse la vitesse de la balle en y
-                    cout<<"ça touche"<<endl;
                     //  // On calcule le coefficient de direction en fonction de l'endroit où touche la balle sur la raquette
                     float dx = this->x - raquette->x;
                     float dz = this->z - raquette->z;
@@ -94,9 +91,6 @@ bool Ball::checkRaquetteHit(Raquette* raquette, bool raquetteSticky) {
                     float Coeffdz = 1+dz;
                     this->vx = this->vx * Coeffdx;
                     this->vz = this->vz * Coeffdz;
-                    cout<<this->vx<<endl;
-                    cout<<this->vy<<endl;
-                    cout<<this->vz<<endl;
                     return false; // Si 0 est retourné, la balle rebondit normalement
                 }
             }
@@ -113,7 +107,6 @@ void Ball::stickBall(Raquette* raquette) {
 void Ball::checkObstacleHit(Obstacle& obstacle, bool& BallIsBetweenObstacleAndRaquette) {
     float delta = 0.001; // Marge d'erreur pour comparer deux nombres à virgule flottante
     // Vérifier si la balle se trouve dans la plage verticale de l'obstacle
-    //obstacle.changeColor=false;
     counter +=1;
     if(counter ==15){
         counter =0;
@@ -122,11 +115,9 @@ void Ball::checkObstacleHit(Obstacle& obstacle, bool& BallIsBetweenObstacleAndRa
     if ((this->y - 0.05*this->coefftaille <= obstacle._y + delta) &&
         (this->y + 0.05*this->coefftaille >= obstacle._y - delta)) {
             canBounce+=1; //permet de ne faire rebondir qu'une fois la balle au lieu de plein de fois
-            //cout << canBounce << endl;
         // Vérifier le côté de l'obstacle pour la collision
         if(canBounce==4){
             canBounce = 0; //on réinitialise la variable canBounce
-            //cout <<"la balle est inversée" << endl;
            
             switch (obstacle._side) {
                 case 1: // Mur d'en haut
@@ -165,9 +156,8 @@ void Ball::checkObstacleHit(Obstacle& obstacle, bool& BallIsBetweenObstacleAndRa
                     break;
             }
         }
-        if(this->y <0.75){ //pour stoper l'avancement du couloir si la balle se trouve entre la raquette et un mur
+        if(this->y <0.75){ //pour stoper l'avancement du couloir si la balle se trouve entre la raquette et un mur ou juste devant un mur
             BallIsBetweenObstacleAndRaquette = true;
-            //cout <<"danger la balle peut passer à travers" <<endl;
         } else {
             BallIsBetweenObstacleAndRaquette = false;
         }
@@ -194,7 +184,6 @@ int Ball::checkBonusHit(Bonus &bonus) {
             if ((this->z - 0.1 * this->coefftaille <= bonus._z + rayon) &&
                 (this->z + 0.1 * this->coefftaille >= bonus._z - rayon)) {
                 bonus._active = false;
-                // std::cout << bonus._active << endl;
                 if(bonus._type == 1) {
                     return 1;// Le premier bonus a été activé
                 } else if (bonus._type == 2) {
@@ -345,9 +334,8 @@ void Bonus::drawBonus()  {
 
 
 void Obstacle::drawObstacle() {
-    //cout<< this->changeColor <<endl;
     if(changeColor){
-        glColor3f(0.7,0.9,1.0);
+        glColor3f(0.7,0.9,1.0); //les murs deviennent bleu très clair lors de la collision avec la balle
     } else {
         if (_y > 2.0) {
         glColor3f(0.0, 0.0, 0.36); 
@@ -427,7 +415,6 @@ int checkBonussHit(Ball ball, std::vector<Bonus>& bonuss){
 
 bool checkRaquetteObstacleCollison(Raquette *raquette, std::vector<Obstacle> obstacles){
     float delta = 0.01;
-    //son y initial est égal à 0.6
     float raquetteDemiLargeur = (0.2*raquette->coefftaille)/2;
     for (auto obstacle: obstacles) { //pour tous les éléments de obstacles
         if((obstacle._y <0.62) && (obstacle._y>0.605)){
@@ -452,7 +439,6 @@ bool checkRaquetteObstacleCollison(Raquette *raquette, std::vector<Obstacle> obs
                     return true;
                 }
             }
-            cout <<"la raquette touche un mur"<<endl;
         }
     }
     return false;

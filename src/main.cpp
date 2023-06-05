@@ -394,7 +394,7 @@ int main() {
 			/* Updates des positions des objets*/
 			ball->checkDirection(); // Balle (vérif de la direction de la balle pour collisions etc)
 			
-			if(corridor->y >= 50) { // Si le joueur dépasse 50 (unité d'avancement du couloir), il gagne
+			if(corridor->y >= 49) { // Si le joueur dépasse 49 (unité d'avancement du couloir), il gagne
 				play = false;
 				CorridorMoving = false;
 				menuwin = true;
